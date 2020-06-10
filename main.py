@@ -129,7 +129,7 @@ async def connect_client(request):
     cmds = PlayerCommands(ws)
     await game_state.connect(cmds)
 
-    async for msg in ws:
+    async for msg in cmds.ws:
         if msg.type == aiohttp.WSMsgType.TEXT:
             try:
                 msg = json.loads(msg.data)
@@ -146,21 +146,20 @@ async def connect_client(request):
                 await game_state.send_to_all()
             except PlayerError as e:
                 log('player error:', e)
-                if cmds.player is not None:
-                    await cmds.ws.send_json({
-                        'type': 'error',
-                        'error': e.message,
-                    })
+                await cmds.ws.send_json({
+                    'type': 'error',
+                    'error': e.message,
+                })
             except:
                 log('error handling message:')
                 traceback.print_exc()
         elif msg.type == aiohttp.WSMsgType.ERROR:
-            log('connection closed with exception:', ws.exception())
+            log('connection closed with exception:', cmds.ws.exception())
 
     log('disconnected')
     await game_state.disconnect(cmds)
 
-    return ws
+    return cmds.ws
 
 
 async def index_middleware(app, handler):
