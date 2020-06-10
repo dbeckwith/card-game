@@ -39,7 +39,7 @@ class Player(object):
         self.hand = []
         self.chips = 0
 
-    def __serialize__(self):
+    def __json__(self):
         return {
             'name': self.name,
             'in_game': self.in_game,
@@ -57,7 +57,7 @@ class GameState(object):
         self.players = []
         self.board = []
 
-    def __serialize__(self):
+    def __json__(self):
         return {
             'leader': None if self.leader is None else self.leader.name,
             'players': self.players,
@@ -110,8 +110,8 @@ class GameState(object):
 
 class GameStateSerializer(json.JSONEncoder):
     def default(self, value):
-        if hasattr(value, '__serialize__'):
-            return value.__serialize__()
+        if hasattr(value, '__json__'):
+            return value.__json__()
         return super(GameStateSerializer, self).default(value)
 
 
