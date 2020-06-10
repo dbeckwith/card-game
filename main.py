@@ -22,8 +22,9 @@ class PlayerCommands(object):
     def join(self, name):
         if self.player is not None:
             raise PlayerError('already joined')
-        self.player = Player(self.ws, name)
-        game_state.add_player(self.player)
+        player = Player(name)
+        game_state.add_player(player)
+        self.player = player
 
     def give_card(self, player, card):
         player = game_state.get_player(player)
@@ -32,8 +33,7 @@ class PlayerCommands(object):
         player.give_card(card)
 
 class Player(object):
-    def __init__(self, ws, name):
-        self.ws = ws
+    def __init__(self, name):
         self.name = name
         self.in_game = False
         self.hand = []
@@ -52,6 +52,7 @@ class Player(object):
 
 class GameState(object):
     def __init__(self):
+        self.connections = []
         self.leader = None
         self.players = []
         self.board = []
@@ -62,6 +63,16 @@ class GameState(object):
             'players': self.players,
             'board': self.board,
         }
+
+    async def connect(self, cmds):
+        self.connections.append(cmds)
+        await game_state.send(cmds.ws)
+
+    async def disconnect(self, cmds):
+        self.connections.remove(cmds)
+        if cmds.player is not None:
+            self.remove_player(cmds.player)
+            await self.send_to_all()
 
     def add_player(self, player):
         if not self.players:
@@ -80,15 +91,15 @@ class GameState(object):
             if player.name == name:
                 return player
 
-    async def send_to_all_players(self):
+    async def send_to_all(self):
         await asyncio.gather(*(
-            self.send_to_player(player)
-            for player
-            in self.players
+            self.send(cmds.ws)
+            for cmds
+            in self.connections
         ))
 
-    async def send_to_player(self, player):
-        await player.ws.send_json(
+    async def send(self, ws):
+        await ws.send_json(
             { 'type': 'game_state', 'game_state': self },
             dumps=lambda *args, **kwargs: json.dumps(
                 *args,
@@ -116,6 +127,7 @@ async def connect_client(request):
 
     log(f'connected')
     cmds = PlayerCommands(ws)
+    await game_state.connect(cmds)
 
     async for msg in ws:
         if msg.type == aiohttp.WSMsgType.TEXT:
@@ -131,11 +143,11 @@ async def connect_client(request):
                     log('unknown message type:', msg_type)
                 else:
                     getattr(cmds, msg_type)(**msg)
-                await game_state.send_to_all_players()
+                await game_state.send_to_all()
             except PlayerError as e:
                 log('player error:', e)
                 if cmds.player is not None:
-                    await cmds.player.ws.send_json({
+                    await cmds.ws.send_json({
                         'type': 'error',
                         'error': e.message,
                     })
@@ -146,10 +158,7 @@ async def connect_client(request):
             log('connection closed with exception:', ws.exception())
 
     log('disconnected')
-
-    if cmds.player is not None:
-        game_state.remove_player(cmds.player)
-        await game_state.send_to_all_players()
+    await game_state.disconnect(cmds)
 
     return ws
 
