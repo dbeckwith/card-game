@@ -41,6 +41,10 @@ window.onload = function() {
   }
 
   document.getElementById('givecard').onclick = function() {
-    ws.send(JSON.stringify({ type: 'give_card', player: playerName, card: '4S' }));
+    ws.send(JSON.stringify({ type: 'draw_card', target: { type: 'player', player: playerName } }));
+  }
+
+  document.getElementById('newgame').onclick = function() {
+    ws.send(JSON.stringify({ type: 'new_game' }));
   }
 }

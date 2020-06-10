@@ -10,6 +10,8 @@ from pathlib import Path
 import signal
 import traceback
 
+import cards
+
 
 loop = asyncio.get_event_loop()
 
@@ -30,17 +32,31 @@ class PlayerCommands(object):
         game_state.add_player(player)
         self.player = player
 
-    def give_card(self, player, card):
-        player = game_state.get_player(player)
-        if player is None:
-            raise PlayerError('player not found')
-        player.give_card(card)
+    def new_game(self):
+        game_state.new_game()
 
-    def take_card(self, player, card):
+    def draw_card(self, target):
+        target_type = target.get('type')
+        if target_type == 'player':
+            player = target.get('player')
+            if player is None:
+                raise PlayerError('player not specified')
+            player = game_state.get_player(player)
+            if player is None:
+                raise PlayerError('player not found')
+            card = game_state.draw_card()
+            player.give_card(card)
+        elif target_type == 'board':
+            card = game_state.draw_card()
+            game_state.add_board_card(card)
+        else:
+            raise PlayerError(f'unknown card draw target {target_type}')
+
+    def trash_card(self, player, card):
         player = game_state.get_player(player)
         if player is None:
             raise PlayerError('player not found')
-        player.take_card(card)
+        player.trash_card(card)
 
 class Player(object):
     def __init__(self, name):
@@ -57,10 +73,14 @@ class Player(object):
             'chips': self.chips,
         }
 
+    def new_game(self):
+        self.in_game = True
+        self.hand = []
+
     def give_card(self, card):
         self.hand.append(card)
 
-    def take_card(self, card):
+    def trash_card(self, card):
         if card in self.hand:
             self.hand.remove(card)
         else:
@@ -72,6 +92,7 @@ class GameState(object):
         self.leader = None
         self.players = []
         self.board = []
+        self.deck = cards.new_deck()
 
     def __json__(self):
         return {
@@ -107,6 +128,21 @@ class GameState(object):
         for player in self.players:
             if player.name == name:
                 return player
+
+    def new_game(self):
+        for player in self.players:
+            player.new_game()
+        self.board = []
+        self.deck = cards.new_deck()
+
+    def draw_card(self):
+        if self.deck:
+            return self.deck.pop()
+        else:
+            raise PlayerError('deck is empty')
+
+    def add_board_card(self, card):
+        self.board.append(card)
 
     async def send_to_all(self):
         await asyncio.gather(*(
