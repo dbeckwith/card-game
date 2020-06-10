@@ -8,7 +8,7 @@ ws.onopen = function(e) {
 ws.onmessage = function(event) {
   const gameState = JSON.parse(event.data);
   console.log('game state:', gameState);
-  document.getElementById('gamestate').textContent = JSON.stringify(gameState, null, 2);
+  document.getElementById('gamestate').value = JSON.stringify(gameState, null, 2);
 };
 
 ws.onclose = function(event) {

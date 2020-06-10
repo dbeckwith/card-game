@@ -6,10 +6,12 @@ from aiohttp import web
 import asyncio
 import json
 from pathlib import Path
+import traceback
 
 
 class Player(object):
-    def __init__(self, name):
+    def __init__(self, ws, name):
+        self.ws = ws
         self.name = name
 
     def __serialize__(self):
@@ -32,6 +34,23 @@ class GameState(object):
             'players': self.players,
         }
 
+    async def send_to_all_players(self):
+        await asyncio.gather(*(
+            self.send_to_player(player)
+            for player
+            in self.players
+        ))
+
+    async def send_to_player(self, player):
+        await player.ws.send_json(
+            self,
+            dumps=lambda *args, **kwargs: json.dumps(
+                *args,
+                **kwargs,
+                cls=GameStateSerializer,
+            ),
+        )
+
 class GameStateSerializer(json.JSONEncoder):
     def default(self, value):
         if hasattr(value, '__serialize__'):
@@ -52,41 +71,35 @@ async def connect_client(request):
     log(f'connected')
     player = None
 
-    async def send_game_state():
-        # TODO: send to all clients
-        await ws.send_json(
-            game_state,
-            dumps=lambda *args, **kwargs: json.dumps(
-                *args,
-                **kwargs,
-                cls=GameStateSerializer,
-            ),
-        )
-
     async for msg in ws:
         if msg.type == aiohttp.WSMsgType.TEXT:
             try:
                 msg = json.loads(msg.data)
             except json.JSONDecodeError as e:
-                log('message error', e)
+                log('message error:', e)
                 continue
-            msg_type = msg.get('type')
-            if msg_type == 'join':
-                name = msg['name']
-                player = Player(name)
-                log(f'{player.name} joined')
-                game_state.add_player(player)
-                await send_game_state()
-            else:
-                log('unknown message type', msg_type)
+            try:
+                msg_type = msg.get('type')
+                if msg_type == 'join':
+                    name = msg['name']
+                    player = Player(ws, name)
+                    log(f'{player.name} joined')
+                    game_state.add_player(player)
+                    await game_state.send_to_all_players()
+                else:
+                    log('unknown message type:', msg_type)
+            except:
+                log('error handling message:')
+                traceback.print_exc()
         elif msg.type == aiohttp.WSMsgType.ERROR:
-            log('connection closed with exception', ws.exception())
+            log('connection closed with exception:', ws.exception())
 
     log('disconnected')
 
     if player is not None:
         log(f'{player.name} left')
         game_state.remove_player(player)
+        await game_state.send_to_all_players()
 
     return ws
 
