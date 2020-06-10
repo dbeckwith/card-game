@@ -152,12 +152,12 @@ async def connect_client(request):
                 log('message error:', e)
                 continue
             try:
-                log(msg)
                 msg_type = msg.pop('type')
                 if msg_type is None or msg_type.startswith('_') or not hasattr(PlayerCommands, msg_type):
                     raise PlayerError(f'unknown message type {msg_type}')
                 else:
                     cmd = getattr(cmds, msg_type)
+                    log(msg_type + '(' + ', '.join(key + '=' + repr(value) for key, value in msg.items()) + ')')
                     required_args = [p.name for p in inspect.signature(cmd).parameters.values() if p.default is inspect.Parameter.empty]
                     missing_args = [arg for arg in required_args if arg not in msg]
                     if missing_args:
