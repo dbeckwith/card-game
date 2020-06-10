@@ -32,6 +32,12 @@ class PlayerCommands(object):
             raise PlayerError('player not found')
         player.give_card(card)
 
+    def take_card(self, player, card):
+        player = game_state.get_player(player)
+        if player is None:
+            raise PlayerError('player not found')
+        player.take_card(card)
+
 class Player(object):
     def __init__(self, name):
         self.name = name
@@ -49,6 +55,12 @@ class Player(object):
 
     def give_card(self, card):
         self.hand.append(card)
+
+    def take_card(self, card):
+        if card in self.hand:
+            self.hand.remove(card)
+        else:
+            raise PlayerError(f'{self.name} is not holding {card}')
 
 class GameState(object):
     def __init__(self):
