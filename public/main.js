@@ -1,7 +1,7 @@
 window.onload = function() {
   let playerName;
 
-  let ws = new WebSocket("ws://localhost:8080/ws");
+  const ws = new WebSocket(`ws://${window.location.host}/ws`);
 
   ws.onopen = function(e) {
     console.log('connected to game');
