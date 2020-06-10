@@ -47,14 +47,19 @@ class Player(object):
 
 class GameState(object):
     def __init__(self):
+        self.leader = None
         self.players = []
         self.board = []
 
     def add_player(self, player):
+        if not self.players:
+            self.leader = player
         self.players.append(player)
 
     def remove_player(self, player):
         self.players.remove(player)
+        if player is self.leader:
+            self.leader = next(iter(self.players), None)
 
     def get_player(self, name):
         for player in self.players:
@@ -63,6 +68,7 @@ class GameState(object):
 
     def __serialize__(self):
         return {
+            'leader': None if self.leader is None else self.leader.name,
             'players': self.players,
             'board': self.board,
         }
