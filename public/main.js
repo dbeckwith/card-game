@@ -7,9 +7,21 @@ window.onload = function() {
   };
 
   ws.onmessage = function(event) {
-    const gameState = JSON.parse(event.data);
-    console.log('game state:', gameState);
-    document.getElementById('gamestate').value = JSON.stringify(gameState, null, 2);
+    const message = JSON.parse(event.data);
+    switch (message.type) {
+      case 'game_state': {
+        const { game_state: gameState } = message;
+        console.log('game state:', gameState);
+        document.getElementById('gamestate').value = JSON.stringify(gameState, null, 2);
+        break;
+      }
+      case 'error': {
+        const { error } = message;
+        console.log('ERROR:', error);
+        document.getElementById('error').textContent = `error: ${error}`;
+        break;
+      }
+    }
   };
 
   ws.onclose = function(event) {

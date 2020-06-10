@@ -9,6 +9,11 @@ from pathlib import Path
 import traceback
 
 
+class PlayerError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        self.message = message
+
 class PlayerCommands(object):
     def __init__(self, ws):
         self.ws = ws
@@ -16,14 +21,14 @@ class PlayerCommands(object):
 
     def join(self, name):
         if self.player is not None:
-            raise 'already joined'
+            raise PlayerError('already joined')
         self.player = Player(self.ws, name)
         game_state.add_player(self.player)
 
     def give_card(self, player, card):
         player = game_state.get_player(player)
         if player is None:
-            raise 'player not found'
+            raise PlayerError('player not found')
         player.give_card(card)
 
 class Player(object):
@@ -34,9 +39,6 @@ class Player(object):
         self.hand = []
         self.chips = 0
 
-    def give_card(self, card):
-        self.hand.append(card)
-
     def __serialize__(self):
         return {
             'name': self.name,
@@ -45,15 +47,27 @@ class Player(object):
             'chips': self.chips,
         }
 
+    def give_card(self, card):
+        self.hand.append(card)
+
 class GameState(object):
     def __init__(self):
         self.leader = None
         self.players = []
         self.board = []
 
+    def __serialize__(self):
+        return {
+            'leader': None if self.leader is None else self.leader.name,
+            'players': self.players,
+            'board': self.board,
+        }
+
     def add_player(self, player):
         if not self.players:
             self.leader = player
+        if any(p.name == player.name for p in self.players):
+            raise PlayerError('already joined')
         self.players.append(player)
 
     def remove_player(self, player):
@@ -66,13 +80,6 @@ class GameState(object):
             if player.name == name:
                 return player
 
-    def __serialize__(self):
-        return {
-            'leader': None if self.leader is None else self.leader.name,
-            'players': self.players,
-            'board': self.board,
-        }
-
     async def send_to_all_players(self):
         await asyncio.gather(*(
             self.send_to_player(player)
@@ -82,7 +89,7 @@ class GameState(object):
 
     async def send_to_player(self, player):
         await player.ws.send_json(
-            self,
+            { 'type': 'game_state', 'game_state': self },
             dumps=lambda *args, **kwargs: json.dumps(
                 *args,
                 **kwargs,
@@ -125,6 +132,13 @@ async def connect_client(request):
                 else:
                     getattr(cmds, msg_type)(**msg)
                 await game_state.send_to_all_players()
+            except PlayerError as e:
+                log('player error:', e)
+                if cmds.player is not None:
+                    await cmds.player.ws.send_json({
+                        'type': 'error',
+                        'error': e.message,
+                    })
             except:
                 log('error handling message:')
                 traceback.print_exc()
