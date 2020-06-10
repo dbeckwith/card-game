@@ -1,12 +1,10 @@
 export class CardGame {
   constructor() {
-    const self = this;
-
     this.ws = new WebSocket(`ws://${window.location.host}/ws`);
 
     this.ws.onopen = (event) => {
       console.log('Connected to game server');
-      self.on_connect?.();
+      this.on_connect?.();
     };
 
     this.ws.onmessage = (event) => {
@@ -15,13 +13,13 @@ export class CardGame {
         case 'game_state': {
           const { game_state } = message;
           console.log('Game state update:', game_state);
-          self.on_update?.(game_state);
+          this.on_update?.(game_state);
           break;
         }
         case 'error': {
           const { error } = message;
           console.log(`Error from server: ${error}`)
-          self.on_error?.(error);
+          this.on_error?.(error);
           break;
         }
       }
@@ -30,7 +28,7 @@ export class CardGame {
     this.ws.onclose = (event) => {
       const { wasClean, code, reason } = event;
       console.log('Connection to game server closed', { wasClean, code, reason });
-      self.on_disconnect?.(reason);
+      this.on_disconnect?.(reason);
     };
 
     this.ws.onerror = (error) => {
