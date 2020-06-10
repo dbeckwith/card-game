@@ -2,11 +2,13 @@ let ws = new WebSocket("ws://localhost:8080/ws");
 
 ws.onopen = function(e) {
   console.log('connected to game');
-  ws.send(JSON.stringify({ type: 'login', username: 'daniel' }));
+  ws.send(JSON.stringify({ type: 'join', name: 'Daniel' }));
 };
 
 ws.onmessage = function(event) {
-  console.log(JSON.parse(event.data));
+  const gameState = JSON.parse(event.data);
+  console.log('game state:', gameState);
+  document.getElementById('gamestate').textContent = JSON.stringify(gameState, null, 2);
 };
 
 ws.onclose = function(event) {
