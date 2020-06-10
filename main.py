@@ -140,7 +140,7 @@ async def connect_client(request):
                 log(msg)
                 msg_type = msg.pop('type')
                 if msg_type is None or msg_type.startswith('_') or not hasattr(PlayerCommands, msg_type):
-                    log('unknown message type:', msg_type)
+                    raise PlayerError(f'unknown message type {msg_type}')
                 else:
                     getattr(cmds, msg_type)(**msg)
                 await game_state.send_to_all()
