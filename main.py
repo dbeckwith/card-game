@@ -9,6 +9,23 @@ from pathlib import Path
 import traceback
 
 
+class PlayerCommands(object):
+    def __init__(self, ws):
+        self.ws = ws
+        self.player = None
+
+    def join(self, name):
+        if self.player is not None:
+            raise 'already joined'
+        self.player = Player(self.ws, name)
+        game_state.add_player(self.player)
+
+    def give_card(self, player, card):
+        player = game_state.get_player(player)
+        if player is None:
+            raise 'player not found'
+        player.give_card(card)
+
 class Player(object):
     def __init__(self, ws, name):
         self.ws = ws
@@ -85,7 +102,7 @@ async def connect_client(request):
     await ws.prepare(request)
 
     log(f'connected')
-    player = None
+    cmds = PlayerCommands(ws)
 
     async for msg in ws:
         if msg.type == aiohttp.WSMsgType.TEXT:
@@ -95,23 +112,12 @@ async def connect_client(request):
                 log('message error:', e)
                 continue
             try:
-                msg_type = msg.get('type')
-                if msg_type == 'join':
-                    if player is None:
-                        name = msg['name']
-                        player = Player(ws, name)
-                        log(f'{player.name} joined')
-                        game_state.add_player(player)
-                    else:
-                        log('player tried to join twice')
-                elif msg_type == 'give_card':
-                    p = msg['player']
-                    card = msg['card']
-                    p = game_state.get_player(p)
-                    if p is not None:
-                        p.give_card(card)
-                else:
+                log(msg)
+                msg_type = msg.pop('type')
+                if msg_type is None or msg_type.startswith('__') or not hasattr(PlayerCommands, msg_type):
                     log('unknown message type:', msg_type)
+                else:
+                    getattr(cmds, msg_type)(**msg)
                 await game_state.send_to_all_players()
             except:
                 log('error handling message:')
@@ -121,9 +127,8 @@ async def connect_client(request):
 
     log('disconnected')
 
-    if player is not None:
-        log(f'{player.name} left')
-        game_state.remove_player(player)
+    if cmds.player is not None:
+        game_state.remove_player(cmds.player)
         await game_state.send_to_all_players()
 
     return ws
