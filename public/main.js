@@ -1,9 +1,10 @@
 window.onload = function() {
+  let playerName;
+
   let ws = new WebSocket("ws://localhost:8080/ws");
 
   ws.onopen = function(e) {
     console.log('connected to game');
-    ws.send(JSON.stringify({ type: 'join', name: 'Daniel' }));
   };
 
   ws.onmessage = function(event) {
@@ -36,7 +37,12 @@ window.onload = function() {
     console.log(`[error] ${error.message}`);
   };
 
+  document.getElementById('joinbtn').onclick = function() {
+    playerName = document.getElementById('nameinput').value;
+    ws.send(JSON.stringify({ type: 'join', name: playerName }));
+  }
+
   document.getElementById('givecard').onclick = function() {
-    ws.send(JSON.stringify({ type: 'give_card', player: 'Daniel', card: '4S' }));
+    ws.send(JSON.stringify({ type: 'give_card', player: playerName, card: '4S' }));
   }
 }
