@@ -8,12 +8,15 @@ import inspect
 import json
 from pathlib import Path
 import signal
+import tempfile
 import traceback
 
 import cards
 
 
 loop = asyncio.get_event_loop()
+
+game_state_backup_file = Path(tempfile.gettempdir()) / 'card_game_state.json'
 
 class PlayerError(Exception):
     def __init__(self, message):
@@ -94,6 +97,9 @@ class GameState(object):
         self.board = []
         self.deck = cards.new_deck()
 
+        self.client_update_event = asyncio.Event()
+        self.save_event = asyncio.Event()
+
     def __json__(self):
         return {
             'leader': None if self.leader is None else self.leader.name,
@@ -109,8 +115,7 @@ class GameState(object):
         self.connections.remove(cmds)
         if cmds.player is not None:
             self.remove_player(cmds.player)
-            client_update_event.set()
-            # await self.send_to_all()
+            self.mark_dirty()
 
     def add_player(self, player):
         if not self.players:
@@ -143,6 +148,10 @@ class GameState(object):
 
     def add_board_card(self, card):
         self.board.append(card)
+
+    def mark_dirty(self):
+        self.client_update_event.set()
+        self.save_event.set()
 
     async def send_to_all(self):
         await asyncio.gather(*(
@@ -204,8 +213,7 @@ async def connect_client(request):
                     if missing_args:
                         raise PlayerError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
                     getattr(cmds, msg_type)(**msg)
-                client_update_event.set()
-                # await game_state.send_to_all()
+                game_state.mark_dirty()
             except PlayerError as e:
                 log('player error:', e)
                 await cmds.ws.send_json({
@@ -223,14 +231,21 @@ async def connect_client(request):
 
     return cmds.ws
 
-client_update_event = asyncio.Event()
-
 async def update_clients():
     while True:
-        await client_update_event.wait()
-        client_update_event.clear()
+        await game_state.client_update_event.wait()
+        game_state.client_update_event.clear()
         await game_state.send_to_all()
         await asyncio.sleep(0.1)
+
+async def save_game_state():
+    while True:
+        await game_state.save_event.wait()
+        game_state.save_event.clear()
+        with open(game_state_backup_file, 'w') as f:
+            json.dump(game_state, f, cls=GameStateSerializer)
+        print(f'game state saved to {game_state_backup_file}')
+        await asyncio.sleep(10)
 
 async def index_middleware(app, handler):
     index = 'index.html'
@@ -306,7 +321,11 @@ async def run_server():
         await app.cleanup()
 
 async def main():
-    await asyncio.gather(run_server(), update_clients())
+    await asyncio.gather(
+        run_server(),
+        update_clients(),
+        save_game_state(),
+    )
 
 if __name__ == '__main__':
     try:
