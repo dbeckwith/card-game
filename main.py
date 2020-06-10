@@ -4,6 +4,7 @@ assert sys.version_info >= (3, 8)
 import aiohttp
 from aiohttp import web
 import asyncio
+import inspect
 import json
 from pathlib import Path
 import signal
@@ -156,6 +157,11 @@ async def connect_client(request):
                 if msg_type is None or msg_type.startswith('_') or not hasattr(PlayerCommands, msg_type):
                     raise PlayerError(f'unknown message type {msg_type}')
                 else:
+                    cmd = getattr(cmds, msg_type)
+                    required_args = [p.name for p in inspect.signature(cmd).parameters.values() if p.default is inspect.Parameter.empty]
+                    missing_args = [arg for arg in required_args if arg not in msg]
+                    if missing_args:
+                        raise PlayerError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
                     getattr(cmds, msg_type)(**msg)
                 client_update_event.set()
                 # await game_state.send_to_all()
