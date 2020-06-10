@@ -87,7 +87,8 @@ class GameState(object):
         self.connections.remove(cmds)
         if cmds.player is not None:
             self.remove_player(cmds.player)
-            await self.send_to_all()
+            client_update_event.set()
+            # await self.send_to_all()
 
     def add_player(self, player):
         if not self.players:
@@ -156,7 +157,8 @@ async def connect_client(request):
                     raise PlayerError(f'unknown message type {msg_type}')
                 else:
                     getattr(cmds, msg_type)(**msg)
-                await game_state.send_to_all()
+                client_update_event.set()
+                # await game_state.send_to_all()
             except PlayerError as e:
                 log('player error:', e)
                 await cmds.ws.send_json({
@@ -173,6 +175,15 @@ async def connect_client(request):
     await game_state.disconnect(cmds)
 
     return cmds.ws
+
+client_update_event = asyncio.Event()
+
+async def update_clients():
+    while True:
+        await client_update_event.wait()
+        client_update_event.clear()
+        await game_state.send_to_all()
+        await asyncio.sleep(0.1)
 
 async def index_middleware(app, handler):
     index = 'index.html'
@@ -240,12 +251,13 @@ async def run_server():
         http_server.close()
         await http_server.wait_closed()
 
-        await web_server.shutdown(timeout=30)
         await app.shutdown()
+        await web_server.shutdown(timeout=30)
+
         await app.cleanup()
 
 async def main():
-    await asyncio.gather(run_server())
+    await asyncio.gather(run_server(), update_clients())
 
 if __name__ == '__main__':
     try:
