@@ -170,14 +170,19 @@ class GameStateSerializer(json.JSONEncoder):
         return super(GameStateSerializer, self).default(value)
 
 async def connect_client(request):
-    def log(msg, *args, **kwargs):
-        print(f'[{request.remote}] {msg}', *args, **kwargs)
-
     ws = web.WebSocketResponse()
+    cmds = PlayerCommands(ws)
+
+    def log(msg, *args, **kwargs):
+        log_prefix = request.remote
+        if cmds.player is not None:
+            log_prefix += f' - {cmds.player.name}'
+        print(f'[{log_prefix}] {msg}', *args, **kwargs)
+
+    log(f'connecting')
     await ws.prepare(request)
 
     log(f'connected')
-    cmds = PlayerCommands(ws)
     await game_state.connect(cmds)
 
     async for msg in cmds.ws:
