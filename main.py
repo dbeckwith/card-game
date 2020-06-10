@@ -13,15 +13,25 @@ class Player(object):
     def __init__(self, ws, name):
         self.ws = ws
         self.name = name
+        self.in_game = False
+        self.hand = []
+        self.chips = 0
+
+    def give_card(self, card):
+        self.hand.append(card)
 
     def __serialize__(self):
         return {
             'name': self.name,
+            'in_game': self.in_game,
+            'hand': self.hand,
+            'chips': self.chips,
         }
 
 class GameState(object):
     def __init__(self):
         self.players = []
+        self.board = []
 
     def add_player(self, player):
         self.players.append(player)
@@ -29,9 +39,15 @@ class GameState(object):
     def remove_player(self, player):
         self.players.remove(player)
 
+    def get_player(self, name):
+        for player in self.players:
+            if player.name == name:
+                return player
+
     def __serialize__(self):
         return {
             'players': self.players,
+            'board': self.board,
         }
 
     async def send_to_all_players(self):
@@ -81,13 +97,22 @@ async def connect_client(request):
             try:
                 msg_type = msg.get('type')
                 if msg_type == 'join':
-                    name = msg['name']
-                    player = Player(ws, name)
-                    log(f'{player.name} joined')
-                    game_state.add_player(player)
-                    await game_state.send_to_all_players()
+                    if player is None:
+                        name = msg['name']
+                        player = Player(ws, name)
+                        log(f'{player.name} joined')
+                        game_state.add_player(player)
+                    else:
+                        log('player tried to join twice')
+                elif msg_type == 'give_card':
+                    p = msg['player']
+                    card = msg['card']
+                    p = game_state.get_player(p)
+                    if p is not None:
+                        p.give_card(card)
                 else:
                     log('unknown message type:', msg_type)
+                await game_state.send_to_all_players()
             except:
                 log('error handling message:')
                 traceback.print_exc()
