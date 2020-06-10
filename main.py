@@ -6,8 +6,11 @@ from aiohttp import web
 import asyncio
 import json
 from pathlib import Path
+import signal
 import traceback
 
+
+loop = asyncio.get_event_loop()
 
 class PlayerError(Exception):
     def __init__(self, message):
@@ -78,7 +81,7 @@ class GameState(object):
 
     async def connect(self, cmds):
         self.connections.append(cmds)
-        await game_state.send(cmds.ws)
+        await self.send(cmds.ws)
 
     async def disconnect(self, cmds):
         self.connections.remove(cmds)
@@ -120,15 +123,13 @@ class GameState(object):
             ),
         )
 
+game_state = GameState()
+
 class GameStateSerializer(json.JSONEncoder):
     def default(self, value):
         if hasattr(value, '__json__'):
             return value.__json__()
         return super(GameStateSerializer, self).default(value)
-
-
-game_state = GameState()
-
 
 async def connect_client(request):
     def log(msg, *args, **kwargs):
@@ -173,7 +174,6 @@ async def connect_client(request):
 
     return cmds.ws
 
-
 async def index_middleware(app, handler):
     index = 'index.html'
 
@@ -189,8 +189,7 @@ async def index_middleware(app, handler):
 
     return index_handler
 
-
-if __name__ == '__main__':
+async def run_server():
     app = web.Application(
         middlewares=[
             index_middleware
@@ -198,4 +197,59 @@ if __name__ == '__main__':
     )
     app.router.add_get('/ws', connect_client)
     app.router.add_static('/', Path(__file__).parent / 'public')
-    web.run_app(app)
+    app.freeze()
+
+    await app.startup()
+
+    def request_factory(message, payload, protocol, writer, task, _cls=web.Request):
+        return _cls(
+            message,
+            payload,
+            protocol,
+            writer,
+            task,
+            loop,
+            client_max_size=app._client_max_size,
+        )
+    web_server = web.Server(app._handle, request_factory=request_factory)
+
+    host = 'localhost'
+    port = 8080
+    http_server = await loop.create_server(
+        web_server,
+        host,
+        port,
+        start_serving=False,
+    )
+
+    def stop():
+        http_server.close()
+
+    loop.add_signal_handler(signal.SIGINT, stop)
+    loop.add_signal_handler(signal.SIGTERM, stop)
+
+    try:
+        print(f'serving at {host}:{port}...')
+        await http_server.serve_forever()
+    finally:
+        loop.remove_signal_handler(signal.SIGINT)
+        loop.remove_signal_handler(signal.SIGTERM)
+
+        print('shutting down...')
+
+        http_server.close()
+        await http_server.wait_closed()
+
+        await web_server.shutdown(timeout=30)
+        await app.shutdown()
+        await app.cleanup()
+
+async def main():
+    await asyncio.gather(run_server())
+
+if __name__ == '__main__':
+    try:
+        loop.run_until_complete(main())
+    except asyncio.exceptions.CancelledError:
+        pass
+    loop.close()
