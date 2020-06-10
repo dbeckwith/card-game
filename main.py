@@ -258,7 +258,7 @@ async def run_server():
         await http_server.wait_closed()
 
         for cmds in game_state.connections:
-            await cmds.ws.close()
+            await cmds.ws.close(code=1012, message=b'server shutdown')
 
         await app.shutdown()
         await web_server.shutdown(timeout=30)

@@ -18,7 +18,7 @@ window.onload = function() {
       }
       case 'error': {
         const { error } = message;
-        console.log('ERROR:', error);
+        console.log('error:', error);
         document.getElementById('error').textContent = `error: ${error}`;
         break;
       }
@@ -26,11 +26,9 @@ window.onload = function() {
   };
 
   ws.onclose = function(event) {
-    if (event.wasClean) {
-      console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-    } else {
-      console.log('[close] Connection died');
-    }
+    const { wasClean, code, reason } = event;
+    console.log('connection closed', { wasClean, code, reason });
+    document.getElementById('error').textContent = `server disconnected: ${reason}`;
   };
 
   ws.onerror = function(error) {
