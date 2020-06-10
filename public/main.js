@@ -1,50 +1,36 @@
-window.onload = function() {
+import { CardGame } from './game_client.js';
+
+window.onload = () => {
   let playerName;
 
-  const ws = new WebSocket(`ws://${window.location.host}/ws`);
+  const client = new CardGame();
 
-  ws.onopen = function(e) {
-    console.log('connected to game');
+  client.on_connect = () => {
+    document.getElementById('gamestate').value = '';
   };
 
-  ws.onmessage = function(event) {
-    const message = JSON.parse(event.data);
-    switch (message.type) {
-      case 'game_state': {
-        const { game_state: gameState } = message;
-        console.log('game state:', gameState);
-        document.getElementById('gamestate').value = JSON.stringify(gameState, null, 2);
-        break;
-      }
-      case 'error': {
-        const { error } = message;
-        console.log('error:', error);
-        document.getElementById('error').textContent = `error: ${error}`;
-        break;
-      }
-    }
+  client.on_update = (game_state) => {
+    document.getElementById('gamestate').value = JSON.stringify(game_state, null, 2);
   };
 
-  ws.onclose = function(event) {
-    const { wasClean, code, reason } = event;
-    console.log('connection closed', { wasClean, code, reason });
+  client.on_error = (error) => {
+    document.getElementById('error').textContent = `error: ${error}`;
+  };
+
+  client.on_disconnect = (reason) => {
     document.getElementById('error').textContent = `server disconnected: ${reason}`;
   };
 
-  ws.onerror = function(error) {
-    console.log(`[error] ${error.message}`);
-  };
-
-  document.getElementById('joinbtn').onclick = function() {
+  document.getElementById('joinbtn').onclick = () => {
     playerName = document.getElementById('nameinput').value;
-    ws.send(JSON.stringify({ type: 'join', name: playerName }));
+    client.join(playerName);
   }
 
-  document.getElementById('givecard').onclick = function() {
-    ws.send(JSON.stringify({ type: 'draw_card', target: { type: 'player', player: playerName } }));
+  document.getElementById('givecard').onclick = () => {
+    client.draw_card({ type: 'player', player: playerName })
   }
 
-  document.getElementById('newgame').onclick = function() {
-    ws.send(JSON.stringify({ type: 'new_game' }));
+  document.getElementById('newgame').onclick = () => {
+    client.new_game();
   }
 }
