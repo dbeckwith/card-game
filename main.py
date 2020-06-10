@@ -156,8 +156,7 @@ class GameState(object):
     async def send_to_all(self):
         await asyncio.gather(*(
             self.send(cmds.ws)
-            for cmds
-            in self.connections
+            for cmds in self.connections
         ))
 
     async def send(self, ws):
@@ -207,9 +206,25 @@ async def connect_client(request):
                     raise PlayerError(f'unknown message type {msg_type}')
                 else:
                     cmd = getattr(cmds, msg_type)
-                    log(msg_type + '(' + ', '.join(key + '=' + repr(value) for key, value in msg.items()) + ')')
-                    required_args = [p.name for p in inspect.signature(cmd).parameters.values() if p.default is inspect.Parameter.empty]
-                    missing_args = [arg for arg in required_args if arg not in msg]
+                    log(
+                        msg_type +
+                        '(' +
+                        ', '.join(
+                            key + '=' + repr(value)
+                            for key, value in msg.items()
+                        ) +
+                        ')',
+                    )
+                    required_args = [
+                        p.name
+                        for p in inspect.signature(cmd).parameters.values()
+                        if p.default is inspect.Parameter.empty
+                    ]
+                    missing_args = [
+                        arg
+                        for arg in required_args
+                        if arg not in msg
+                    ]
                     if missing_args:
                         raise PlayerError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
                     getattr(cmds, msg_type)(**msg)
@@ -313,7 +328,10 @@ async def run_server():
         http_server.close()
         await http_server.wait_closed()
 
-        await asyncio.gather(*(cmds.ws.close(code=1012, message=b'server shutdown') for cmds in game_state.connections))
+        await asyncio.gather(*(
+            cmds.ws.close(code=1012, message=b'server shutdown')
+            for cmds in game_state.connections
+        ))
 
         await app.shutdown()
         await web_server.shutdown(timeout=30)
