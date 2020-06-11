@@ -10,6 +10,7 @@ var num_players = players.length; //tracks how many players didn't opt out
 var common_cards = [];
 var pot = 0;
 var bet = 0;
+var draw_mode = false;
 function set_bet(player)
 {
         //called when Bet button pressed
@@ -30,12 +31,24 @@ function payout()
 
 function add(p)
 {
-    //add a card in draw poker
+    if(draw_mode)
+    {
+        current_player = p;
+        one_card(false);
+    }
+    //add a card when playing a draw poker game
 }
-function draw(){
+function draw()
+{
+    draw_mode = !draw_mode;
+    if(draw_mode)
+    {
+    }
+        
     //called when Draw button clicked - puts in draw mode where
     //clicking card removes it
     //remember: user sees all up with border around down
+    //also: dealer can now click add button to dole out cards
 }
 
 /**
@@ -350,14 +363,13 @@ function update_display(slide)
 
                     "<button  class='dlrbtns' type='button' onclick='add(" + loc + ")'>" + "Add</button>" +
 
-                   
                     "<button class='dlrbtns' type='button' onclick='won(" + loc + ")'>Won</button><br>" +
-
 
                     '<input type="number" size="4" maxlength="4" id="bet' + loc + '" name="fname" style="width:50px;" min="0" max="999">' +
 
                     "<button id='fold' type='button' onclick='fold(" + loc + ")'>" + "FOLD</button>" +
- "<span onclick=give_card(" + loc + ")" + clr_add + ">" + players[loc].name + "</span><br>";
+                    
+                    "<span " + clr_add + ">" + players[loc].name + "</span><br>";
 
                 display += "</td><td>";
 
@@ -366,9 +378,9 @@ function update_display(slide)
                 {
                     //last card only should show animation:
                     if (loc == current_player && j == players[i].hand.length - 1 && slide)
-                        add = " id='last' ";
+                        add_id = " id='last' ";
                     else
-                        add = "";
+                        add_id = "";
 
                     curr_card = players[loc].hand[j];
 
@@ -377,12 +389,12 @@ function update_display(slide)
                         display += "<img class='card' onclick='flip()' src='card_images/1B.svg'>";
                     //in play - up card
                     else if (curr_card.up)
-                        display += "<img " + add + "class='card' onclick='flip(" + loc + ", " + j + ")' src='card_images/" +
+                        display += "<img " + add_id + "class='card' onclick='flip(" + loc + ", " + j + ")' src='card_images/" +
                         curr_card.value + curr_card.suit +
                         ".svg'>";
                     //in play - down card:
                     else
-                        display += "<img " + add + "class='card' onclick='flip(" + loc + ", " + j + ")' src='card_images/2B.svg'>";
+                        display += "<img " + add_id + "class='card' onclick='flip(" + loc + ", " + j + ")' src='card_images/2B.svg'>";
                 }
                 if (loc < 5)
                     display += "</td>";
