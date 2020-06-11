@@ -353,11 +353,11 @@ function update_display(slide)
                     display += "<button id='fold' type='button' onclick='sitout(" + loc + ")'>" +
                     "SIT OUT</button>"
                 if (loc == start_player - 1)
-                    clr_add = "style='color:yellow'";
+                    clr_add = "color:yellow'";
                 else if (loc == current_player + 1)
-                    clr_add = "style='color:red'";
+                    clr_add = "color:red'";
                 else
-                    clr_add = ""
+                    clr_add = "'"
                 display +=
 
 
@@ -371,7 +371,7 @@ function update_display(slide)
 
                     '<input type="number" size="4" maxlength="4" id="bet' + loc + '" name="fname" style="width:50px;" min="0" max="999">' +
 
-                    "<span style='margin-left:5px'" + clr_add + ">" + players[loc].name + "</span><br>";
+                    "<span style='margin-left:5px;" + clr_add + ">" + players[loc].name + "</span><br>";
 
                 display += "</td><td>";
 
