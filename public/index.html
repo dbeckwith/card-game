@@ -53,7 +53,9 @@
         <button type="button" class="restart_btn" style="margin-left: 40px;" onclick="reset_dealer()">Reset Dealer/Restart</button>
 
         <button type="button"  class="restart_btn" onclick="shuffle_restart()">Shuffle/Restart</button><br>
-        <span style="font-size:30px;"> POT: 40 chips</span>
+        <span id="pot" style="font-size:30px;"></span>
+        <span id="last_bet" style="font-family: consolas; font-size:18px; color:beige;"></span>
+
         <button id='fold' style="margin-left: 40px; color:white;background-color: red"  type='button' onclick="payout()">PAY-OUT</button>
 
         <div id="numcards"></div>

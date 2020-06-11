@@ -8,34 +8,19 @@ var current_player = 0;
 var current_card_up = true;
 var num_players = players.length; //tracks how many players didn't opt out
 var common_cards = [];
-var pot = 40;
-//SELECT MENUS FOR BETTING:
-//var menu1 = '<select onchange="bet(this)" name="bet" id="bet"' //allows for class for last player for slide fx
-//var menu2 =
-//    '<option value="b">BET</option>' +
-//    '<option value="chk">===</option>' +
-//    '<option value="chk">Check</option>' +
-//    '<option value="c1">1</option>' +
-//    '<option value="c2">2</option>' +
-//    '<option value="c3">3</option>' +
-//    '<option value="c4">4</option>' +
-//    '<option value="c5">5</option>' +
-//    '<option value="c6">6</option>' +
-//    '<option value="c7">7</option>' +
-//    '<option value="c8">8</option>' +
-//    '<option value="c9">9</option>' +
-//    '<option value="c10">10</option>' +
-//    '<option value="chalf">1/2 POT</option>' +
-//
-//    '<option value="cpot">POT</option>' +
-//
-//    '<option value="cother">Other</option>' +
-//    '</select>'
-
-
+var pot = 0;
+var bet = 0;
 function set_bet(player)
 {
-    //called when Bet button pressed
+        //called when Bet button pressed
+
+    bet = parseInt(document.getElementById("bet" + player).value);
+    if(typeof bet !== "undefined" && !Number.isNaN(bet))
+    {
+        pot += bet;
+        players[player].chips -= bet;
+        update_display(false);
+    }
 }
 
 function payout()
@@ -51,21 +36,6 @@ function draw(){
     //called when Draw button clicked - puts in draw mode where
     //clicking card removes it
     //remember: user sees all up with border around down
-}
-
-function bet(a)
-{
-    var x = (a.value || a.options[a.selectedIndex].value); //crossbrowser solution =)
-    if (x == "cother")
-        alert("Okay, how much do you want to bet?");
-    else if (x == "chalf")
-        alert("You have bet half the pot, which is " + pot / 2 + " chips");
-    else if (x == "cpot")
-        alert("You have bet the whole pot, which is " + pot + " chips");
-    else if (x == "check")
-        alert("You have checked");
-    else
-        alert("You have bet " + x.slice(1) + " chips ");
 }
 
 /**
@@ -229,6 +199,7 @@ function one_card(up_card)
  */
 function deal_card(up_card)
 {
+    bet = 0;
     card = get_next_card();
     if (typeof card !== 'undefined')
     {
@@ -337,6 +308,8 @@ function deal_common()
  */
 function update_display(slide)
 {
+    document.getElementById("pot").innerHTML = "POT: " + pot + " chips";
+    document.getElementById("last_bet").innerHTML = "(last bet: " + bet + ")";
     document.getElementById("numcards").innerHTML = "remaining cards: " + deck.length;
     if (deck.length == 0)
         document.getElementById("numcards").style.backgroundColor = "red";
