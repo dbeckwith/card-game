@@ -178,7 +178,9 @@ class GameStateSerializer(json.JSONEncoder):
         return super(GameStateSerializer, self).default(value)
 
 async def connect_client(request):
-    ws = web.WebSocketResponse()
+    ws = web.WebSocketResponse(
+        heartbeat=1.0,
+    )
     cmds = PlayerCommands(ws)
 
     def log(msg, *args, **kwargs):
@@ -187,62 +189,63 @@ async def connect_client(request):
             log_prefix += f' - {cmds.player.name}'
         print(f'[{log_prefix}] {msg}', *args, **kwargs)
 
-    log(f'connecting')
+    log('connecting')
     await ws.prepare(request)
 
-    log(f'connected')
+    log('connected')
     await game_state.connect(cmds)
 
-    async for msg in cmds.ws:
-        if msg.type == aiohttp.WSMsgType.TEXT:
-            try:
-                msg = json.loads(msg.data)
-            except json.JSONDecodeError as e:
-                log('message error:', e)
-                continue
-            try:
-                msg_type = msg.pop('type')
-                if msg_type is None or msg_type.startswith('_') or not hasattr(PlayerCommands, msg_type):
-                    raise PlayerError(f'unknown message type {msg_type}')
-                else:
-                    cmd = getattr(cmds, msg_type)
-                    log(
-                        msg_type +
-                        '(' +
-                        ', '.join(
-                            key + '=' + repr(value)
-                            for key, value in msg.items()
-                        ) +
-                        ')',
-                    )
-                    required_args = [
-                        p.name
-                        for p in inspect.signature(cmd).parameters.values()
-                        if p.default is inspect.Parameter.empty
-                    ]
-                    missing_args = [
-                        arg
-                        for arg in required_args
-                        if arg not in msg
-                    ]
-                    if missing_args:
-                        raise PlayerError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
-                    getattr(cmds, msg_type)(**msg)
-                game_state.mark_dirty()
-            except PlayerError as e:
-                log('player error:', e)
-                await cmds.ws.send_json({
-                    'type': 'error',
-                    'error': e.message,
-                })
-            except:
-                log('error handling message:')
-                traceback.print_exc()
-        elif msg.type == aiohttp.WSMsgType.ERROR:
-            log('connection closed with exception:', cmds.ws.exception())
-
-    log('disconnected')
-    await game_state.disconnect(cmds)
+    try:
+        async for msg in cmds.ws:
+            if msg.type == aiohttp.WSMsgType.TEXT:
+                try:
+                    msg = json.loads(msg.data)
+                except json.JSONDecodeError as e:
+                    log('message error:', e)
+                    continue
+                try:
+                    msg_type = msg.pop('type')
+                    if msg_type is None or msg_type.startswith('_') or not hasattr(PlayerCommands, msg_type):
+                        raise PlayerError(f'unknown message type {msg_type}')
+                    else:
+                        cmd = getattr(cmds, msg_type)
+                        log(
+                            msg_type +
+                            '(' +
+                            ', '.join(
+                                key + '=' + repr(value)
+                                for key, value in msg.items()
+                            ) +
+                            ')',
+                        )
+                        required_args = [
+                            p.name
+                            for p in inspect.signature(cmd).parameters.values()
+                            if p.default is inspect.Parameter.empty
+                        ]
+                        missing_args = [
+                            arg
+                            for arg in required_args
+                            if arg not in msg
+                        ]
+                        if missing_args:
+                            raise PlayerError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
+                        getattr(cmds, msg_type)(**msg)
+                    game_state.mark_dirty()
+                except PlayerError as e:
+                    log('player error:', e)
+                    await cmds.ws.send_json({
+                        'type': 'error',
+                        'error': e.message,
+                    })
+                except:
+                    log('error handling message:')
+                    traceback.print_exc()
+            elif msg.type == aiohttp.WSMsgType.ERROR:
+                log('connection closed with exception:', cmds.ws.exception())
+    finally:
+        log('disconnected')
+        await game_state.disconnect(cmds)
 
     return cmds.ws
 
