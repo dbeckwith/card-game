@@ -11,12 +11,13 @@ var common_cards = [];
 var pot = 0;
 var bet = 0;
 var draw_mode = false;
+
 function set_bet(player)
 {
-        //called when Bet button pressed
+    //called when Bet button pressed
 
     bet = parseInt(document.getElementById("bet" + player).value);
-    if(typeof bet !== "undefined" && !Number.isNaN(bet))
+    if (typeof bet !== "undefined" && !Number.isNaN(bet))
     {
         pot += bet;
         players[player].chips -= bet;
@@ -31,20 +32,20 @@ function payout()
 
 function add(p)
 {
-    if(draw_mode)
+    if (draw_mode)
     {
         current_player = p;
         one_card(false);
     }
     //add a card when playing a draw poker game
 }
+
 function draw()
 {
     draw_mode = !draw_mode;
-    if(draw_mode)
-    {
-    }
-        
+    if (draw_mode)
+    {}
+
     //called when Draw button clicked - puts in draw mode where
     //clicking card removes it
     //remember: user sees all up with border around down
@@ -359,17 +360,18 @@ function update_display(slide)
                     clr_add = ""
                 display +=
 
-                    "<button id='fold' type='button' onclick='set_bet(" + loc + ")'>Bet</button>" +
+
+                    "<button id='fold' type='button' onclick='fold(" + loc + ")'>" + "FOLD</button>" +
 
                     "<button  class='dlrbtns' type='button' onclick='add(" + loc + ")'>" + "Add</button>" +
 
                     "<button class='dlrbtns' type='button' onclick='won(" + loc + ")'>Won</button><br>" +
 
+                    "<button id='fold' type='button' onclick='set_bet(" + loc + ")'>Bet</button>" +
+
                     '<input type="number" size="4" maxlength="4" id="bet' + loc + '" name="fname" style="width:50px;" min="0" max="999">' +
 
-                    "<button id='fold' type='button' onclick='fold(" + loc + ")'>" + "FOLD</button>" +
-                    
-                    "<span " + clr_add + ">" + players[loc].name + "</span><br>";
+                    "<span style='margin-left:5px'" + clr_add + ">" + players[loc].name + "</span><br>";
 
                 display += "</td><td>";
 
