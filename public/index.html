@@ -62,10 +62,10 @@
 
         
         <button class='player_btn' type='button' onclick='fold()'>FOLD</button>
-         <input type="number" class='player_btn' size="4" maxlength="4" id="bet" name="fname" style="width:50px;" min="0" max="999">
+         <input autocomplete="off" type="number" class='player_btn' size="4" maxlength="4" id="bet" name="fname" style="width:70px;" min="0" max="999">
         <button class='player_btn' type='button' onclick='set_bet()'>Bet</button>
         <button class='player_btn' type='button' onclick='check()'>Check</button>
-
+        <span id="my_chips">My Chips:</span>
 
     </center>
     <div id="field"></div>

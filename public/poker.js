@@ -21,6 +21,7 @@ function set_bet() //took out argument player
     {
         pot += bet;
         players[current_player].chips -= bet;
+        document.getElementById("my_chips").innerHTML = "My chips: " + players[current_player].chips;
         update_display(false);
     }
 }
