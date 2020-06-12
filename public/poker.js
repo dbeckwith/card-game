@@ -12,7 +12,7 @@ var pot = 0;
 var bet = 0;
 var draw_mode = false;
 
-function set_bet()  //took out argument player
+function set_bet() //took out argument player
 {
     //called when Bet button pressed
 
@@ -24,9 +24,12 @@ function set_bet()  //took out argument player
         update_display(false);
     }
 }
-function check(){
+
+function check()
+{
     //check button is clicked
 }
+
 function payout()
 {
     //divide pot by all winners
@@ -45,7 +48,7 @@ function add(p)
 function draw()
 {
     draw_mode = !draw_mode;
-    if(draw_mode)
+    if (draw_mode)
         document.getElementById("drawbtn").style.backgroundColor = "yellow";
     else
         document.getElementById("drawbtn").style.backgroundColor = "white";
@@ -67,7 +70,7 @@ function setup()
         {
             name: names[i],
             hand: [],
-            chips: 120,  //$30
+            chips: Math.floor(Math.random() * 200), //random for testing - could be 120 = $30
             fold: false,
             playing: true
         });
@@ -320,7 +323,21 @@ function deal_common()
         document.getElementById("common").innerHTML = common_disp;
     }
 }
+/**
+ */
+function getChipMax()
+{
 
+    max = 0;
+    for (var i = 0; i < players.length; i++)
+    {
+
+        if (players[i].chips > max)
+            max = players[i].chips;
+    }
+    return max;
+
+}
 /**
  * updates all cards on field
  */
@@ -334,11 +351,11 @@ function update_display(slide)
 
     display = "<table>";
 
-
+    max = getChipMax();
     //two columns of players, 5 per column:
-    for (i = 0; i < Math.ceil(players.length / 2); i++)
+    for (var i = 0; i < Math.ceil(players.length / 2); i++)
     {
-        for (col = 0; col < 2; col++)
+        for (var col = 0; col < 2; col++)
         {
             loc = i + 5 * col; //loc in second column
 
@@ -362,17 +379,20 @@ function update_display(slide)
                     clr_add = "color:red'";
                 else
                     clr_add = "'"
+                
+                chip_img = "chips_images/" + Math.ceil(players[loc].chips / max * 5) + ".png";
+                
                 display +=
-                   
+
                     //ADD CARD
                     "<button  class='dlrbtns' type='button' onclick='add(" + loc + ")'>" + "Add</button>" +
                     //WIN BUTTON
                     "<button class='dlrbtns' type='button' onclick='won(" + loc + ")'>Won</button><br>" +
-                    
+
                     //NAME
-                    "<span style='margin-left:5px;" + clr_add + ">" + players[loc].name + "</span>" + 
-                    
-                    "<img src='chips_images/five.png' style='width:30px;'><br>";
+                    "<span style='margin-left:5px;" + clr_add + ">" + players[loc].name + "</span>" +
+
+                    "<img src='" + chip_img + "' style='width:30px;'><br>";
 
                 display += "</td><td>";
 
