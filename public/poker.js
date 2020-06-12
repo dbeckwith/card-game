@@ -16,17 +16,21 @@ function set_bet() //took out argument player
 {
     //called when Bet button pressed
 
-    bet = parseInt(document.getElementById("bet" + player).value);
+    bet = parseInt(document.getElementById("bet").value);
     if (typeof bet !== "undefined" && !Number.isNaN(bet))
     {
         pot += bet;
-        players[player].chips -= bet;
+        players[current_player].chips -= bet;
         update_display(false);
     }
 }
 
 function check()
 {
+    current_player++;
+    current_player %= players.length;
+    update_display(false);
+
     //check button is clicked
 }
 
@@ -157,6 +161,7 @@ function shuffle_restart()
     shuffle_fisher_yates(deck);
     turn_in_cards();
     start_player = start_player + 1;
+    start_player %= players.length;
     current_player = start_player;
     update_display(false);
 }
@@ -286,12 +291,12 @@ function deal_all(down, up)
 }
 
 
-function fold(p)
+function fold()
 {
-    players[p].fold = true;
+    players[current_player].fold = true;
     //turn all cards over:
-    for (var j = 0; j < players[p].hand.length; j++)
-        players[p].hand[j].up = false;
+    for (var j = 0; j < players[current_player].hand.length; j++)
+        players[current_player].hand[j].up = false;
 
     update_display(false);
 
@@ -379,9 +384,12 @@ function update_display(slide)
                     clr_add = "color:red'";
                 else
                     clr_add = "'"
-                
-                chip_img = "chips_images/" + Math.ceil(players[loc].chips / max * 5) + ".png";
-                
+
+                 if(players[loc].chips > 0)
+                    chip_img = "<img src='chips_images/" + Math.ceil(players[loc].chips / max * 5) + ".png' style='width:30px;'>";
+                else
+                    chip_img = "";
+
                 display +=
 
                     //ADD CARD
@@ -392,7 +400,7 @@ function update_display(slide)
                     //NAME
                     "<span style='margin-left:5px;" + clr_add + ">" + players[loc].name + "</span>" +
 
-                    "<img src='" + chip_img + "' style='width:30px;'><br>";
+                    chip_img + "<br>";
 
                 display += "</td><td>";
 
