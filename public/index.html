@@ -36,10 +36,10 @@
 -->
 
         <a href="#" onclick="alert('CambridgePoker &copy;2020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');">
-            <img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;"> 
+            <img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">
         </a>
-            <br>
-                <button style="margin-right:20px; border-color:black; border-radius:1px;" type="button" onclick="draw()">DRAW</button>
+        <br>
+        <button id="drawbtn" style="margin-right:20px; border-color:black; border-radius:1px;" type="button" onclick="draw()">DRAW</button>
 
         <button type="button" onclick="deal_all(5, 0)">5 DN</button>
         <button type="button" onclick="deal_all(2, 1)">2 DN, 1 UP</button>
@@ -49,18 +49,27 @@
         <button type="button" class="next" onclick="one_card(false)">Next DN</button>
         <button type="button" id="common_btn" onclick="deal_common()">COMMON DOWN</button>
 
-        
+
         <button type="button" class="restart_btn" style="margin-left: 40px;" onclick="reset_dealer()">Reset Dealer/Restart</button>
 
-        <button type="button"  class="restart_btn" onclick="shuffle_restart()">Shuffle/Restart</button><br>
-        <span id="pot" style="font-size:30px;"></span>
+        <button type="button" class="restart_btn" onclick="shuffle_restart()">Shuffle/Restart</button><br>
+        <span id="pot" style="font-size:24px;"></span>
         <span id="last_bet" style="font-family: consolas; font-size:18px; color:beige;"></span>
+        
+        <button id=' fold' style="margin-left: 40px; color:white;background-color: red" type='button' onclick="payout()">PAY-OUT</button>
+        <br>
+                    <div id="numcards"></div>
 
-        <button id='fold' style="margin-left: 40px; color:white;background-color: red"  type='button' onclick="payout()">PAY-OUT</button>
+        
+        <button class='player_btn' type='button' onclick='fold()'>FOLD</button>
+         <input type="number" class='player_btn' size="4" maxlength="4" id="bet' + loc + '" name="fname" style="width:50px;" min="0" max="999">
+        <button class='player_btn' type='button' onclick='set_bet()'>Bet</button>
+        <button class='player_btn' type='button' onclick='check()'>Check</button>
 
-        <div id="numcards"></div>
+
     </center>
-    <div id="field"></div><div id="common"></div>
-<br><span style='color:yellow'>DEALER IN YELLOW</span>
+    <div id="field"></div>
+    <div id="common"></div>
+    <br><span style='color:yellow'>DEALER IN YELLOW</span>
 
 </body>

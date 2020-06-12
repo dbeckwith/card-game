@@ -12,7 +12,7 @@ var pot = 0;
 var bet = 0;
 var draw_mode = false;
 
-function set_bet(player)
+function set_bet()  //took out argument player
 {
     //called when Bet button pressed
 
@@ -24,7 +24,9 @@ function set_bet(player)
         update_display(false);
     }
 }
-
+function check(){
+    //check button is clicked
+}
 function payout()
 {
     //divide pot by all winners
@@ -43,8 +45,10 @@ function add(p)
 function draw()
 {
     draw_mode = !draw_mode;
-    if (draw_mode)
-    {}
+    if(draw_mode)
+        document.getElementById("drawbtn").style.backgroundColor = "yellow";
+    else
+        document.getElementById("drawbtn").style.backgroundColor = "white";
 
     //called when Draw button clicked - puts in draw mode where
     //clicking card removes it
@@ -63,7 +67,7 @@ function setup()
         {
             name: names[i],
             hand: [],
-            chips: 25,
+            chips: 120,  //$30
             fold: false,
             playing: true
         });
@@ -352,26 +356,23 @@ function update_display(slide)
                 if (!game_started)
                     display += "<button id='fold' type='button' onclick='sitout(" + loc + ")'>" +
                     "SIT OUT</button>"
-                if (loc == start_player - 1)
+                if (loc == current_player + 1)
                     clr_add = "color:yellow'";
-                else if (loc == current_player + 1)
+                else if (loc == start_player - 1)
                     clr_add = "color:red'";
                 else
                     clr_add = "'"
                 display +=
-
-
-                    "<button id='fold' type='button' onclick='fold(" + loc + ")'>" + "FOLD</button>" +
-
+                   
+                    //ADD CARD
                     "<button  class='dlrbtns' type='button' onclick='add(" + loc + ")'>" + "Add</button>" +
-
+                    //WIN BUTTON
                     "<button class='dlrbtns' type='button' onclick='won(" + loc + ")'>Won</button><br>" +
-
-                    "<button id='fold' type='button' onclick='set_bet(" + loc + ")'>Bet</button>" +
-
-                    '<input type="number" size="4" maxlength="4" id="bet' + loc + '" name="fname" style="width:50px;" min="0" max="999">' +
-
-                    "<span style='margin-left:5px;" + clr_add + ">" + players[loc].name + "</span><br>";
+                    
+                    //NAME
+                    "<span style='margin-left:5px;" + clr_add + ">" + players[loc].name + "</span>" + 
+                    
+                    "<img src='chips_images/five.png' style='width:30px;'><br>";
 
                 display += "</td><td>";
 
