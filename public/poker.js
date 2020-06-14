@@ -13,11 +13,8 @@ var bet = 0;
 var draw_mode = false;
 var current_player_name = "";
 
-function login(name){
-    current_player_name = name;
-    window.location.replace("poker.html");
-    //go to poker.html which has onload
-}
+
+
 function set_bet() //took out argument player
 {
     //called when Bet button pressed
@@ -27,7 +24,7 @@ function set_bet() //took out argument player
     {
         pot += bet;
         players[current_player].chips -= bet;
-        document.getElementById("my_chips").innerHTML = "My chips: " + players[current_player].chips;
+        document.getElementById("my_chips").innerHTML = current_player_name + "'s chips: " + players[current_player].chips;
         update_display(false);
     }
 }
@@ -70,9 +67,88 @@ function draw()
     //also: dealer can now click add button to dole out cards
 }
 
-/**
- * create player objects
- */
+function render()
+{
+    if (current_player_name === "")
+        set_login_screen();
+    else
+        set_game_screen();
+}
+
+function login(name)
+{
+    var nm = document.getElementById("login_name").value;
+
+    current_player_name = nm;
+    //    var the_game = new CardGame();
+    //    the_game.join(name);
+
+    //show game field:
+    set_game_screen();
+
+}
+
+function set_login_screen()
+{
+    html = '<center><input id="login_name" style="width:210px; height:40px;font-size:20px;">' +
+        '<br>' +
+        "<button type='button' onclick='login()'>LOGIN</button><BR>" +
+        '<HR>' +
+        'CURRENT PLAYERS:</center>';
+    document.getElementById("all").innerHTML = html;
+}
+
+function set_game_screen()
+{
+    html = '<center><a href="#" onclick="alert("CambridgePoker &copy;2020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith");">' +
+        '<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">' +
+        '</a><br>' +
+        '<!-- dealer control buttons -->' +
+        '<button id="drawbtn" style="margin-right:20px; border-color:black; border-radius:1px;" type="button" onclick="draw()">DRAW</button>' +
+
+        '<button type="button" onclick="deal_all(5, 0)">5 DN</button>' +
+        '<button type="button" onclick="deal_all(2, 1)">2 DN, 1 UP</button>' +
+        '<button type="button" onclick="deal_all(0, 1)">1 UP</button>' +
+        '<button type="button" onclick="deal_all(1, 0)">1 DN</button>' +
+        '<button type="button" class="next" style="margin-left:20px" onclick="one_card(true)">Next UP</button>' +
+        '<button type="button" class="next" onclick="one_card(false)">Next DN</button>' +
+        '<button type="button" id="common_btn" onclick="deal_common()">COMMON DOWN</button>' +
+
+        '<button type="button" class="restart_btn" style="margin-left: 40px;" onclick="reset_dealer()">Reset Dealer/Restart</button>' +
+        '<button type="button" class="restart_btn" onclick="shuffle_restart()">Shuffle/Restart</button><br>' +
+
+        '<!-- display elements -->' +
+        '<span id="pot" style="font-size:24px;"></span>' +
+        '<span id="last_bet" style="font-family: consolas; font-size:18px; color:beige;"></span>' +
+
+        "<button id=' fold' style='margin-left: 40px; color:white;background-color: red' type='button' onclick='payout()'>PAY-OUT</button>" +
+        '<br>' +
+        '<div id="numcards"></div>' +
+
+        '<!-- player control buttons -->' +
+        "<button class='player_btn' type='button' onclick='fold()'>FOLD</button>" +
+
+        "<input autocomplete='off' type='number' class='player_btn' size='4' maxlength='4' id='bet' name='fname' style='width:70px;' min='0' max='999'>" +
+        "<button class='player_btn' type='button' onclick='set_bet()'>Bet</button>" +
+        "<button class='player_btn' type='button' onclick='check()'>Check</button>" +
+
+        '<span id="my_chips">' + current_player_name + '\'s Chips:</span>' +
+
+
+        '</center>' +
+
+        '<!-- all player controls and cards -->' +
+        '<div id="field"></div>' +
+
+        '<div id="common"></div>' +
+
+        '<br>' +
+        "<span style='color:yellow'>DEALER IN YELLOW</span>";
+    document.getElementById("all").innerHTML = html;
+
+    setup();
+}
+
 function setup()
 {
     for (var i = 0; i < names.length; i++)
@@ -161,16 +237,24 @@ function turn_in_cards()
  */
 function shuffle_restart()
 {
-    game_started = false;
-    common_cards = [];
+    //in case num cards turned red when reached 0:
     document.getElementById("numcards").style.backgroundColor = "transparent";
 
+    //reset variables:
+    game_started = false;
+    common_cards = [];
+    pot = 0;
+    bet = 0;
+    
+    //get deck and shuffle:
     deck = getDeck();
     shuffle_fisher_yates(deck);
     turn_in_cards();
+    //next starting player
     start_player = start_player + 1;
     start_player %= players.length;
     current_player = start_player;
+    //update with no slide in:
     update_display(false);
 }
 /**

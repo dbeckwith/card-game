@@ -25,31 +25,11 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-
-    <script>
-        function log() {
-            var nm = document.getElementById("login_name").value;
-            login(nm);
-        }
-
-    </script>
 </head>
 
-<body>
+<body onload="render()">
+<div id="all">
 
-
-    <center>
-        <a href="#" onclick="alert('CambridgePoker &copy;2020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');">
-            <img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">
-        </a>
-
-        <br>
-
-        <input id="login_name" style="width:170px;">
-        <br>
-        <button type='button' onclick='log()'>LOGIN</button><BR>
-        <HR>
-        CURRENT PLAYERS:
-    </center>
-
+   
+    </div>
 </body>
