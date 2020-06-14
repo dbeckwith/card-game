@@ -11,7 +11,13 @@ var common_cards = [];
 var pot = 0;
 var bet = 0;
 var draw_mode = false;
+var current_player_name = "";
 
+function login(name){
+    current_player_name = name;
+    window.location.replace("poker.html");
+    //go to poker.html which has onload
+}
 function set_bet() //took out argument player
 {
     //called when Bet button pressed
@@ -82,6 +88,7 @@ function setup()
     }
     shuffle_restart();
 }
+
 
 function reset_dealer()
 {
@@ -386,7 +393,7 @@ function update_display(slide)
                 else
                     clr_add = "'"
 
-                 if(players[loc].chips > 0)
+                if (players[loc].chips > 0)
                     chip_img = "<img src='chips_images/" + Math.ceil(players[loc].chips / max * 5) + ".png' style='width:30px;'>";
                 else
                     chip_img = "";

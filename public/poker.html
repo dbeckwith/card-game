@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <title>CambridgePoker</title>
+
+    <script type="text/javascript" src="poker.js"></script>
+
+    <link rel="stylesheet" href="poker.css">
+
+
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+
+<body onload="setup()">
+
+
+    <center>
+        <a href="#" onclick="alert('CambridgePoker &copy;2020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');">
+            <img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">
+        </a>
+        <br>
+            <!-- dealer control buttons -->
+            <button id="drawbtn" style="margin-right:20px; border-color:black; border-radius:1px;" type="button" onclick="draw()">DRAW</button>
+
+            <button type="button" onclick="deal_all(5, 0)">5 DN</button>
+            <button type="button" onclick="deal_all(2, 1)">2 DN, 1 UP</button>
+            <button type="button" onclick="deal_all(0, 1)">1 UP</button>
+            <button type="button" onclick="deal_all(1, 0)">1 DN</button>
+            <button type="button" class="next" style="margin-left:20px" onclick="one_card(true)">Next UP</button>
+            <button type="button" class="next" onclick="one_card(false)">Next DN</button>
+            <button type="button" id="common_btn" onclick="deal_common()">COMMON DOWN</button>
+
+            <button type="button" class="restart_btn" style="margin-left: 40px;" onclick="reset_dealer()">Reset Dealer/Restart</button>
+            <button type="button" class="restart_btn" onclick="shuffle_restart()">Shuffle/Restart</button><br>
+
+            <!-- display elements -->
+            <span id="pot" style="font-size:24px;"></span>
+            <span id="last_bet" style="font-family: consolas; font-size:18px; color:beige;"></span>
+
+            <button id=' fold' style="margin-left: 40px; color:white;background-color: red" type='button' onclick="payout()">PAY-OUT</button>
+            <br>
+            <div id="numcards"></div>
+
+            <!-- player control buttons -->
+            <button class='player_btn' type='button' onclick='fold()'>FOLD</button>
+            <input autocomplete="off" type="number" class='player_btn' size="4" maxlength="4" id="bet" name="fname" style="width:70px;" min="0" max="999">
+            <button class='player_btn' type='button' onclick='set_bet()'>Bet</button>
+            <button class='player_btn' type='button' onclick='check()'>Check</button>
+
+            <span id="my_chips">My Chips:</span>
+       
+
+    </center>
+
+    <!-- all player controls and cards -->
+    <div id="field"></div>
+
+    <div id="common"></div>
+
+    <br>
+    <span style='color:yellow'>DEALER IN YELLOW</span>
+</body>
