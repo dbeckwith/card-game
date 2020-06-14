@@ -1,4 +1,8 @@
-import { CardGame } from './game_client.js';
+import
+{
+    CardGame
+}
+from './game_client.js';
 
 let suits = ["S", "D", "C", "H"];
 let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"];
@@ -100,7 +104,8 @@ function set_login_screen()
         '<HR>' +
         'CURRENT PLAYERS:</center>';
     document.getElementById("all").innerHTML = html;
-    document.getElementById('loginbutton').onclick = () => {
+    document.getElementById('loginbutton').onclick = () =>
+    {
         login();
     };
 }
@@ -114,30 +119,30 @@ function set_game_screen()
         '<button id="drawbtn" style="margin-right:20px; border-color:black; border-radius:1px;" type="button" onclick="draw()">DRAW</button>' +
 
         '<button type="button" id="fivedownbutton">5 DN</button>' +
-        '<button type="button" onclick="deal_all(2, 1)">2 DN, 1 UP</button>' +
-        '<button type="button" onclick="deal_all(0, 1)">1 UP</button>' +
-        '<button type="button" onclick="deal_all(1, 0)">1 DN</button>' +
-        '<button type="button" class="next" style="margin-left:20px" onclick="one_card(true)">Next UP</button>' +
-        '<button type="button" class="next" onclick="one_card(false)">Next DN</button>' +
+        '<button type="button" id="two_dn_one_up">2 DN, 1 UP</button>' +
+        '<button type="button" id="one_up">1 UP</button>' +
+        '<button type="button" id="one_down">1 DN</button>' +
+        '<button type="button" class="next" style="margin-left:20px" id="next_up">Next UP</button>' +
+        '<button type="button" class="next" id="next_down">Next DN</button>' +
         '<button type="button" id="common_btn">COMMON DOWN</button>' +
 
-        '<button type="button" class="restart_btn" style="margin-left: 40px;" onclick="reset_dealer()">Reset Dealer/Restart</button>' +
-        '<button type="button" class="restart_btn" onclick="shuffle_restart()">Shuffle/Restart</button><br>' +
+        '<button type="button" class="restart_btn" style="margin-left: 40px;" id="reset_dealer">Reset Dealer/Restart</button>' +
+        '<button type="button" class="restart_btn" id="shuffle_restart">Shuffle/Restart</button><br>' +
 
         '<!-- display elements -->' +
         '<span id="pot" style="font-size:24px;"></span>' +
         '<span id="last_bet" style="font-family: consolas; font-size:18px; color:beige;"></span>' +
 
-        "<button id=' fold' style='margin-left: 40px; color:white;background-color: red' type='button' onclick='payout()'>PAY-OUT</button>" +
+        "<button id='pay_out' style='margin-left: 40px; color:white;background-color: red' type='button' >PAY-OUT</button>" +
         '<br>' +
         '<div id="numcards"></div>' +
 
         '<!-- player control buttons -->' +
-        "<button class='player_btn' type='button' onclick='fold()'>FOLD</button>" +
+        "<button class='player_btn' type='button' id='fold_btn'>FOLD</button>" +
 
         "<input autocomplete='off' type='number' class='player_btn' size='4' maxlength='4' id='bet' name='fname' style='width:70px;' min='0' max='999'>" +
-        "<button class='player_btn' type='button' onclick='set_bet()'>Bet</button>" +
-        "<button class='player_btn' type='button' onclick='check()'>Check</button>" +
+        "<button class='player_btn' type='button' id='set_bet'>Bet</button>" +
+        "<button class='player_btn' type='button' id='check_btn'>Check</button>" +
 
         '<span id="my_chips">' + current_player_name + '\'s Chips:</span>' +
 
@@ -153,12 +158,55 @@ function set_game_screen()
         "<span style='color:yellow'>DEALER IN YELLOW</span>";
     document.getElementById("all").innerHTML = html;
 
-    document.getElementById("fivedownbutton").onclick = () => {
+    document.getElementById("fivedownbutton").onclick = () =>
+    {
         deal_all(5, 0);
     };
-    document.getElementById("common_btn").onclick = () => {
-        deal_common();
+    document.getElementById("two_dn_one_up").onclick = () =>
+    {
+        deal_all(2, 1);
     };
+    document.getElementById("one_up").onclick = () =>
+    {
+        deal_all(0, 1);
+    };
+    document.getElementById("one_down").onclick = () =>
+    {
+        onclick = deal_all(1, 0);
+    };
+    document.getElementById("next_up").onclick = () =>
+    {
+        one_card(true);
+    };
+    document.getElementById("next_down").onclick = () =>
+    {
+        one_card(false);
+    };
+    document.getElementById("reset_dealer").onclick = () =>
+    {
+        reset_dealer();
+    };
+    document.getElementById("shuffle_restart").onclick = () =>
+    {
+        shuffle_restart();
+    };
+    document.getElementById("pay_out").onclick = () =>
+    {
+        payout();
+    };
+    document.getElementById("fold_btn").onclick = () =>
+    {
+        fold();
+    };
+    document.getElementById("set_bet").onclick = () =>
+    {
+        set_bet();
+    };
+    document.getElementById("set_bet").onclick = () =>
+    {
+        check();
+    };
+
 
 
     setup();
@@ -435,7 +483,8 @@ function deal_common()
         document.getElementById("common").innerHTML = common_disp;
 
         for (let i = 0; i < common_cards.length; i++)
-            document.getElementById('card' + i).onclick = () => {
+            document.getElementById('card' + i).onclick = () =>
+            {
                 flip_common(i);
             }
     }
@@ -570,9 +619,11 @@ function update_display(slide)
 }
 
 
-window.onload = () => {
+window.onload = () =>
+{
     the_game = new CardGame();
-    the_game.on_update = (game_state) => {
+    the_game.on_update = (game_state) =>
+    {
         render();
     };
 };
