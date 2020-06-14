@@ -39,6 +39,7 @@ class PlayerCommands(object):
         game_state.new_game()
 
     def draw_card(self, target):
+        # TODO: update for new card type
         target_type = target.get('type')
         if target_type == 'player':
             player = target.get('player')
@@ -61,6 +62,27 @@ class PlayerCommands(object):
             raise PlayerError('player not found')
         player.trash_card(card)
 
+    def deal_all(self, down, up):
+        for _ in range(down):
+            for player in game_state.players:
+                card = game_state.draw_card()
+                player.give_card(card, False)
+        for _ in range(up):
+            for player in game_state.players:
+                card = game_state.draw_card()
+                player.give_card(card, True)
+
+class PlayerCard(object):
+    def __init__(self, card, up):
+        self.card = card
+        self.up = up
+
+    def __json__(self):
+        return {
+            'card': self.card,
+            'up': self.up,
+        }
+
 class Player(object):
     def __init__(self, name):
         self.name = name
@@ -80,10 +102,11 @@ class Player(object):
         self.in_game = True
         self.hand = []
 
-    def give_card(self, card):
-        self.hand.append(card)
+    def give_card(self, card, up):
+        self.hand.append(PlayerCard(card, up))
 
     def trash_card(self, card):
+        # TODO: remove any card, up or down with this value
         if card in self.hand:
             self.hand.remove(card)
         else:

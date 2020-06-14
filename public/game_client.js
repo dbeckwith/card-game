@@ -74,4 +74,8 @@ export class CardGame {
   trash_card(player, card) {
     this._send('trash_card', { player, card });
   }
+
+  deal_all(down, up) {
+    this._send('deal_all', { down, up });
+  }
 }

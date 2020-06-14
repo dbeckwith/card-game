@@ -78,15 +78,22 @@ $(() => {
       }
       $deal_all_button.text(label);
       $deal_all_button.on('click', function() {
-        // TODO: deal
+        game.deal_all(down, up);
       });
       return $deal_all_button;
+    });
+
+    const $new_game_button = $('<button />');
+    $new_game_button.text('New Game');
+    $new_game_button.on('click', function() {
+      game.new_game();
     });
 
     $dealer_controls.append($logo_link);
     $dealer_controls.append('<br />');
     $dealer_controls.append($draw_button);
     $dealer_controls.append($deal_all_buttons);
+    $dealer_controls.append($new_game_button);
 
     const $game_board = $('<div />', {
       id: 'game_board',
@@ -104,6 +111,28 @@ $(() => {
     const $player_seats = _.map(game_state.players, (player) => {
       const $player_seat = $('<div />');
       $player_seat.text(player.name);
+
+      const $hand = _.map(player.hand, (card) => {
+        let card_img_name;
+        if (card.up || player.name === current_player) {
+          card_img_name = card.card;
+        } else {
+          card_img_name = '2B';
+        }
+
+        const $card_img = $('<img />', {
+          src: `card_images/${card_img_name}.svg`,
+        });
+
+        $card_img.addClass('card');
+        if (!card.up && player.name === current_player) {
+          $card_img.addClass('down-card');
+        }
+
+        return $card_img;
+      });
+
+      $player_seat.append($hand);
 
       return $player_seat;
     });
