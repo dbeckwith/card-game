@@ -42,7 +42,7 @@ $(() => {
   function setup_game_html(game_state) {
     $app.empty();
 
-    const $center = $('<center />');
+    const $dealer_controls = $('<center />');
 
     const $logo_link = $('<a />', {
       href: '#',
@@ -83,15 +83,32 @@ $(() => {
       return $deal_all_button;
     });
 
-    $center.append($logo_link);
-    $center.append('<br />');
-    $center.append($draw_button);
-    $center.append($deal_all_buttons);
-    $app.append($center);
+    $dealer_controls.append($logo_link);
+    $dealer_controls.append('<br />');
+    $dealer_controls.append($draw_button);
+    $dealer_controls.append($deal_all_buttons);
+
+    const $game_board = $('<div />', {
+      id: 'game_board',
+    });
+
+    $app.append($dealer_controls);
+    $app.append($game_board);
   }
 
   function render_game(game_state) {
+    const $game_board = $('#game_board');
 
+    $game_board.empty();
+
+    const $player_seats = _.map(game_state.players, (player) => {
+      const $player_seat = $('<div />');
+      $player_seat.text(player.name);
+
+      return $player_seat;
+    });
+
+    $game_board.append($player_seats);
   }
 
   game.on_update = (game_state) => {
