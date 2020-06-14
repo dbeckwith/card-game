@@ -113,13 +113,13 @@ function set_game_screen()
         '<!-- dealer control buttons -->' +
         '<button id="drawbtn" style="margin-right:20px; border-color:black; border-radius:1px;" type="button" onclick="draw()">DRAW</button>' +
 
-        '<button type="button" onclick="deal_all(5, 0)">5 DN</button>' +
+        '<button type="button" id="fivedownbutton">5 DN</button>' +
         '<button type="button" onclick="deal_all(2, 1)">2 DN, 1 UP</button>' +
         '<button type="button" onclick="deal_all(0, 1)">1 UP</button>' +
         '<button type="button" onclick="deal_all(1, 0)">1 DN</button>' +
         '<button type="button" class="next" style="margin-left:20px" onclick="one_card(true)">Next UP</button>' +
         '<button type="button" class="next" onclick="one_card(false)">Next DN</button>' +
-        '<button type="button" id="common_btn" onclick="deal_common()">COMMON DOWN</button>' +
+        '<button type="button" id="common_btn">COMMON DOWN</button>' +
 
         '<button type="button" class="restart_btn" style="margin-left: 40px;" onclick="reset_dealer()">Reset Dealer/Restart</button>' +
         '<button type="button" class="restart_btn" onclick="shuffle_restart()">Shuffle/Restart</button><br>' +
@@ -152,6 +152,14 @@ function set_game_screen()
         '<br>' +
         "<span style='color:yellow'>DEALER IN YELLOW</span>";
     document.getElementById("all").innerHTML = html;
+
+    document.getElementById("fivedownbutton").onclick = () => {
+        deal_all(5, 0);
+    };
+    document.getElementById("common_btn").onclick = () => {
+        deal_common();
+    };
+
 
     setup();
 }
@@ -334,7 +342,7 @@ function deal_card(up_card)
             card.up = true;
 
         //get current player and add card to their hand:
-        player = players[current_player]
+        const player = players[current_player]
         player.hand.push(card);
 
         update_display(true);
@@ -372,7 +380,7 @@ function deal_all(down, up)
     //downs:
     for (let d = 0; d < down; d++)
     {
-        count = 0;
+        let count = 0;
         for (let i = 0; i < players.length; i++)
         {
             count += check_and_deal_card(count, false);
@@ -381,7 +389,7 @@ function deal_all(down, up)
     //ups:
     for (let u = 0; u < up; u++)
     {
-        count = 0;
+        let count = 0;
         for (let i = 0; i < players.length; i++)
         {
             count += check_and_deal_card(count, true);
@@ -418,13 +426,18 @@ function deal_common()
     if (typeof card !== 'undefined')
     {
         common_cards.push(card);
-        common_disp = "";
+        let common_disp = "";
         for (let i = 0; i < common_cards.length; i++)
-            common_disp += "<img class='card' onclick='flip_common(" + i + ")'  src='card_images/1B.svg'>";
+            common_disp += "<img class='card' id='card" + i + "' src='card_images/1B.svg'>";
 
         update_display(false);
 
         document.getElementById("common").innerHTML = common_disp;
+
+        for (let i = 0; i < common_cards.length; i++)
+            document.getElementById('card' + i).onclick = () => {
+                flip_common(i);
+            }
     }
 }
 /**
