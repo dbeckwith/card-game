@@ -1,17 +1,22 @@
-var suits = ["S", "D", "C", "H"];
-var values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"];
-var names = ["Jason", "Eve", "Patrick", "Sarah", "Wati", "Paul", "Ned", "Philecia", "James", "Andrew"];
+import { CardGame } from './game_client.js';
 
-var players = [];
-var start_player = 0; //player that receives first card and bets first
-var current_player = 0;
-var current_card_up = true;
-var num_players = players.length; //tracks how many players didn't opt out
-var common_cards = [];
-var pot = 0;
-var bet = 0;
-var draw_mode = false;
-var current_player_name = "";
+let suits = ["S", "D", "C", "H"];
+let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"];
+let names = ["Jason", "Eve", "Patrick", "Sarah", "Wati", "Paul", "Ned", "Philecia", "James", "Andrew"];
+
+let players = [];
+let start_player = 0; //player that receives first card and bets first
+let current_player = 0;
+let current_card_up = true;
+let num_players = players.length; //tracks how many players didn't opt out
+let common_cards = [];
+let pot = 0;
+let bet = 0;
+let draw_mode = false;
+let current_player_name = "";
+let game_started;
+let the_game;
+let deck;
 
 
 
@@ -75,13 +80,12 @@ function render()
         set_game_screen();
 }
 
-function login(name)
+function login()
 {
-    var nm = document.getElementById("login_name").value;
+    const name = document.getElementById("login_name").value;
 
-    current_player_name = nm;
-    //    var the_game = new CardGame();
-    //    the_game.join(name);
+    current_player_name = name;
+    the_game.join(name);
 
     //show game field:
     set_game_screen();
@@ -90,17 +94,20 @@ function login(name)
 
 function set_login_screen()
 {
-    html = '<center><input id="login_name" style="width:210px; height:40px;font-size:20px;">' +
+    let html = '<center><input id="login_name" style="width:210px; height:40px;font-size:20px;">' +
         '<br>' +
-        "<button type='button' onclick='login()'>LOGIN</button><BR>" +
+        '<button type="button" id="loginbutton">LOGIN</button><BR>' +
         '<HR>' +
         'CURRENT PLAYERS:</center>';
     document.getElementById("all").innerHTML = html;
+    document.getElementById('loginbutton').onclick = () => {
+        login();
+    };
 }
 
 function set_game_screen()
 {
-    html = '<center><a href="#" onclick="alert("CambridgePoker &copy;2020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith");">' +
+    let html = '<center><a href="#" onclick="alert("CambridgePoker &copy;2020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith");">' +
         '<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">' +
         '</a><br>' +
         '<!-- dealer control buttons -->' +
@@ -151,7 +158,7 @@ function set_game_screen()
 
 function setup()
 {
-    for (var i = 0; i < names.length; i++)
+    for (let i = 0; i < names.length; i++)
     {
         players.push(
         {
@@ -176,13 +183,13 @@ function reset_dealer()
  */
 function getDeck()
 {
-    var deck = new Array();
+    let deck = new Array();
 
-    for (var i = 0; i < suits.length; i++)
+    for (let i = 0; i < suits.length; i++)
     {
-        for (var x = 0; x < values.length; x++)
+        for (let x = 0; x < values.length; x++)
         {
-            var card = {
+            let card = {
                 value: values[x],
                 suit: suits[i],
                 up: false
@@ -197,7 +204,7 @@ function getDeck()
 function shuffle_fisher_yates(deck)
 {
     num_players = players.length;
-    var i = 0,
+    let i = 0,
         j = 0,
         temp = null
 
@@ -222,7 +229,7 @@ function get_next_card()
  */
 function turn_in_cards()
 {
-    for (i = 0; i < players.length; i++)
+    for (let i = 0; i < players.length; i++)
     {
         players[i].hand = [];
         players[i].fold = false;
@@ -245,7 +252,7 @@ function shuffle_restart()
     common_cards = [];
     pot = 0;
     bet = 0;
-    
+
     //get deck and shuffle:
     deck = getDeck();
     shuffle_fisher_yates(deck);
@@ -262,14 +269,14 @@ function shuffle_restart()
  */
 function flip(i, j)
 {
-    cd = players[i].hand[j];
+    const cd = players[i].hand[j];
     cd.up = !cd.up;
     update_display(false);
 }
 
 function flip_common(i)
 {
-    cd = common_cards[i];
+    const cd = common_cards[i];
     cd.up = !cd.up;
     update_display(false);
 }
@@ -280,7 +287,7 @@ function flip_common(i)
  */
 function one_card(up_card)
 {
-    dealt = false;
+    let dealt = false;
 
     while (!dealt)
     {
@@ -288,7 +295,7 @@ function one_card(up_card)
         if (!players[current_player].fold && players[current_player].playing)
         {
             dealt = true;
-            card = get_next_card();
+            const card = get_next_card();
             if (typeof card !== 'undefined')
             {
                 if (!up_card)
@@ -318,7 +325,7 @@ function one_card(up_card)
 function deal_card(up_card)
 {
     bet = 0;
-    card = get_next_card();
+    const card = get_next_card();
     if (typeof card !== 'undefined')
     {
         if (!up_card)
@@ -363,19 +370,19 @@ function deal_all(down, up)
     current_player = start_player;
 
     //downs:
-    for (var d = 0; d < down; d++)
+    for (let d = 0; d < down; d++)
     {
         count = 0;
-        for (var i = 0; i < players.length; i++)
+        for (let i = 0; i < players.length; i++)
         {
             count += check_and_deal_card(count, false);
         }
     }
     //ups:
-    for (var u = 0; u < up; u++)
+    for (let u = 0; u < up; u++)
     {
         count = 0;
-        for (var i = 0; i < players.length; i++)
+        for (let i = 0; i < players.length; i++)
         {
             count += check_and_deal_card(count, true);
         }
@@ -387,7 +394,7 @@ function fold()
 {
     players[current_player].fold = true;
     //turn all cards over:
-    for (var j = 0; j < players[current_player].hand.length; j++)
+    for (let j = 0; j < players[current_player].hand.length; j++)
         players[current_player].hand[j].up = false;
 
     update_display(false);
@@ -407,12 +414,12 @@ function sitout(p)
 
 function deal_common()
 {
-    card = get_next_card();
+    const card = get_next_card();
     if (typeof card !== 'undefined')
     {
         common_cards.push(card);
         common_disp = "";
-        for (var i = 0; i < common_cards.length; i++)
+        for (let i = 0; i < common_cards.length; i++)
             common_disp += "<img class='card' onclick='flip_common(" + i + ")'  src='card_images/1B.svg'>";
 
         update_display(false);
@@ -425,8 +432,8 @@ function deal_common()
 function getChipMax()
 {
 
-    max = 0;
-    for (var i = 0; i < players.length; i++)
+    let max = 0;
+    for (let i = 0; i < players.length; i++)
     {
 
         if (players[i].chips > max)
@@ -446,15 +453,15 @@ function update_display(slide)
     if (deck.length == 0)
         document.getElementById("numcards").style.backgroundColor = "red";
 
-    display = "<table>";
+    let display = "<table>";
 
-    max = getChipMax();
+    const max = getChipMax();
     //two columns of players, 5 per column:
-    for (var i = 0; i < Math.ceil(players.length / 2); i++)
+    for (let i = 0; i < Math.ceil(players.length / 2); i++)
     {
-        for (var col = 0; col < 2; col++)
+        for (let col = 0; col < 2; col++)
         {
-            loc = i + 5 * col; //loc in second column
+            const loc = i + 5 * col; //loc in second column
 
             if (loc < players.length)
             {
@@ -470,6 +477,7 @@ function update_display(slide)
                 if (!game_started)
                     display += "<button id='fold' type='button' onclick='sitout(" + loc + ")'>" +
                     "SIT OUT</button>"
+                let clr_add;
                 if (loc == current_player + 1)
                     clr_add = "color:yellow'";
                 else if (loc == start_player - 1)
@@ -477,6 +485,7 @@ function update_display(slide)
                 else
                     clr_add = "'"
 
+                let chip_img;
                 if (players[loc].chips > 0)
                     chip_img = "<img src='chips_images/" + Math.ceil(players[loc].chips / max * 5) + ".png' style='width:30px;'>";
                 else
@@ -497,15 +506,16 @@ function update_display(slide)
                 display += "</td><td>";
 
                 //the cards:
-                for (j = 0; j < players[loc].hand.length; j++)
+                for (let j = 0; j < players[loc].hand.length; j++)
                 {
+                    let add_id;
                     //last card only should show animation:
                     if (loc == current_player && j == players[i].hand.length - 1 && slide)
                         add_id = " id='last' ";
                     else
                         add_id = "";
 
-                    curr_card = players[loc].hand[j];
+                    const curr_card = players[loc].hand[j];
 
                     //out of game - grey back of card:
                     if (players[loc].fold || !players[loc].playing)
@@ -532,8 +542,8 @@ function update_display(slide)
     document.getElementById("field").innerHTML = display;
 
     //common cards:
-    common_disp = "";
-    for (var i = 0; i < common_cards.length; i++)
+    let common_disp = "";
+    for (let i = 0; i < common_cards.length; i++)
     {
         if (common_cards[i].up)
             common_disp += "<img class='card' onclick='flip_common(" + i + ")' src='card_images/" + common_cards[i].value +
@@ -545,3 +555,11 @@ function update_display(slide)
 
 
 }
+
+
+window.onload = () => {
+    the_game = new CardGame();
+    the_game.on_update = (game_state) => {
+        render();
+    };
+};
