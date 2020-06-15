@@ -11,6 +11,7 @@ class RPC(object):
     def connect(self, player_id):
         if self.player_id is not None or self.player is not None:
             raise ClientError('already connected')
+        # TODO: need to re-check when other connection logs in
         player = self.game_state.get_player(player_id)
         if player is not None:
             self.player_id = player.id
@@ -32,6 +33,7 @@ class RPC(object):
     def logout(self):
         if self.player is None:
             raise ClientError('not logged-in')
+        # TODO: log out other connections as well
         self.game_state.remove_player(self.player)
         self.player = None
 

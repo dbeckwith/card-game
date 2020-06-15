@@ -1,13 +1,18 @@
+let showing_login_screen = false;
+
 export function render_ui({ game, game_state, current_player }) {
   const $app = $('#app');
 
-  function render_login_screen() {
+  function setup_login_screen() {
     $app.empty();
 
     const $center = $('<center />');
 
-    const $name_input = $('<input />', {
-      style: 'width: 210px; height: 40px; font-size: 20px;'
+    const $name_input = $('<input />');
+    $name_input.css({
+      width: '210px',
+      height: '40px',
+      fontSize: '20px',
     });
 
     const $login_button = $('<button />');
@@ -17,10 +22,9 @@ export function render_ui({ game, game_state, current_player }) {
       game.login(name);
     });
 
-    const current_players = _.map(game_state.players, (player) => player.name);
-
-    const $current_players = $('<div />');
-    $current_players.text(`CURRENT PLAYERS: ${_.join(current_players, ', ')}`);
+    const $current_players = $('<div />', {
+      id: 'current-players',
+    });
 
     $center.append($name_input);
     $center.append('<br />');
@@ -29,6 +33,12 @@ export function render_ui({ game, game_state, current_player }) {
     $center.append('<hr />');
     $center.append($current_players);
     $app.append($center);
+  }
+
+  function render_login_screen() {
+    const $current_players = $('#current-players');
+    const current_players = _.map(game_state.players, (player) => player.name);
+    $current_players.text(`CURRENT PLAYERS: ${_.join(current_players, ', ')}`);
   }
 
   function setup_game_html() {
@@ -43,7 +53,6 @@ export function render_ui({ game, game_state, current_player }) {
       alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
-    $header.append($logo_link);
 
     const $dealer_controls = $('<div />', {
       id: 'dealer-controls',
@@ -92,18 +101,18 @@ export function render_ui({ game, game_state, current_player }) {
       game.logout();
     });
 
-    $dealer_controls.append($logo_link);
-    $dealer_controls.append('<br />');
+    const $game_board = $('<div />', {
+      id: 'game-board',
+    });
+
     $dealer_controls.append($draw_button);
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($new_game_button);
     $dealer_controls.append($logout_button);
 
+    $header.append($logo_link);
+    $header.append('<br />');
     $header.append($dealer_controls);
-
-    const $game_board = $('<div />', {
-      id: 'game-board',
-    });
 
     $app.append($header);
     $app.append($game_board);
@@ -121,7 +130,6 @@ export function render_ui({ game, game_state, current_player }) {
     }
 
     const $game_board = $('#game-board');
-
     $game_board.empty();
 
     const $player_seats = _.map(game_state.players, (player) => {
@@ -178,8 +186,13 @@ export function render_ui({ game, game_state, current_player }) {
   }
 
   if (current_player == null) {
+    if (!showing_login_screen) {
+      setup_login_screen();
+      showing_login_screen = true;
+    }
     render_login_screen();
   } else {
+    showing_login_screen = false;
     render_game();
   }
 }
