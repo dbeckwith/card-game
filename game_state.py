@@ -43,13 +43,13 @@ class GameState(object):
             self.dealer = player
 
     def remove_player(self, player):
-        self.players.remove(player)
         if self.dealer is player:
             if self.players:
                 seat = self.players.index(player)
                 self.dealer = self.players[(seat + 1) % len(self.players)]
             else:
                 self.dealer = None
+        self.players.remove(player)
 
     def get_player(self, id):
         for player in self.players:
