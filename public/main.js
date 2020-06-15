@@ -4,9 +4,7 @@ $(() => {
   const game = new CardGame();
   const $app = $('#app');
 
-  let current_player;
-
-  function render_login_screen(game_state) {
+  function render_login_screen({ game_state, current_player }) {
     $app.empty();
 
     const $center = $('<center />');
@@ -19,10 +17,8 @@ $(() => {
     $login_button.text('Login');
     $login_button.on('click', function() {
       const name = $name_input.val();
-      current_player = name;
-      game.join(name);
-
-      setup_game_html(game_state);
+      game.login(name);
+      setup_game_html({ game_state, current_player });
     });
 
     const current_players = _.map(game_state.players, (player) => player.name);
@@ -39,7 +35,7 @@ $(() => {
     $app.append($center);
   }
 
-  function setup_game_html(game_state) {
+  function setup_game_html({ game_state, current_player }) {
     $app.empty();
 
     const $dealer_controls = $('<center />');
@@ -103,7 +99,7 @@ $(() => {
     $app.append($game_board);
   }
 
-  function render_game(game_state) {
+  function render_game({ game_state, current_player }) {
     const $game_board = $('#game_board');
 
     $game_board.empty();
@@ -114,7 +110,7 @@ $(() => {
 
       const $hand = _.map(player.hand, (card) => {
         let card_img_name;
-        if (card.up || player.name === current_player) {
+        if (card.up || player.id === current_player) {
           card_img_name = card.card;
         } else {
           card_img_name = '2B';
@@ -125,7 +121,7 @@ $(() => {
         });
 
         $card_img.addClass('card');
-        if (!card.up && player.name === current_player) {
+        if (!card.up && player.id === current_player) {
           $card_img.addClass('down-card');
         }
 
@@ -140,11 +136,15 @@ $(() => {
     $game_board.append($player_seats);
   }
 
-  game.on_update = (game_state) => {
+  game.on_connect = () => {
+    game.connect('myuniqueid');
+  }
+
+  game.on_update = ({ game_state, current_player }) => {
     if (current_player == null) {
-      render_login_screen(game_state);
+      render_login_screen({ game_state, current_player });
     } else {
-      render_game(game_state);
+      render_game({ game_state, current_player });
     }
   };
 });

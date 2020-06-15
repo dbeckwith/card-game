@@ -11,9 +11,9 @@ export class CardGame {
       const message = JSON.parse(event.data);
       switch (message.type) {
         case 'game_state': {
-          const { game_state } = message;
-          console.log('Game state update:', game_state);
-          this.on_update?.(game_state);
+          const { game_state, current_player } = message;
+          console.log('Game state update:', { game_state, current_player });
+          this.on_update?.({ game_state, current_player });
           break;
         }
         case 'error': {
@@ -40,13 +40,17 @@ export class CardGame {
     this.ws.send(JSON.stringify({ ...args, type: command }));
   }
 
+  connect(player_id) {
+    this._send('connect', { player_id });
+  }
+
   /**
    * Join the session as a new player. You will be included in the next game.
    *
    * @param name: string - The display name of the player.
    */
-  join(name) {
-    this._send('join', { name });
+  login(name) {
+    this._send('login', { name });
   }
 
   /**
