@@ -1,6 +1,7 @@
 import asyncio
 import aiohttp
 from aiohttp import web
+from collections import Counter
 import inspect
 import json
 from pathlib import Path
@@ -12,6 +13,9 @@ from rpc import RPC, ClientError
 
 async def connect_client(request):
     game_state = request.app['game_state']
+    connection_ids = request.app['connection_ids']
+    connection_ids[request.remote] += 1
+    connection_id = connection_ids[request.remote]
 
     ws = web.WebSocketResponse(
         heartbeat=1.0,
@@ -19,7 +23,7 @@ async def connect_client(request):
     rpc = RPC(ws, game_state)
 
     def log(msg, *args, **kwargs):
-        log_prefix = f'[{request.remote}]'
+        log_prefix = f'[{request.remote}#{connection_id}]'
         if rpc.player_id is not None:
             log_prefix += f' [{rpc.player_id}'
             if rpc.player is not None:
@@ -113,6 +117,7 @@ async def run_server(game_state):
         ],
     )
     app['game_state'] = game_state
+    app['connection_ids'] = Counter()
     app.router.add_get('/ws', connect_client)
     app.router.add_static('/', Path(__file__).parent / 'public')
     app.freeze()
