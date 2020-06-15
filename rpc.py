@@ -33,9 +33,9 @@ class RPC(object):
     def logout(self):
         if self.player is None:
             raise ClientError('not logged-in')
-        # TODO: log out other connections as well
         self.game_state.remove_player(self.player)
-        self.player = None
+        for rpc in self.player.connections:
+            rpc.player = None
 
     def kick(self, player_id):
         player = self.game_state.get_player(player_id)
