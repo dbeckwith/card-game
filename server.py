@@ -19,10 +19,13 @@ async def connect_client(request):
     rpc = RPC(ws, game_state)
 
     def log(msg, *args, **kwargs):
-        log_prefix = request.remote
-        if rpc.player is not None:
-            log_prefix += f' - {rpc.player.name}'
-        print(f'[{log_prefix}] {msg}', *args, **kwargs)
+        log_prefix = f'[{request.remote}]'
+        if rpc.player_id is not None:
+            log_prefix += f' [{rpc.player_id}'
+            if rpc.player is not None:
+                log_prefix += f' ({rpc.player.name})'
+            log_prefix += ']'
+        print(f'{log_prefix} {msg}', *args, **kwargs)
 
     log('connecting')
     await ws.prepare(request)

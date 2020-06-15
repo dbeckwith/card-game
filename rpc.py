@@ -25,9 +25,8 @@ class RPC(object):
         player = Player(self.player_id, name)
         self.game_state.add_player(player)
         self.player = player
-        self.player_id = None
 
-    def logoff(self):
+    def logout(self):
         if self.player is None:
             raise ClientError('not logged-in')
         self.game_state.remove_player(self.player)

@@ -84,11 +84,18 @@ $(() => {
       game.new_game();
     });
 
+    const $logout_button = $('<button />');
+    $logout_button.text('Logout');
+    $logout_button.on('click', function() {
+      game.logout();
+    });
+
     $dealer_controls.append($logo_link);
     $dealer_controls.append('<br />');
     $dealer_controls.append($draw_button);
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($new_game_button);
+    $dealer_controls.append($logout_button);
 
     const $game_board = $('<div />', {
       id: 'game_board',
@@ -140,8 +147,14 @@ $(() => {
   }
 
   game.on_connect = () => {
-    game.connect('myuniqueid');
-  }
+    const storage = window.localStorage;
+    let player_id = storage.getItem('player_id');
+    if (!player_id) {
+      player_id = generate_random_id();
+      storage.setItem('player_id', player_id);
+    }
+    game.connect(player_id);
+  };
 
   game.on_update = ({ game_state, current_player }) => {
     if (current_player == null) {
@@ -151,3 +164,13 @@ $(() => {
     }
   };
 });
+
+function generate_random_id() {
+  const length = 16;
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz'.split('');
+  let str = '';
+  for (let i = 0; i < length; i++) {
+    str += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return str;
+}

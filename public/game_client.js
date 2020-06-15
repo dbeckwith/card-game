@@ -54,6 +54,15 @@ export class CardGame {
   }
 
   /**
+   * Join the session as a new player. You will be included in the next game.
+   *
+   * @param name: string - The display name of the player.
+   */
+  logout(name) {
+    this._send('logout', {});
+  }
+
+  /**
    * Tell the server to start a new game. All players' hands, the board, and the deck will be reset.
    */
   new_game() {
