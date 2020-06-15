@@ -18,7 +18,6 @@ $(() => {
     $login_button.on('click', function() {
       const name = $name_input.val();
       game.login(name);
-      setup_game_html({ game_state, current_player });
     });
 
     const current_players = _.map(game_state.players, (player) => player.name);
@@ -100,6 +99,10 @@ $(() => {
   }
 
   function render_game({ game_state, current_player }) {
+    if ($('#game_board').length === 0) {
+      setup_game_html({ game_state, current_player });
+    }
+
     const $game_board = $('#game_board');
 
     $game_board.empty();

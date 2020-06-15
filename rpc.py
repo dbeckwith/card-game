@@ -11,7 +11,11 @@ class RPC(object):
     def connect(self, player_id):
         if self.player_id is not None or self.player is not None:
             raise ClientError('already connected')
-        self.player_id = player_id
+        player = self.game_state.get_player(player_id)
+        if player is None:
+            self.player_id = player_id
+        else:
+            self.player = player
 
     def login(self, name):
         if self.player is not None:
