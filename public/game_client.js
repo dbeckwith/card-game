@@ -1,5 +1,9 @@
 export class CardGame {
   constructor() {
+    this._reconnect();
+  }
+
+  _reconnect() {
     this.ws = new WebSocket(`ws://${window.location.host}/ws`);
 
     this.ws.onopen = (event) => {
@@ -29,6 +33,9 @@ export class CardGame {
       const { wasClean, code, reason } = event;
       console.log('Connection to game server closed', { wasClean, code, reason });
       this.on_disconnect?.(reason);
+      setTimeout(() => {
+        this._reconnect();
+      }, 1000);
     };
 
     this.ws.onerror = (error) => {
