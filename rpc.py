@@ -16,6 +16,7 @@ class RPC(object):
             self.player_id = player_id
         else:
             self.player = player
+            self.player.connected = True
 
     def login(self, name):
         if self.player is not None:

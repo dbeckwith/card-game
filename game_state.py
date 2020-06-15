@@ -27,6 +27,8 @@ class GameState(object):
 
     async def disconnect(self, rpc):
         self.connections.remove(rpc)
+        if rpc.player is not None:
+            rpc.player.connected = False
 
     def add_player(self, player):
         if any(p.id == player.id for p in self.players):

@@ -135,3 +135,8 @@
         font-size: 14px;
         font-style: bold;
     }
+
+.player-disconnected .player-name {
+    opacity: 0.4;
+    font-style: italic;
+}

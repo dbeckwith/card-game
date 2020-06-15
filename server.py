@@ -84,6 +84,7 @@ async def connect_client(request):
     finally:
         log('disconnected')
         await game_state.disconnect(rpc)
+        game_state.mark_dirty()
 
     return rpc.ws
 

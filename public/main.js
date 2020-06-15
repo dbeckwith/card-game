@@ -116,7 +116,14 @@ $(() => {
 
     const $player_seats = _.map(game_state.players, (player) => {
       const $player_seat = $('<div />');
-      $player_seat.text(player.name);
+      $player_seat.addClass('player-seat');
+      if (!player.connected) {
+        $player_seat.addClass('player-disconnected');
+      }
+
+      const $player_name = $('<span />');
+      $player_name.addClass('player-name');
+      $player_name.text(player.name);
 
       const $hand = _.map(player.hand, (card) => {
         let card_img_name;
@@ -138,6 +145,7 @@ $(() => {
         return $card_img;
       });
 
+      $player_seat.append($player_name);
       $player_seat.append($hand);
 
       return $player_seat;
@@ -147,7 +155,7 @@ $(() => {
   }
 
   game.on_connect = () => {
-    const storage = window.localStorage;
+    const storage = window.sessionStorage;
     let player_id = storage.getItem('player_id');
     if (!player_id) {
       player_id = generate_random_id();
