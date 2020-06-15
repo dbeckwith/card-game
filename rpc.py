@@ -45,6 +45,8 @@ class RPC(object):
         self.game_state.new_game()
 
     def deal_all(self, down, up):
+        if len(self.game_state.deck) < (down + up) * self.game_state.players:
+            raise ClientError('deck does not have enough cards')
         for _ in range(down):
             for player in self.game_state.players:
                 card = self.game_state.draw_card()

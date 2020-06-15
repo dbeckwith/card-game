@@ -4,6 +4,7 @@ from pathlib import Path
 import tempfile
 
 import cards
+from rpc import ClientError
 
 
 class GameState(object):
