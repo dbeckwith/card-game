@@ -37,7 +37,7 @@ $(() => {
   function setup_game_html({ game_state, current_player }) {
     $app.empty();
 
-    const $dealer_controls = $('<center />');
+    const $header = $('<center />');
 
     const $logo_link = $('<a />', {
       href: '#',
@@ -46,6 +46,12 @@ $(() => {
       alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
+    $header.append($logo_link);
+
+    const $dealer_controls = $('<div />', {
+      id: 'dealer_controls',
+    });
+    $dealer_controls.addClass('dealer-controls');
 
     const $draw_button = $('<button />');
     $draw_button.text('DRAW');
@@ -97,17 +103,25 @@ $(() => {
     $dealer_controls.append($new_game_button);
     $dealer_controls.append($logout_button);
 
+    $header.append($dealer_controls);
+
     const $game_board = $('<div />', {
       id: 'game_board',
     });
 
-    $app.append($dealer_controls);
+    $app.append($header);
     $app.append($game_board);
   }
 
   function render_game({ game_state, current_player }) {
     if ($('#game_board').length === 0) {
       setup_game_html({ game_state, current_player });
+    }
+
+    if (game_state.dealer === current_player) {
+      $('#dealer_controls').show();
+    } else {
+      $('#dealer_controls').hide();
     }
 
     const $game_board = $('#game_board');
@@ -121,6 +135,9 @@ $(() => {
         $player_seat.addClass('player-connected');
       } else {
         $player_seat.addClass('player-disconnected');
+      }
+      if (game_state.dealer === player.id) {
+        $player_seat.addClass('player-dealer');
       }
 
       const $player_name = $('<span />');

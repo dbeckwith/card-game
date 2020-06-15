@@ -11,6 +11,7 @@ class GameState(object):
     def __init__(self):
         self.players = []
         self.deck = cards.new_deck()
+        self.dealer = None
 
         self.connections = []
         self.client_update_event = asyncio.Event()
@@ -20,6 +21,8 @@ class GameState(object):
     def __json__(self):
         return {
             'players': self.players,
+            'deck': self.deck,
+            'dealer': self.dealer.id if self.dealer else None,
         }
 
     async def connect(self, rpc):
@@ -36,9 +39,17 @@ class GameState(object):
             # player already in the game
             return
         self.players.append(player)
+        if self.dealer is None:
+            self.dealer = player
 
     def remove_player(self, player):
         self.players.remove(player)
+        if self.dealer is player:
+            if self.players:
+                seat = self.players.index(player)
+                self.dealer = self.players[(seat + 1) % len(self.players)]
+            else:
+                self.dealer = None
 
     def get_player(self, id):
         for player in self.players:
@@ -49,6 +60,9 @@ class GameState(object):
         for player in self.players:
             player.new_game()
         self.deck = cards.new_deck()
+        if self.dealer:
+            seat = self.players.index(self.dealer)
+            self.dealer = self.players[(seat + 1) % len(self.players)]
 
     def draw_card(self):
         if self.deck:
