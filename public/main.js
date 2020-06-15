@@ -2,6 +2,7 @@ import { CardGame } from './game_client.js';
 
 $(() => {
   const game = new CardGame();
+
   const $app = $('#app');
 
   function render_login_screen({ game_state, current_player }) {
@@ -49,9 +50,8 @@ $(() => {
     $header.append($logo_link);
 
     const $dealer_controls = $('<div />', {
-      id: 'dealer_controls',
+      id: 'dealer-controls',
     });
-    $dealer_controls.addClass('dealer-controls');
 
     const $draw_button = $('<button />');
     $draw_button.text('DRAW');
@@ -106,7 +106,7 @@ $(() => {
     $header.append($dealer_controls);
 
     const $game_board = $('<div />', {
-      id: 'game_board',
+      id: 'game-board',
     });
 
     $app.append($header);
@@ -114,17 +114,17 @@ $(() => {
   }
 
   function render_game({ game_state, current_player }) {
-    if ($('#game_board').length === 0) {
+    if ($('#game-board').length === 0) {
       setup_game_html({ game_state, current_player });
     }
 
     if (game_state.dealer === current_player) {
-      $('#dealer_controls').show();
+      $('#dealer-controls').show();
     } else {
-      $('#dealer_controls').hide();
+      $('#dealer-controls').hide();
     }
 
-    const $game_board = $('#game_board');
+    const $game_board = $('#game-board');
 
     $game_board.empty();
 
@@ -189,6 +189,11 @@ $(() => {
       storage.setItem('player_id', player_id);
     }
     game.connect(player_id);
+    $('#connection-banner').hide();
+  };
+
+  game.on_disconnect = () => {
+    $('#connection-banner').show();
   };
 
   game.on_update = ({ game_state, current_player }) => {
