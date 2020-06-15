@@ -32,6 +32,9 @@ class RPC(object):
         self.game_state.remove_player(self.player)
         self.player = None
 
+    def new_game(self):
+        self.game_state.new_game()
+
     def deal_all(self, down, up):
         for _ in range(down):
             for player in self.game_state.players:

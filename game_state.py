@@ -42,6 +42,11 @@ class GameState(object):
             if player.id == id:
                 return player
 
+    def new_game(self):
+        for player in self.players:
+            player.new_game()
+        self.deck = cards.new_deck()
+
     def draw_card(self):
         if self.deck:
             card = self.deck.pop()

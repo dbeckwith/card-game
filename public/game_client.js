@@ -69,25 +69,6 @@ export class CardGame {
     this._send('new_game', {});
   }
 
-  /**
-   * Draw a card and give it to the given target, which may be a player or the shared board. An error will be triggered if the deck is empty or the target player cannot be found.
-   *
-   * @param target: { type: 'player', player: string } | { type: 'board' } - The target to give the drawn card to. May be either a specific player or the shared board.
-   */
-  draw_card(target) {
-    this._send('draw_card', { target });
-  }
-
-  /**
-   * Remove the given card from a player's hand. Triggers an error if the player cannot be found or is not currently holding the card.
-   *
-   * @param player: string - The name of the player to take a card from.
-   * @param card: string - The card identifier to take from the player.
-   */
-  trash_card(player, card) {
-    this._send('trash_card', { player, card });
-  }
-
   deal_all(down, up) {
     this._send('deal_all', { down, up });
   }

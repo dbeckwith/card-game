@@ -13,6 +13,9 @@ class Player(object):
             'hand': self.hand,
         }
 
+    def new_game(self):
+        self.hand = []
+
     def give_card(self, card):
         self.hand.append(card)
 
