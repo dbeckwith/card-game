@@ -32,12 +32,11 @@ class GameState(object):
     async def disconnect(self, rpc):
         self.connections.remove(rpc)
         if rpc.player is not None:
-            rpc.player.connected = False
+            rpc.player.connections.remove(rpc)
 
     def add_player(self, player):
         if any(p.id == player.id for p in self.players):
-            # player already in the game
-            return
+            raise ClientError('player with same id already in game')
         self.players.append(player)
         if self.dealer is None:
             self.dealer = player

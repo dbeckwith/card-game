@@ -2,14 +2,14 @@ class Player(object):
     def __init__(self, id, name):
         self.id = id
         self.name = name
-        self.connected = True
+        self.connections = []
         self.hand = []
 
     def __json__(self):
         return {
             'id': self.id,
             'name': self.name,
-            'connected': self.connected,
+            'connected': bool(self.connections),
             'hand': self.hand,
         }
 

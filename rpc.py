@@ -12,11 +12,12 @@ class RPC(object):
         if self.player_id is not None or self.player is not None:
             raise ClientError('already connected')
         player = self.game_state.get_player(player_id)
-        if player is None:
-            self.player_id = player_id
-        else:
+        if player is not None:
+            self.player_id = player.id
             self.player = player
-            self.player.connected = True
+            self.player.connections.append(self)
+        else:
+            self.player_id = player_id
 
     def login(self, name):
         if self.player is not None:
@@ -26,6 +27,7 @@ class RPC(object):
         player = Player(self.player_id, name)
         self.game_state.add_player(player)
         self.player = player
+        self.player.connections.append(self)
 
     def logout(self):
         if self.player is None:
@@ -37,7 +39,7 @@ class RPC(object):
         player = self.game_state.get_player(player_id)
         if player is None:
             raise ClientError('player not found')
-        if player.connected:
+        if player.connections:
             raise ClientError('cannot kick player while they are still connected')
         self.game_state.remove_player(player)
 
