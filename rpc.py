@@ -33,6 +33,14 @@ class RPC(object):
         self.game_state.remove_player(self.player)
         self.player = None
 
+    def kick(self, player_id):
+        player = self.game_state.get_player(player_id)
+        if player is None:
+            raise ClientError('player not found')
+        if player.connected:
+            raise ClientError('cannot kick player while they are still connected')
+        self.game_state.remove_player(player)
+
     def new_game(self):
         self.game_state.new_game()
 

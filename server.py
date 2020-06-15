@@ -46,6 +46,7 @@ async def connect_client(request):
                     if msg_type is None or msg_type.startswith('_') or not hasattr(RPC, msg_type):
                         raise ClientError(f'unknown message type {msg_type}')
                     else:
+                        # TODO: type check arguments
                         cmd = getattr(rpc, msg_type)
                         log(
                             msg_type +

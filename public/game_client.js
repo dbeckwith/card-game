@@ -62,6 +62,10 @@ export class CardGame {
     this._send('logout', {});
   }
 
+  kick(player_id) {
+    this._send('kick', { player_id });
+  }
+
   /**
    * Tell the server to start a new game. All players' hands, the board, and the deck will be reset.
    */

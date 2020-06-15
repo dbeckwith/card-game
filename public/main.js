@@ -117,13 +117,22 @@ $(() => {
     const $player_seats = _.map(game_state.players, (player) => {
       const $player_seat = $('<div />');
       $player_seat.addClass('player-seat');
-      if (!player.connected) {
+      if (player.connected) {
+        $player_seat.addClass('player-connected');
+      } else {
         $player_seat.addClass('player-disconnected');
       }
 
       const $player_name = $('<span />');
       $player_name.addClass('player-name');
       $player_name.text(player.name);
+
+      const $kick_button = $('<button />');
+      $kick_button.addClass('kick-button');
+      $kick_button.text('Kick');
+      $kick_button.on('click', function() {
+        game.kick(player.id);
+      });
 
       const $hand = _.map(player.hand, (card) => {
         let card_img_name;
@@ -146,6 +155,7 @@ $(() => {
       });
 
       $player_seat.append($player_name);
+      $player_seat.append($kick_button);
       $player_seat.append($hand);
 
       return $player_seat;

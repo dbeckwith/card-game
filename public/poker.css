@@ -136,6 +136,10 @@
         font-style: bold;
     }
 
+.player-connected .kick-button {
+    display: none;
+}
+
 .player-disconnected .player-name {
     opacity: 0.4;
     font-style: italic;
