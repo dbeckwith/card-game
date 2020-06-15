@@ -1,4 +1,5 @@
 import asyncio
+from collections import defaultdict
 import json
 from pathlib import Path
 import tempfile
@@ -14,6 +15,7 @@ class GameState(object):
         self.dealer = None
 
         self.connections = []
+        self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.save_event = asyncio.Event()
         self.backup_file = Path(tempfile.gettempdir()) / 'card_game_state.json'
@@ -31,8 +33,10 @@ class GameState(object):
 
     async def disconnect(self, rpc):
         self.connections.remove(rpc)
-        if rpc.player is not None:
-            rpc.player.connections.remove(rpc)
+        if rpc.player_id is not None:
+            self.player_id_connections[rpc.player_id].remove(rpc)
+            if rpc.player is not None and not self.player_id_connections[rpc.player_id]:
+                rpc.player.connected = False
 
     def add_player(self, player):
         if any(p.id == player.id for p in self.players):
