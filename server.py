@@ -13,6 +13,8 @@ from rpc import RPC, ClientError
 
 async def connect_client(request):
     game_state = request.app['game_state']
+
+    # make a unique id for this connection's IP address
     connection_ids = request.app['connection_ids']
     connection_ids[request.remote] += 1
     connection_id = connection_ids[request.remote]
@@ -32,51 +34,66 @@ async def connect_client(request):
         print(f'{log_prefix} {msg}', *args, **kwargs)
 
     log('connecting')
+    # upgrade the HTTP request to a WebSocket connection
     await ws.prepare(request)
 
     log('connected')
+    # tell the game state about the new connection
     await game_state.connect(rpc)
 
     try:
+        # loop through all messages receieved over connection
         async for msg in rpc.ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
+                # load message as JSON
                 try:
                     msg = json.loads(msg.data)
                 except json.JSONDecodeError as e:
                     log('message error:', e)
                     continue
+
                 try:
+                    # find a method on the RPC type matching the `type` field
                     msg_type = msg.pop('type')
                     if msg_type is None or msg_type.startswith('_') or not hasattr(RPC, msg_type):
                         raise ClientError(f'unknown message type {msg_type}')
-                    else:
-                        # TODO: type check arguments
-                        cmd = getattr(rpc, msg_type)
-                        log(
-                            msg_type +
-                            '(' +
-                            ', '.join(
-                                key + '=' + repr(value)
-                                for key, value in msg.items()
-                            ) +
-                            ')',
-                        )
-                        required_args = [
-                            p.name
-                            for p in inspect.signature(cmd).parameters.values()
-                            if p.default is inspect.Parameter.empty
-                        ]
-                        missing_args = [
-                            arg
-                            for arg in required_args
-                            if arg not in msg
-                        ]
-                        if missing_args:
-                            raise ClientError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
-                        getattr(rpc, msg_type)(**msg)
+                    cmd = getattr(rpc, msg_type)
+
+                    # TODO: type check arguments
+
+                    log(
+                        msg_type +
+                        '(' +
+                        ', '.join(
+                            key + '=' + repr(value)
+                            for key, value in msg.items()
+                        ) +
+                        ')',
+                    )
+
+                    # use inspect module to get argument names of method
+                    required_args = [
+                        p.name
+                        for p in inspect.signature(cmd).parameters.values()
+                        if p.default is inspect.Parameter.empty
+                    ]
+                    # find which args are missing in WS message
+                    missing_args = [
+                        arg
+                        for arg in required_args
+                        if arg not in msg
+                    ]
+                    if missing_args:
+                        raise ClientError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
+
+                    # call the method with the message as kwargs
+                    cmd(**msg)
+
+                    # mark the game state as changed so it will update the connections
                     game_state.mark_dirty()
                 except ClientError as e:
                     log('client error:', e)
+                    # tell the client that it did something wrong
                     await rpc.ws.send_json({
                         'type': 'error',
                         'error': e.message,
@@ -84,11 +101,15 @@ async def connect_client(request):
                 except:
                     log('error handling message:')
                     traceback.print_exc()
+
             elif msg.type == aiohttp.WSMsgType.ERROR:
                 log('connection closed with exception:', rpc.ws.exception())
     finally:
+        # loop ended, client must have disconnected or an error occurred
         log('disconnected')
+        # tell the game state that this connection is disconnecting
         await game_state.disconnect(rpc)
+        # mark the game state as changed so it can update the remaining connections about the disconnected one
         game_state.mark_dirty()
 
     return rpc.ws
@@ -108,7 +129,7 @@ async def index_middleware(app, handler):
 
     return index_handler
 
-async def run_server(game_state):
+async def run_server(*, host, port, game_state):
     loop = asyncio.get_event_loop()
 
     app = web.Application(
@@ -116,10 +137,16 @@ async def run_server(game_state):
             index_middleware
         ],
     )
+
+    # app state
     app['game_state'] = game_state
     app['connection_ids'] = Counter()
+
+    # serve WebSocket connection to game
     app.router.add_get('/ws', connect_client)
+    # serve static webpage files
     app.router.add_static('/', Path(__file__).parent / 'public')
+
     app.freeze()
 
     await app.startup()
@@ -136,8 +163,6 @@ async def run_server(game_state):
         )
     web_server = web.Server(app._handle, request_factory=request_factory)
 
-    host = '0.0.0.0'
-    port = 31455
     http_server = await loop.create_server(
         web_server,
         host,
@@ -163,6 +188,7 @@ async def run_server(game_state):
         http_server.close()
         await http_server.wait_closed()
 
+        # tell all the connections that the server is shutting down
         await asyncio.gather(*(
             rpc.ws.close(code=1012, message=b'server shutdown')
             for rpc in game_state.connections

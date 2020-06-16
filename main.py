@@ -11,7 +11,11 @@ async def main():
     game_state = GameState()
 
     await asyncio.gather(
-        run_server(game_state),
+        run_server(
+            host='0.0.0.0',
+            port=31455,
+            game_state=game_state,
+        ),
         game_state.update_clients_loop(),
         game_state.backup_loop(),
     )

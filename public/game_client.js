@@ -51,20 +51,10 @@ export class CardGame {
     this._send('connect', { player_id });
   }
 
-  /**
-   * Join the session as a new player. You will be included in the next game.
-   *
-   * @param name: string - The display name of the player.
-   */
   login(name) {
     this._send('login', { name });
   }
 
-  /**
-   * Join the session as a new player. You will be included in the next game.
-   *
-   * @param name: string - The display name of the player.
-   */
   logout(name) {
     this._send('logout', {});
   }
