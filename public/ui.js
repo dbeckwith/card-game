@@ -95,6 +95,7 @@ export function render_ui({ game, game_state, current_player }) {
       game.new_game();
     });
 
+    // TODO: always show this (not part of dealer controls)
     const $logout_button = $('<button />');
     $logout_button.text('Logout');
     $logout_button.on('click', function() {
@@ -114,7 +115,9 @@ export function render_ui({ game, game_state, current_player }) {
       id: 'player-controls',
     });
 
-    const $fold_button = $('<button />');
+    const $fold_button = $('<button />', {
+      id: 'fold-button',
+    });
     $fold_button.text('Fold');
     $fold_button.on('click', function() {
       game.fold();
@@ -147,6 +150,12 @@ export function render_ui({ game, game_state, current_player }) {
       $('#player-controls').show();
     } else {
       $('#player-controls').hide();
+    }
+
+    if (game_state.hand_started) {
+      $('#fold-button').text('Fold');
+    } else {
+      $('#fold-button').text('Sit Out');
     }
 
     const $game_board = $('#game-board');

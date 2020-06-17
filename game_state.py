@@ -12,6 +12,7 @@ class GameState(object):
     def __init__(self):
         self.players = []
         self.deck = cards.new_deck()
+        self.hand_started = False
         self.dealer = None
 
         self.connections = []
@@ -24,6 +25,7 @@ class GameState(object):
         return {
             'players': self.players,
             'deck': self.deck,
+            'hand_started': self.hand_started,
             'dealer': self.dealer.id if self.dealer else None,
         }
 
@@ -87,6 +89,9 @@ class GameState(object):
 
         # shuffle a new deck
         self.deck = cards.new_deck()
+
+        # new hand
+        self.hand_started = False
 
         # pick a new dealer
         if self.dealer:

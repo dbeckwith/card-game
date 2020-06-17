@@ -69,6 +69,9 @@ class RPC(object):
         self.game_state.new_game()
 
     def deal_all(self, down, up):
+        # dealing cards starts the hand
+        self.game_state.hand_started = True
+
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
 
