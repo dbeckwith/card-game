@@ -69,18 +69,27 @@ class RPC(object):
         self.game_state.new_game()
 
     def deal_all(self, down, up):
+        # only consider players in the hand
+        players = list(self.game_state.players_in_hand())
+
         # check that deck has enough cards to give to each player
-        if len(self.game_state.deck) < (down + up) * len(self.game_state.players):
+        if len(self.game_state.deck) < (down + up) * len(players):
             raise ClientError('deck does not have enough cards')
 
         for _ in range(down):
-            for player in self.game_state.players:
+            for player in players:
                 card = self.game_state.draw_card()
                 player.give_card(PlayerCard(card, False))
         for _ in range(up):
-            for player in self.game_state.players:
+            for player in players:
                 card = self.game_state.draw_card()
                 player.give_card(PlayerCard(card, True))
+
+    def fold(self):
+        if self.player is None:
+            raise ClientError('not logged-in')
+
+        self.player.in_hand = False
 
 class ClientError(Exception):
     def __init__(self, message):

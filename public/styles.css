@@ -157,3 +157,7 @@ select {
     opacity: 0.4;
     font-style: italic;
 }
+
+#player-controls button {
+    font-size: 20px;
+}

@@ -75,6 +75,11 @@ class GameState(object):
             if player.id == player_id:
                 return player
 
+    def players_in_hand(self):
+        for player in self.players:
+            if player.in_hand:
+                yield player
+
     def new_game(self):
         # reset each player
         for player in self.players:
@@ -123,7 +128,7 @@ class GameState(object):
 
         # include the player id if logged-in
         if rpc.player is not None:
-            msg['current_player'] = rpc.player.id
+            msg['current_player'] = rpc.player
 
         # send as JSON over websocket using the custom serializer
         await rpc.ws.send_json(

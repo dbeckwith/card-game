@@ -110,9 +110,23 @@ export function render_ui({ game, game_state, current_player }) {
     $dealer_controls.append($new_game_button);
     $dealer_controls.append($logout_button);
 
+    const $player_controls = $('<div />', {
+      id: 'player-controls',
+    });
+
+    const $fold_button = $('<button />');
+    $fold_button.text('Fold');
+    $fold_button.on('click', function() {
+      game.fold();
+    });
+
+    $player_controls.append($fold_button);
+
     $header.append($logo_link);
     $header.append('<br />');
     $header.append($dealer_controls);
+    $header.append('<br />');
+    $header.append($player_controls);
 
     $app.append($header);
     $app.append($game_board);
@@ -123,10 +137,16 @@ export function render_ui({ game, game_state, current_player }) {
       setup_game_html();
     }
 
-    if (game_state.dealer === current_player) {
+    if (game_state.dealer === current_player.id) {
       $('#dealer-controls').show();
     } else {
       $('#dealer-controls').hide();
+    }
+
+    if (current_player.in_hand) {
+      $('#player-controls').show();
+    } else {
+      $('#player-controls').hide();
     }
 
     const $game_board = $('#game-board');
@@ -155,25 +175,30 @@ export function render_ui({ game, game_state, current_player }) {
         game.kick(player.id);
       });
 
-      const $hand = _.map(player.hand, (card) => {
-        let card_img_name;
-        if (card.up || player.id === current_player) {
-          card_img_name = card.card;
-        } else {
-          card_img_name = '2B';
-        }
+      let $hand;
+      if (player.in_hand) {
+        $hand = _.map(player.hand, (card) => {
+          let card_img_name;
+          if (card.up || player.id === current_player.id) {
+            card_img_name = card.card;
+          } else {
+            card_img_name = '2B';
+          }
 
-        const $card_img = $('<img />', {
-          src: `card_images/${card_img_name}.svg`,
+          const $card_img = $('<img />', {
+            src: `card_images/${card_img_name}.svg`,
+          });
+
+          $card_img.addClass('card');
+          if (!card.up && player.id === current_player.id) {
+            $card_img.addClass('down-card');
+          }
+
+          return $card_img;
         });
-
-        $card_img.addClass('card');
-        if (!card.up && player.id === current_player) {
-          $card_img.addClass('down-card');
-        }
-
-        return $card_img;
-      });
+      } else {
+        $hand = [];
+      }
 
       $player_seat.append($player_name);
       $player_seat.append($kick_button);
