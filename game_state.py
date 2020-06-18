@@ -7,6 +7,9 @@ import tempfile
 import cards
 from rpc import ClientError
 
+# TODO: "stand up"
+# not included in dealer rotation
+# but seat stays at the table, keep chips
 
 class GameState(object):
     def __init__(self):
