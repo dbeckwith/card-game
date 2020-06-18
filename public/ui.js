@@ -169,13 +169,24 @@ export function render_ui({ game, game_state, current_player }) {
       } else {
         $player_seat.addClass('player-disconnected');
       }
-      if (game_state.dealer === player.id) {
-        $player_seat.addClass('player-dealer');
-      }
 
       const $player_name = $('<span />');
       $player_name.addClass('player-name');
       $player_name.text(player.name);
+
+      const $active_player_indicator = $('<span />');
+      $active_player_indicator.addClass('active-player-indicator');
+      $active_player_indicator.text('*');
+      if (game_state.active_player !== player.id) {
+        $active_player_indicator.hide();
+      }
+
+      const $dealer_indicator = $('<span />');
+      $dealer_indicator.addClass('dealer-indicator');
+      $dealer_indicator.text('(D)');
+      if (game_state.dealer !== player.id) {
+        $dealer_indicator.hide();
+      }
 
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
@@ -210,6 +221,8 @@ export function render_ui({ game, game_state, current_player }) {
       }
 
       $player_seat.append($player_name);
+      $player_seat.append($active_player_indicator);
+      $player_seat.append($dealer_indicator);
       $player_seat.append($kick_button);
       $player_seat.append($hand);
 

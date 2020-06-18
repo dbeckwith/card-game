@@ -17,6 +17,7 @@ class GameState(object):
         self.deck = cards.new_deck()
         self.hand_started = False
         self.dealer = None
+        self.active_player = None
 
         self.connections = []
         self.player_id_connections = defaultdict(list)
@@ -29,7 +30,8 @@ class GameState(object):
             'players': self.players,
             'deck': self.deck,
             'hand_started': self.hand_started,
-            'dealer': self.dealer.id if self.dealer else None,
+            'dealer': self.dealer.id if self.dealer is not None else None,
+            'active_player': self.active_player.id if self.active_player is not None else None,
         }
 
     async def connect(self, rpc):
@@ -97,15 +99,20 @@ class GameState(object):
         self.hand_started = False
 
         # pick a new dealer
-        if self.dealer:
+        if self.dealer is not None:
             self.next_dealer()
 
+            self.active_player = self.next_player_after(self.dealer)
+
     def next_dealer(self):
-        if self.dealer:
-            # get the player's seat
-            seat = self.players.index(self.dealer)
-            # set the dealer to the player with the next seat (wrapping around)
-            self.dealer = self.players[(seat + 1) % len(self.players)]
+        if self.dealer is not None:
+            self.dealer = self.next_player_after(self.dealer)
+
+    def next_player_after(self, player):
+        # get the player's seat
+        seat = self.players.index(player)
+        # return the player with the next seat (wrapping around)
+        return self.players[(seat + 1) % len(self.players)]
 
     def draw_card(self):
         if self.deck:

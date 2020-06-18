@@ -150,10 +150,6 @@ select {
     display: none;
 }
 
-.player-dealer .player-name {
-    color: blue;
-}
-
 .player-disconnected .player-name {
     opacity: 0.4;
     font-style: italic;
