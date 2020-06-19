@@ -43,6 +43,9 @@ class RPC(object):
         if self.player is None:
             raise ClientError('not logged-in')
 
+        if self.game_state.active_player is self.player:
+            self.game_state.next_active_player()
+
         # remove player from game
         self.game_state.remove_player(self.player)
 
@@ -57,6 +60,9 @@ class RPC(object):
             raise ClientError('player not found')
         if player.connected:
             raise ClientError('cannot kick player while they are still connected')
+
+        if self.game_state.active_player is player:
+            self.game_state.next_active_player()
 
         # remove player from game
         self.game_state.remove_player(player)
@@ -92,7 +98,33 @@ class RPC(object):
         if self.player is None:
             raise ClientError('not logged-in')
 
+        if not self.player.in_hand:
+            raise ClientError('not in hand')
+
+        if self.game_state.active_player is not self.player:
+            raise ClientError('not your turn')
+
         self.player.in_hand = False
+
+        self.game_state.next_active_player()
+
+    def bet(self, amount):
+        if self.player is None:
+            raise ClientError('not logged-in')
+
+        if not self.player.in_hand:
+            raise ClientError('not in hand')
+
+        if self.game_state.active_player is not self.player:
+            raise ClientError('not your turn')
+
+        if self.player.chips < amount:
+            raise ClientError('you don\'t have enough chips!')
+
+        self.player.chips -= amount
+        self.game_state.pot += amount
+
+        self.game_state.next_active_player()
 
 class ClientError(Exception):
     def __init__(self, message):

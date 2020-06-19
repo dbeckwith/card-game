@@ -111,6 +111,10 @@ export function render_ui({ game, game_state, current_player }) {
     $dealer_controls.append($new_game_button);
     $dealer_controls.append($logout_button);
 
+    const $common_info = $('<div />', {
+      id: 'common-info',
+    });
+
     const $player_controls = $('<div />', {
       id: 'player-controls',
     });
@@ -123,11 +127,41 @@ export function render_ui({ game, game_state, current_player }) {
       game.fold();
     });
 
+    const $bet_input = $('<input />', {
+      id: 'bet-input',
+      type: 'number',
+      min: 0,
+    });
+
+    const $bet_button = $('<button />', {
+      id: 'bet-button',
+    });
+    $bet_button.text('Bet');
+    $bet_button.on('click', function() {
+      const amount = +$bet_input.val();
+      game.bet(amount);
+      $bet_input.val('');
+    });
+
+    const $check_button = $('<button />', {
+      id: 'check-button',
+    });
+    $check_button.text('Check');
+    $check_button.on('click', function() {
+      game.bet(0);
+      $bet_input.val('');
+    });
+
     $player_controls.append($fold_button);
+    $player_controls.append($bet_input);
+    $player_controls.append($bet_button);
+    $player_controls.append($check_button);
 
     $header.append($logo_link);
     $header.append('<br />');
     $header.append($dealer_controls);
+    $header.append('<br />');
+    $header.append($common_info);
     $header.append('<br />');
     $header.append($player_controls);
 
@@ -146,11 +180,21 @@ export function render_ui({ game, game_state, current_player }) {
       $('#dealer-controls').hide();
     }
 
+    const $common_info = $('#common-info');
+    $common_info.empty();
+
+    const $pot_display = $('<span />');
+    $pot_display.text(`POT: ${game_state.pot} chips`);
+
+    $common_info.append($pot_display);
+
     if (current_player.in_hand) {
       $('#player-controls').show();
     } else {
       $('#player-controls').hide();
     }
+
+    $('#bet-input').prop('max', current_player.chips);
 
     if (game_state.hand_started) {
       $('#fold-button').text('Fold');
@@ -178,6 +222,7 @@ export function render_ui({ game, game_state, current_player }) {
       $active_player_indicator.addClass('active-player-indicator');
       $active_player_indicator.text('*');
       if (game_state.active_player !== player.id) {
+        // TODO: do this with CSS
         $active_player_indicator.hide();
       }
 
@@ -187,6 +232,10 @@ export function render_ui({ game, game_state, current_player }) {
       if (game_state.dealer !== player.id) {
         $dealer_indicator.hide();
       }
+
+      const $chips_display = $('<span />');
+      $chips_display.addClass('chips-display');
+      $chips_display.text(`${player.chips} chips`);
 
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
@@ -223,6 +272,7 @@ export function render_ui({ game, game_state, current_player }) {
       $player_seat.append($player_name);
       $player_seat.append($active_player_indicator);
       $player_seat.append($dealer_indicator);
+      $player_seat.append($chips_display);
       $player_seat.append($kick_button);
       $player_seat.append($hand);
 

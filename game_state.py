@@ -18,6 +18,7 @@ class GameState(object):
         self.hand_started = False
         self.dealer = None
         self.active_player = None
+        self.pot = 0
 
         self.connections = []
         self.player_id_connections = defaultdict(list)
@@ -32,6 +33,7 @@ class GameState(object):
             'hand_started': self.hand_started,
             'dealer': self.dealer.id if self.dealer is not None else None,
             'active_player': self.active_player.id if self.active_player is not None else None,
+            'pot': self.pot,
         }
 
     async def connect(self, rpc):
@@ -98,15 +100,28 @@ class GameState(object):
         # new hand
         self.hand_started = False
 
-        # pick a new dealer
         if self.dealer is not None:
+            # pick a new dealer
             self.next_dealer()
 
+            # pick the first active player
             self.active_player = self.next_player_after(self.dealer)
+
+        # reset the pot
+        self.pot = 0
 
     def next_dealer(self):
         if self.dealer is not None:
             self.dealer = self.next_player_after(self.dealer)
+
+    def next_active_player(self):
+        if self.active_player is not None:
+            for _ in range(len(self.players)):
+                self.active_player = self.next_player_after(self.active_player)
+                if self.active_player.in_hand:
+                    break
+            else:
+                self.active_player = None
 
     def next_player_after(self, player):
         # get the player's seat

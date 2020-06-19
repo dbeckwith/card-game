@@ -77,4 +77,8 @@ export class CardGame {
   fold() {
     this._send('fold');
   }
+
+  bet(amount) {
+    this._send('bet', { amount });
+  }
 }
