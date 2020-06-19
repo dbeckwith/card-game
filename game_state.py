@@ -116,12 +116,17 @@ class GameState(object):
 
     def next_active_player(self):
         if self.active_player is not None:
-            for _ in range(len(self.players)):
+            original = self.active_player
+
+            while True:
                 self.active_player = self.next_player_after(self.active_player)
-                if self.active_player.in_hand:
+                if self.active_player is original:
+                    # we've looped back around
+                    self.active_player = None
                     break
-            else:
-                self.active_player = None
+                if self.active_player.in_hand:
+                    # found a player in the hand
+                    break
 
     def next_player_after(self, player):
         # get the player's seat

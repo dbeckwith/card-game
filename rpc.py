@@ -43,6 +43,7 @@ class RPC(object):
         if self.player is None:
             raise ClientError('not logged-in')
 
+        # if this was the active player, pick the next one
         if self.game_state.active_player is self.player:
             self.game_state.next_active_player()
 
@@ -61,6 +62,7 @@ class RPC(object):
         if player.connected:
             raise ClientError('cannot kick player while they are still connected')
 
+        # if this was the active player, pick the next one
         if self.game_state.active_player is player:
             self.game_state.next_active_player()
 
@@ -97,10 +99,8 @@ class RPC(object):
     def fold(self):
         if self.player is None:
             raise ClientError('not logged-in')
-
         if not self.player.in_hand:
             raise ClientError('not in hand')
-
         if self.game_state.active_player is not self.player:
             raise ClientError('not your turn')
 
@@ -111,15 +111,12 @@ class RPC(object):
     def bet(self, amount):
         if self.player is None:
             raise ClientError('not logged-in')
-
         if not self.player.in_hand:
             raise ClientError('not in hand')
-
         if self.game_state.active_player is not self.player:
             raise ClientError('not your turn')
-
         if self.player.chips < amount:
-            raise ClientError('you don\'t have enough chips!')
+            raise ClientError('not enough chips')
 
         self.player.chips -= amount
         self.game_state.pot += amount
