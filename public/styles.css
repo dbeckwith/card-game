@@ -4,6 +4,7 @@ body {
     background-image: linear-gradient(to bottom, #007712, #2AcF15 );
     color: white;
     min-height: 100vh;
+    /* TOOD: remove body margin */
 }
 
 /* shake card on hover */

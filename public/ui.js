@@ -1,3 +1,6 @@
+// TODO: indicator for if in hand or not
+// show cards as gray background
+
 let showing_login_screen = false;
 
 export function render_ui({ game, game_state, current_player }) {
