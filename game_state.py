@@ -90,6 +90,9 @@ class GameState(object):
                 yield player
 
     def new_game(self):
+        if self.pot != 0:
+            raise ClientError('pot must be empty')
+
         # reset each player
         for player in self.players:
             player.new_game()
@@ -106,9 +109,6 @@ class GameState(object):
 
             # pick the first active player
             self.active_player = self.next_player_after(self.dealer)
-
-        # reset the pot
-        self.pot = 0
 
     def next_dealer(self):
         if self.dealer is not None:
