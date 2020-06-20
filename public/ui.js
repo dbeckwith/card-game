@@ -12,6 +12,8 @@
 
 // TODO: common cards
 
+// TODO: show number of remaining cards in deck
+
 let showing_login_screen = false;
 
 export function render_ui({ game, game_state, current_player }) {
