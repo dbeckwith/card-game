@@ -1,6 +1,17 @@
 // TODO: indicator for if in hand or not
 // show cards as gray background
 
+// TODO: reveal cards
+// click on your down card to make it up
+
+// TODO: pass deal to specific player
+
+// TODO: button to take everyone's cards and shuffle without new game, but still shift dealer
+
+// TODO: show errors
+
+// TODO: common cards
+
 let showing_login_screen = false;
 
 export function render_ui({ game, game_state, current_player }) {
