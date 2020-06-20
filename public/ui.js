@@ -92,6 +92,15 @@ export function render_ui({ game, game_state, current_player }) {
       return $deal_all_button;
     });
 
+    const $payout_button = $('<button />');
+    $payout_button.text('Pay-out');
+    $payout_button.on('click', function() {
+      const winners = $('.winner-checkbox:checked').map(function() {
+        return $(this).val();
+      }).toArray();
+      game.payout(winners);
+    });
+
     const $new_game_button = $('<button />');
     $new_game_button.text('New Game');
     $new_game_button.on('click', function() {
@@ -111,6 +120,7 @@ export function render_ui({ game, game_state, current_player }) {
 
     $dealer_controls.append($draw_button);
     $dealer_controls.append($deal_all_buttons);
+    $dealer_controls.append($payout_button);
     $dealer_controls.append($new_game_button);
     $dealer_controls.append($logout_button);
 
@@ -240,6 +250,18 @@ export function render_ui({ game, game_state, current_player }) {
       $chips_display.addClass('chips-display');
       $chips_display.text(`${player.chips} chips`);
 
+      const $winner_checkbox = $('<input />', {
+        id: `winner-checkbox-${player.id}`,
+        type: 'checkbox',
+        value: player.id,
+      });
+      $winner_checkbox.addClass('winner-checkbox');
+
+      const $winner_checkbox_label = $('<label />', {
+        for: `winner-checkbox-${player.id}`,
+      });
+      $winner_checkbox_label.text('Won');
+
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
       $kick_button.text('Kick');
@@ -276,6 +298,10 @@ export function render_ui({ game, game_state, current_player }) {
       $player_seat.append($active_player_indicator);
       $player_seat.append($dealer_indicator);
       $player_seat.append($chips_display);
+      if (game_state.dealer === current_player.id) {
+        $player_seat.append($winner_checkbox);
+        $player_seat.append($winner_checkbox_label);
+      }
       $player_seat.append($kick_button);
       $player_seat.append($hand);
 
