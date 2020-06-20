@@ -157,6 +157,13 @@ class RPC(object):
         # empty the pot
         self.game_state.pot = 0
 
+    def change_active_player(self, player):
+        player = self.game_state.get_player(player)
+        if player is None:
+            raise ClientError('player not found')
+
+        self.game_state.active_player = player
+
 class ClientError(Exception):
     def __init__(self, message):
         super().__init__(message)

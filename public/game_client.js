@@ -85,4 +85,8 @@ export class CardGame {
   payout(winners) {
     this._send('payout', { winners });
   }
+
+  change_active_player(player) {
+    this._send('change_active_player', { player });
+  }
 }

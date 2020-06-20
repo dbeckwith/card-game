@@ -92,6 +92,14 @@ export function render_ui({ game, game_state, current_player }) {
       return $deal_all_button;
     });
 
+    const $change_active_player_select = $('<select />', {
+      id: 'change-active-player-select',
+    });
+    $change_active_player_select.on('change', function() {
+      const player = $(this).val();
+      game.change_active_player(player);
+    });
+
     const $payout_button = $('<button />');
     $payout_button.text('Pay-out');
     $payout_button.on('click', function() {
@@ -120,6 +128,8 @@ export function render_ui({ game, game_state, current_player }) {
 
     $dealer_controls.append($draw_button);
     $dealer_controls.append($deal_all_buttons);
+    $dealer_controls.append('<span>Bettor: </span>');
+    $dealer_controls.append($change_active_player_select);
     $dealer_controls.append($payout_button);
     $dealer_controls.append($new_game_button);
     $dealer_controls.append($logout_button);
@@ -192,6 +202,19 @@ export function render_ui({ game, game_state, current_player }) {
     } else {
       $('#dealer-controls').hide();
     }
+
+    const $change_active_player_select = $('#change-active-player-select');
+    $change_active_player_select.empty();
+    _.forEach(game_state.players, player => {
+      if (player.in_hand) {
+        const $player_option = $('<option />', {
+          value: player.id,
+        });
+        $player_option.text(player.name);
+        $player_option.prop('selected', game_state.active_player === player.id);
+        $change_active_player_select.append($player_option);
+      }
+    });
 
     const $common_info = $('#common-info');
     $common_info.empty();

@@ -124,16 +124,6 @@ button:hover {
    background-color:deepskyblue;
 }
 
-/* BET selector */
-select {
-    background-color: blue;
-    color: white;
-    border-radius: 7px;
-    font-family: verdana;
-    font-size: 14px;
-    width: 50px;
-}
-
 /* number of cards remaining display */
 #numcards {
     font-size: 14px;
