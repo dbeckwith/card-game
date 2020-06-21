@@ -580,7 +580,9 @@ export function render_ui(
       {
         $player_seat.append($winner_checkbox);
         $player_seat.append($winner_checkbox_label);
+        
       }
+      $player_seat.append('<br>');
       $player_seat.append($kick_button);
       $player_seat.append($hand);
 

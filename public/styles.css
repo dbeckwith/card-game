@@ -212,5 +212,11 @@ input
 }
 #logout-btn{
   margin-left:40px;
-  border-radius:0px;
+  
+border-radius:0px;
+}
+#current-game{
+  margin-left: 10px;
+  font-style:italic;
+  float:right;
 }
