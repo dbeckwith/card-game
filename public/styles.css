@@ -153,6 +153,7 @@ button:hover {
 
 .player-seat > * {
     margin-right: 4px;
+    font-family: consolas;
 }
 .one-card-buttons{
   border: solid 2px orange;
@@ -165,6 +166,10 @@ button:hover {
 }
 #dealer-controls-bottom{
   margin-top: 8px;
+}
+#dealer-controls{
+  margin-top: 8px;
+  margin-bottom:8px;
 }
 #draw-btn{
   border-radius:1px;
@@ -184,4 +189,25 @@ input
 }
 .opening-cards{
   border: solid 3px;
+}
+#logo{
+  float:left;
+}
+#pot-display{
+  color:black;
+/*  lightgreen;*/
+  font-size:28px;
+  margin-left: 10px;
+  margin-right:10px;
+  background-color:red;
+  padding:4px;
+  border: solid 2px;
+  border-color:yellow;
+}
+#last-bet{
+  color:#ff7777;
+}
+#logout-btn{
+  margin-left:40px;
+  border-radius:0px;
 }

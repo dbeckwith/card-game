@@ -67,6 +67,7 @@ export function render_ui({ game, game_state, current_player }) {
     //LOGO:
     const $logo_link = $('<a />', {
       href: '#',
+      id: 'logo',
     });
     $logo_link.on('click', function() {
       alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
@@ -143,7 +144,7 @@ export function render_ui({ game, game_state, current_player }) {
     });
     $next_down_button.addClass('one-card-buttons');
 
-    const $dealer_controls_bottom = $('<div />', {
+    const $dealer_controls_bottom = $('<span />', {
       id: 'dealer-controls-bottom',
     });
     //change active player selector:
@@ -158,6 +159,8 @@ export function render_ui({ game, game_state, current_player }) {
     //payout checkboxes:
     const $payout_button = $('<button />');
     $payout_button.text('Pay-out');
+    $payout_button.attr('id', 'first-of-group'); //to add some left margin space
+
     $payout_button.on('click', function() {
       //get which players were checked:
       const winners = $('.winner-checkbox:checked').map(function() {
@@ -175,7 +178,9 @@ export function render_ui({ game, game_state, current_player }) {
     });
 
     // TODO: always show this (not part of dealer controls)
-    const $logout_button = $('<button />');
+    const $logout_button = $('<button />',{
+      id:"logout-btn",
+    });
     $logout_button.text('Logout');
     $logout_button.on('click', function() {
       game.logout();
@@ -196,14 +201,14 @@ export function render_ui({ game, game_state, current_player }) {
     $dealer_controls_bottom.append($change_active_player_select);
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($new_game_button);
-    $dealer_controls_bottom.append($logout_button);
+    $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
 
-    const $common_info = $('<div />', {
+    const $common_info = $('<span />', {
       id: 'common-info',
     });
 
     // PLAYER CONTROLS:
-    const $player_controls = $('<div />', {
+    const $player_controls = $('<span />', {
       id: 'player-controls',
     });
 
@@ -249,13 +254,13 @@ export function render_ui({ game, game_state, current_player }) {
 
     //PUT EVERYTHING INTO THE  HTML:
     $header.append($logo_link);
-    $header.append('<br />');
     $header.append($dealer_controls);
     $header.append($dealer_controls_bottom);
-    $header.append($common_info);
-    $header.append('<hr />');
     $header.append($player_controls);
-    $header.append('<br />');
+    $header.append($common_info);
+    $header.append($logout_button);
+
+    $header.append('<hr />');
 
     $app.append($header);
     $app.append($game_board);
@@ -270,8 +275,11 @@ export function render_ui({ game, game_state, current_player }) {
     //SHOW CONTROLS TO CURRENT DEALER:
     if (game_state.dealer === current_player.id) {
       $('#dealer-controls').show();
+      $('#dealer-controls-bottom').show();
+      
     } else {
       $('#dealer-controls').hide();
+      $('#dealer-controls-bottom').hide();
     }
 
     //show active players in the menu:
@@ -291,10 +299,16 @@ export function render_ui({ game, game_state, current_player }) {
     const $common_info = $('#common-info');
     $common_info.empty();
 
-    const $pot_display = $('<span />');
+    const $pot_display = $('<span />',{
+      id:"pot-display",
+    });
     $pot_display.text(`POT: ${game_state.pot} chips`);
 
+    const $last_bet_display = $('<span />');
+    $last_bet_display.text(` Last Bet: ? chips`);
+    
     $common_info.append($pot_display);
+    $common_info.append($last_bet_display);
 
     //show or hide each player's hand:
     if (current_player.in_hand) {
@@ -330,18 +344,28 @@ export function render_ui({ game, game_state, current_player }) {
 
       const $active_player_indicator = $('<span />');
       $active_player_indicator.addClass('active-player-indicator');
-      $active_player_indicator.text('*');
+      $active_player_indicator.text('>>');
       if (game_state.active_player !== player.id) {
         // TODO: do this with CSS
         $active_player_indicator.hide();
       }
 
       const $dealer_indicator = $('<span />');
+      const $player_indicator = $('<span />');
+
       $dealer_indicator.addClass('dealer-indicator');
-      $dealer_indicator.text('(D)');
+      $dealer_indicator.text('D ');
       if (game_state.dealer !== player.id) {
         $dealer_indicator.hide();
       }
+      if(game_state.active_player !== player.id &&
+         game_state.dealer != player.id) //everyone else gets a ..
+        {
+          $player_indicator.addClass('player-indicator');
+          $player_indicator.text('..');
+        }
+      
+  
 
       const $chips_display = $('<span />');
       $chips_display.addClass('chips-display');
@@ -393,10 +417,13 @@ export function render_ui({ game, game_state, current_player }) {
       }
 
       //add all HTML to each player
-      $player_seat.append($player_name);
       $player_seat.append($active_player_indicator);
+
       $player_seat.append($dealer_indicator);
+      $player_seat.append($player_indicator);
+      $player_seat.append($player_name);
       $player_seat.append($chips_display);
+      
       if (game_state.dealer === current_player.id) {
         $player_seat.append($winner_checkbox);
         $player_seat.append($winner_checkbox_label);
