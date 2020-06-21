@@ -104,7 +104,7 @@ class RPC(object):
         
         card = self.game_state.draw_card()
         
-        self.player.give_card(PlayerCard(card, up))
+        self.game_state.active_player.give_card(PlayerCard(card, up))
         self.game_state.next_active_player()
                               
     def fold(self):

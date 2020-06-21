@@ -4,7 +4,8 @@ body {
     background-image: linear-gradient(to bottom, #007712, #2AcF15 );
     color: white;
     min-height: 100vh;
-    /* TOOD: remove body margin */
+    margin:0px;
+    padding:5px;
 }
 
 /* shake card on hover */
@@ -18,7 +19,7 @@ img:hover {
     animation: 0.5s ease-out 0s 1 slideInFromLeft;
     background: #333;
 }
-
+/**/
 @keyframes slideInFromLeft {
     0% {
         transform: translateX(100%);
@@ -164,4 +165,23 @@ button:hover {
 }
 #dealer-controls-bottom{
   margin-top: 8px;
+}
+#draw-btn{
+  border-radius:1px;
+  margin-left: 15px;
+}
+#bet-input{
+  width:60px;
+  height:30px;
+}
+input
+{
+    font-size:22px;
+}
+#change-active-player-select{
+  width:80px;
+  height:30px;
+}
+.opening-cards{
+  border: solid 3px;
 }

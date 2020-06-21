@@ -78,8 +78,10 @@ export function render_ui({ game, game_state, current_player }) {
       id: 'dealer-controls',
     });
 
-    const $draw_button = $('<button />');
-    $draw_button.text('DRAW');
+    const $draw_button = $('<button />', {
+      id: 'draw-btn',
+    });
+    $draw_button.text('DRAW MODE');
     $draw_button.on('click', function() {
       // TODO: draw
     });
@@ -107,11 +109,16 @@ export function render_ui({ game, game_state, current_player }) {
         label += `${up} UP`;
       }
       $deal_all_button.text(label);
-      if (down == 0 && up == 1)
-          $deal_all_button.attr('id', 'first-of-group'); //to add some left margin space
+      
+      if (down == 0 && up == 1 || down == 5)
+        $deal_all_button.attr('id', 'first-of-group'); //to add some left margin space
+      
       if (down + up == 1)
-          $deal_all_button.addClass('one-all-buttons');
-
+        $deal_all_button.addClass('one-all-buttons');
+      
+      if (down == 5 || down + up == 3)
+        $deal_all_button.addClass('opening-cards');  
+      
       //bind to deal_all():
       $deal_all_button.on('click', function() {
         game.deal_all(down, up);
@@ -180,10 +187,11 @@ export function render_ui({ game, game_state, current_player }) {
       
     //ADD ALL DEALER CONTROLS HTML TO PAGE:
 
-    $dealer_controls.append($draw_button);
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
+    $dealer_controls.append($draw_button);
+
     $dealer_controls_bottom.append('<span>Bettor: </span>');
     $dealer_controls_bottom.append($change_active_player_select);
     $dealer_controls_bottom.append($payout_button);
@@ -217,7 +225,7 @@ export function render_ui({ game, game_state, current_player }) {
     const $bet_button = $('<button />', {
       id: 'bet-button',
     });
-    $bet_button.text('Bet');
+    $bet_button.text('Bet:');
     $bet_button.on('click', function() {
       const amount = +$bet_input.val();
       game.bet(amount);
@@ -234,19 +242,20 @@ export function render_ui({ game, game_state, current_player }) {
     });
 
     $player_controls.append($fold_button);
-    $player_controls.append($bet_input);
-    $player_controls.append($bet_button);
     $player_controls.append($check_button);
+    $player_controls.append($bet_button);
+    $player_controls.append($bet_input);
+
 
     //PUT EVERYTHING INTO THE  HTML:
     $header.append($logo_link);
     $header.append('<br />');
     $header.append($dealer_controls);
     $header.append($dealer_controls_bottom);
-    $header.append('<br />');
     $header.append($common_info);
-    $header.append('<br />');
+    $header.append('<hr />');
     $header.append($player_controls);
+    $header.append('<br />');
 
     $app.append($header);
     $app.append($game_board);
