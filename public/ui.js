@@ -107,7 +107,11 @@ export function render_ui({ game, game_state, current_player }) {
         label += `${up} UP`;
       }
       $deal_all_button.text(label);
-        
+      if (down == 0 && up == 1)
+          $deal_all_button.attr('id', 'first-of-group'); //to add some left margin space
+      if (down + up == 1)
+          $deal_all_button.addClass('one-all-buttons');
+
       //bind to deal_all():
       $deal_all_button.on('click', function() {
         game.deal_all(down, up);
@@ -121,11 +125,19 @@ export function render_ui({ game, game_state, current_player }) {
     $next_up_button.on('click', function() {
       game.one_card(true);
     });
+    $next_up_button.addClass('one-card-buttons');
+    $next_up_button.attr('id', 'first-of-group'); //to add some left margin space
+    
     //NEXT DOWN BUTTON  - deals one card up down to one player
     const $next_down_button = $('<button />');
     $next_down_button.text('Next DN');
     $next_down_button.on('click', function() {
       game.one_card(false);
+    });
+    $next_down_button.addClass('one-card-buttons');
+
+    const $dealer_controls_bottom = $('<div />', {
+      id: 'dealer-controls-bottom',
     });
     //change active player selector:
     const $change_active_player_select = $('<select />', {
@@ -172,11 +184,11 @@ export function render_ui({ game, game_state, current_player }) {
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
-    $dealer_controls.append('<span>Bettor: </span>');
-    $dealer_controls.append($change_active_player_select);
-    $dealer_controls.append($payout_button);
-    $dealer_controls.append($new_game_button);
-    $dealer_controls.append($logout_button);
+    $dealer_controls_bottom.append('<span>Bettor: </span>');
+    $dealer_controls_bottom.append($change_active_player_select);
+    $dealer_controls_bottom.append($payout_button);
+    $dealer_controls_bottom.append($new_game_button);
+    $dealer_controls_bottom.append($logout_button);
 
     const $common_info = $('<div />', {
       id: 'common-info',
@@ -230,6 +242,7 @@ export function render_ui({ game, game_state, current_player }) {
     $header.append($logo_link);
     $header.append('<br />');
     $header.append($dealer_controls);
+    $header.append($dealer_controls_bottom);
     $header.append('<br />');
     $header.append($common_info);
     $header.append('<br />');

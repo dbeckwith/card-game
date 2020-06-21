@@ -153,3 +153,15 @@ button:hover {
 .player-seat > * {
     margin-right: 4px;
 }
+.one-card-buttons{
+  border: solid 2px orange;
+}
+.one-all-buttons{
+  border: solid 2px red;
+}
+#first-of-group{
+  margin-left: 15px;
+}
+#dealer-controls-bottom{
+  margin-top: 8px;
+}
