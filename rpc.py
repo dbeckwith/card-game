@@ -95,7 +95,18 @@ class RPC(object):
             for player in players:
                 card = self.game_state.draw_card()
                 player.give_card(PlayerCard(card, True))
-
+    def one_card(self, up):
+        '''
+        deals one card to one player
+        :param up: True if up card, False if down card
+        '''
+        self.game_state.hand_started = True
+        
+        card = self.game_state.draw_card()
+        
+        self.player.give_card(PlayerCard(card, up))
+        self.game_state.next_active_player()
+                              
     def fold(self):
         if self.player is None:
             raise ClientError('not logged-in')

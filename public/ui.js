@@ -16,6 +16,7 @@
 
 let showing_login_screen = false;
 
+//SETS UP LOGIN SCREEN
 export function render_ui({ game, game_state, current_player }) {
   const $app = $('#app');
 
@@ -57,11 +58,13 @@ export function render_ui({ game, game_state, current_player }) {
     $current_players.text(`CURRENT PLAYERS: ${_.join(current_players, ', ')}`);
   }
 
+  //SETS UP HTML - called by render_game
   function setup_game_html() {
     $app.empty();
 
     const $header = $('<center />');
 
+    //LOGO:
     const $logo_link = $('<a />', {
       href: '#',
     });
@@ -70,6 +73,7 @@ export function render_ui({ game, game_state, current_player }) {
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
 
+    //Div for all dealer controls:
     const $dealer_controls = $('<div />', {
       id: 'dealer-controls',
     });
@@ -86,9 +90,13 @@ export function render_ui({ game, game_state, current_player }) {
       [0, 1],
       [1, 0],
     ];
+      
+    //CREATE ALL DEAL BUTTONS for dealer view:
     const $deal_all_buttons = _.map(deal_all_up_down_numbers, ([down, up]) => {
       const $deal_all_button = $('<button />');
       let label = '';
+        
+      //add text to buttons based on how many up or down:
       if (down > 0) {
         label += `${down} DN`;
       }
@@ -99,12 +107,27 @@ export function render_ui({ game, game_state, current_player }) {
         label += `${up} UP`;
       }
       $deal_all_button.text(label);
+        
+      //bind to deal_all():
       $deal_all_button.on('click', function() {
         game.deal_all(down, up);
       });
       return $deal_all_button;
     });
 
+    //NEXT UP BUTTON  - deals one card up to one player
+    const $next_up_button = $('<button />');
+    $next_up_button.text('Next UP');
+    $next_up_button.on('click', function() {
+      game.one_card(true);
+    });
+    //NEXT DOWN BUTTON  - deals one card up down to one player
+    const $next_down_button = $('<button />');
+    $next_down_button.text('Next DN');
+    $next_down_button.on('click', function() {
+      game.one_card(false);
+    });
+    //change active player selector:
     const $change_active_player_select = $('<select />', {
       id: 'change-active-player-select',
     });
@@ -113,15 +136,19 @@ export function render_ui({ game, game_state, current_player }) {
       game.change_active_player(player);
     });
 
+    //payout checkboxes:
     const $payout_button = $('<button />');
     $payout_button.text('Pay-out');
     $payout_button.on('click', function() {
+      //get which players were checked:
       const winners = $('.winner-checkbox:checked').map(function() {
         return $(this).val();
       }).toArray();
+      //pay all those that were checked:
       game.payout(winners);
     });
 
+    //NEW GAME BUTTON:
     const $new_game_button = $('<button />');
     $new_game_button.text('New Game');
     $new_game_button.on('click', function() {
@@ -138,9 +165,13 @@ export function render_ui({ game, game_state, current_player }) {
     const $game_board = $('<div />', {
       id: 'game-board',
     });
+      
+    //ADD ALL DEALER CONTROLS HTML TO PAGE:
 
     $dealer_controls.append($draw_button);
     $dealer_controls.append($deal_all_buttons);
+    $dealer_controls.append($next_up_button);
+    $dealer_controls.append($next_down_button);
     $dealer_controls.append('<span>Bettor: </span>');
     $dealer_controls.append($change_active_player_select);
     $dealer_controls.append($payout_button);
@@ -151,6 +182,7 @@ export function render_ui({ game, game_state, current_player }) {
       id: 'common-info',
     });
 
+    // PLAYER CONTROLS:
     const $player_controls = $('<div />', {
       id: 'player-controls',
     });
@@ -169,6 +201,7 @@ export function render_ui({ game, game_state, current_player }) {
       min: 0,
     });
 
+    //BET BUTTON:
     const $bet_button = $('<button />', {
       id: 'bet-button',
     });
@@ -193,6 +226,7 @@ export function render_ui({ game, game_state, current_player }) {
     $player_controls.append($bet_button);
     $player_controls.append($check_button);
 
+    //PUT EVERYTHING INTO THE  HTML:
     $header.append($logo_link);
     $header.append('<br />');
     $header.append($dealer_controls);
@@ -205,17 +239,20 @@ export function render_ui({ game, game_state, current_player }) {
     $app.append($game_board);
   }
 
+ 
   function render_game() {
     if ($('#game-board').length === 0) {
       setup_game_html();
     }
 
+    //SHOW CONTROLS TO CURRENT DEALER:
     if (game_state.dealer === current_player.id) {
       $('#dealer-controls').show();
     } else {
       $('#dealer-controls').hide();
     }
 
+    //show active players in the menu:
     const $change_active_player_select = $('#change-active-player-select');
     $change_active_player_select.empty();
     _.forEach(game_state.players, player => {
@@ -237,6 +274,7 @@ export function render_ui({ game, game_state, current_player }) {
 
     $common_info.append($pot_display);
 
+    //show or hide each player's hand:
     if (current_player.in_hand) {
       $('#player-controls').show();
     } else {
@@ -245,6 +283,7 @@ export function render_ui({ game, game_state, current_player }) {
 
     $('#bet-input').prop('max', current_player.chips);
 
+    //SHOW OR HIDE FOLD OR SIT-OUT BUTTONS:
     if (game_state.hand_started) {
       $('#fold-button').text('Fold');
     } else {
@@ -305,6 +344,7 @@ export function render_ui({ game, game_state, current_player }) {
         game.kick(player.id);
       });
 
+      //SHOW CARDS FOR EACH PLAYER (also determine up and down):
       let $hand;
       if (player.in_hand) {
         $hand = _.map(player.hand, (card) => {
@@ -330,6 +370,7 @@ export function render_ui({ game, game_state, current_player }) {
         $hand = [];
       }
 
+      //add all HTML to each player
       $player_seat.append($player_name);
       $player_seat.append($active_player_indicator);
       $player_seat.append($dealer_indicator);
@@ -346,7 +387,7 @@ export function render_ui({ game, game_state, current_player }) {
 
     $game_board.append($player_seats);
   }
-
+  //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
   if (current_player == null) {
     if (!showing_login_screen) {
       setup_login_screen();
