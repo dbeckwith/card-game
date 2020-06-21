@@ -14,6 +14,8 @@
 
 // TODO: show number of remaining cards in deck
 
+// TODO: show green outline around name of who the bet is to (instead of >>)
+
 let showing_login_screen = false;
 
 //SETS UP LOGIN SCREEN
@@ -197,7 +199,7 @@ export function render_ui({ game, game_state, current_player }) {
     $dealer_controls.append($next_down_button);
     $dealer_controls.append($draw_button);
 
-    $dealer_controls_bottom.append('<span>Bettor: </span>');
+    $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
     $dealer_controls_bottom.append($change_active_player_select);
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($new_game_button);
@@ -230,7 +232,7 @@ export function render_ui({ game, game_state, current_player }) {
     const $bet_button = $('<button />', {
       id: 'bet-button',
     });
-    $bet_button.text('Bet:');
+    $bet_button.text('Bet');
     $bet_button.on('click', function() {
       const amount = +$bet_input.val();
       game.bet(amount);
@@ -305,7 +307,7 @@ export function render_ui({ game, game_state, current_player }) {
     $pot_display.text(`POT: ${game_state.pot} chips`);
 
     const $last_bet_display = $('<span />');
-    $last_bet_display.text(` Last Bet: ? chips`);
+    $last_bet_display.text(` LAST BET: ? chips`);
     
     $common_info.append($pot_display);
     $common_info.append($last_bet_display);

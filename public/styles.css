@@ -207,6 +207,9 @@ input
 #last-bet{
   color:#ff7777;
 }
+#bet-button{
+  margin-left:15px;
+}
 #logout-btn{
   margin-left:40px;
   border-radius:0px;
