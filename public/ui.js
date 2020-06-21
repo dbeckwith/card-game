@@ -193,6 +193,18 @@ export function render_ui(
       const player = $(this).val();
       game.change_active_player(player);
     });
+    
+    //set game selector to show name of game on screen:
+    const $set_game_select = $('<select />',
+    {
+      id: 'set-game-select',
+    });
+    $set_game_select.on('change', function ()
+    {
+      const curr_game = $(this).val();
+      $current_game.empty();
+      $current_game.append(curr_game);
+    });
 
     //payout checkboxes:
     const $payout_button = $('<button />');
@@ -246,6 +258,9 @@ export function render_ui(
     $dealer_controls_bottom.append($change_active_player_select);
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($new_game_button);
+    $dealer_controls_bottom.append('<span>Game: </span>');
+    $dealer_controls_bottom.append($set_game_select);
+
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
 
     const $common_info = $('<span />',
@@ -253,7 +268,7 @@ export function render_ui(
       id: 'common-info',
     });
 
-    // PLAYER CONTROLS:
+    // SET UP ALL PLAYER CONTROLS:
     const $player_controls = $('<span />',
     {
       id: 'player-controls',
@@ -269,6 +284,7 @@ export function render_ui(
       game.fold();
     });
 
+  
     const $bet_input = $('<input />',
     {
       id: 'bet-input',
@@ -317,13 +333,22 @@ export function render_ui(
       $bet_input.val('');
     });
 
+    const $current_game = $('<span />',
+    {
+      id:'current-game',
+    });
+    
+    const $chips_stack_display = $('<span />');
+    $chips_stack_display.addClass('chips-display');
+    $chips_stack_display.text(`${current_player.chips} chips`);
+
+    $player_controls.append($chips_stack_display);
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
     $player_controls.append($bet_button);
     $player_controls.append($bet_input);
  
-      $player_controls.append($bet_buttons);
-    
+    $player_controls.append($bet_buttons);
 
 
     //PUT EVERYTHING INTO THE  HTML:
@@ -333,6 +358,8 @@ export function render_ui(
     $header.append($player_controls);
     $header.append($common_info);
     $header.append($logout_button);
+    $header.append($current_game);
+
 
     $header.append('<hr />');
 
@@ -377,6 +404,25 @@ export function render_ui(
         $change_active_player_select.append($player_option);
       }
     });
+    
+       //show games list in the menu:
+    const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw', 
+                            '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball', 
+                            'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey', 
+                            'Woolworths');
+    const $set_game_select = $('#set-game-select');
+    $set_game_select.empty();
+    for(let i = 0; i < $games.length; i++)
+      {
+        const $a_game = $('<option />',
+        {
+          value: $games[i],
+        });
+        $a_game.text($games[i]);
+        $a_game.prop('selected', game_state.game = $games[i]);
+        $set_game_select.append($a_game);
+      }
+    
 
     const $common_info = $('#common-info');
     $common_info.empty();
@@ -387,11 +433,8 @@ export function render_ui(
     });
     $pot_display.text(`POT: ${game_state.pot} chips`);
 
-    const $last_bet_display = $('<span />');
-    $last_bet_display.text(` LAST BET: ? chips`);
 
     $common_info.append($pot_display);
-    $common_info.append($last_bet_display);
 
     //show or hide each player's hand:
     if (current_player.in_hand)
@@ -462,9 +505,9 @@ export function render_ui(
 
 
 
-      const $chips_display = $('<span />');
-      $chips_display.addClass('chips-display');
-      $chips_display.text(`${player.chips} chips`);
+      //still a number, for now:
+//      const $chips_stack_display = $('<span />');
+//      $chips_stack_display.addClass('chips-display');
 
       const $winner_checkbox = $('<input />',
       {
@@ -531,7 +574,7 @@ export function render_ui(
       $player_seat.append($dealer_indicator);
       $player_seat.append($player_indicator);
       $player_seat.append($player_name);
-      $player_seat.append($chips_display);
+//      $player_seat.append($chips_stack_display);
 
       if (game_state.dealer === current_player.id)
       {

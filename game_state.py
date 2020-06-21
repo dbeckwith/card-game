@@ -21,6 +21,7 @@ class GameState(object):
         self.common_cards = []
         self.pot = 0
 
+        self.current_game = None
         self.connections = []
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
