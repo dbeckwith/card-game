@@ -10,8 +10,6 @@
 
 // TODO: show errors
 
-// TODO: common cards
-
 // TODO: show number of remaining cards in deck
 
 // TODO: show green outline around name of who the bet is to (instead of >>)
@@ -139,6 +137,16 @@ export function render_ui({ game, game_state, current_player }) {
     $next_up_button.attr('id', 'first-of-group'); //to add some left margin space
     
     //NEXT DOWN BUTTON  - deals one card up down to one player
+    const $common_button = $('<button />');
+    $common_button.text('COMMON (up)');
+    $common_button.on('click', function() {
+      game.deal_common();
+    });
+    $common_button.addClass('common-button');
+    
+    
+    
+        //NEXT DOWN BUTTON  - deals one card up down to one player
     const $next_down_button = $('<button />');
     $next_down_button.text('Next DN');
     $next_down_button.on('click', function() {
@@ -197,6 +205,7 @@ export function render_ui({ game, game_state, current_player }) {
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
+    $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
 
     $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
@@ -436,7 +445,32 @@ export function render_ui({ game, game_state, current_player }) {
       return $player_seat;
     });
 
+    //COMMON CARDS:
+    const $common_display = $('<div />',
+    {
+      id: "common-display",
+    });
+    
+  const $common_hand = _.map(game_state.common_cards, (card) =>
+   {
+     let card_img_name;
+     card_img_name = card;
+
+     const $card_img = $('<img />',
+     {
+       src: `card_images/${card_img_name}.svg`,
+     });
+
+     $card_img.addClass('card');
+
+     return $card_img;
+   });
+    
+    $common_display.append($common_hand);
+
     $game_board.append($player_seats);
+    $game_board.append($common_display);
+
   }
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
   if (current_player == null) {

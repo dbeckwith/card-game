@@ -73,7 +73,9 @@ export class CardGame {
   deal_all(down, up) {
     this._send('deal_all', { down, up });
   }
-    
+  deal_common(){
+    this._send('deal_common');
+  }
   one_card(up){
     this._send('one_card', {up});
   }

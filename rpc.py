@@ -106,7 +106,13 @@ class RPC(object):
         
         self.game_state.active_player.give_card(PlayerCard(card, up))
         self.game_state.next_active_player()
-                              
+        
+    def deal_common(self):
+        self.game_state.hand_started = True
+        
+        card = self.game_state.draw_card()
+        self.game_state.common_cards.append(card)
+         
     def fold(self):
         if self.player is None:
             raise ClientError('not logged-in')

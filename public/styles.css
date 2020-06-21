@@ -153,7 +153,7 @@ button:hover {
 
 .player-seat > * {
     margin-right: 4px;
-    font-family: consolas;
+    font-family: monospace;
 }
 .one-card-buttons{
   border: solid 2px orange;

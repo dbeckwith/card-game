@@ -18,6 +18,7 @@ class GameState(object):
         self.hand_started = False
         self.dealer = None
         self.active_player = None
+        self.common_cards = []
         self.pot = 0
 
         self.connections = []
@@ -34,6 +35,7 @@ class GameState(object):
             'dealer': self.dealer.id if self.dealer is not None else None,
             'active_player': self.active_player.id if self.active_player is not None else None,
             'pot': self.pot,
+            'common_cards': self.common_cards,
         }
 
     async def connect(self, rpc):
@@ -96,7 +98,8 @@ class GameState(object):
         # reset each player
         for player in self.players:
             player.new_game()
-
+            
+        self.common_cards = []
         # shuffle a new deck
         self.deck = cards.new_deck()
 
