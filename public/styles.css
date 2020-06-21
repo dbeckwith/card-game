@@ -15,7 +15,7 @@ img:hover {
 }
 
 /* last card (or 1 card) slides in */
-#last {
+.last {
     animation: 0.5s ease-out 0s 1 slideInFromLeft;
     background: #333;
 }
