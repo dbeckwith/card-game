@@ -9,10 +9,12 @@ body {
 }
 
 /* shake card on hover */
+/*
 img:hover {
     animation: shake 0.5s;
     animation-iteration-count: 1;
 }
+*/
 
 /* last card (or 1 card) slides in */
 .last {
@@ -62,7 +64,7 @@ td {
 
 .card {
     width: 60px;
-    border: 4px solid transparent;
+/*    border: 4px solid transparent;*/
     border-radius: 6px;
 }
 
