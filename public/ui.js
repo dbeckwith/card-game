@@ -53,12 +53,33 @@ export function render_ui(
       id: 'current-players',
     });
 
+    //TO-DO: deal a hand of five random cards:
+    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
+    const suits = ['C', 'D', 'H', 'S'];
+    
+    const $five_cards = $('<div />');
+    for(let i = 0; i < 5; i++)
+    {
+       const v = values[Math.floor(Math.random() * values.length)]
+       const s = suits[Math.floor(Math.random() * suits.length)]
+       const card_val = v + s;
+        const $card_img = $('<img />',
+        {
+            src: `card_images/${card_val}.svg`,
+        });
+      $card_img.addClass("opening-cards");
+    $five_cards.append($card_img)
+    }
+    
+   
+    
     $center.append($name_input);
     $center.append('<br />');
     $center.append($login_button);
     $center.append('<br />');
     $center.append('<hr />');
     $center.append($current_players);
+    $center.append($five_cards);
     $app.append($center);
   }
 
