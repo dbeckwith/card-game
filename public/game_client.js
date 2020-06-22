@@ -94,4 +94,7 @@ export class CardGame {
   change_active_player(player) {
     this._send('change_active_player', { player });
   }
+  flip_card(card_num){
+    this._send('flip_card', { card_num });
+  }
 }

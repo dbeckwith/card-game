@@ -67,7 +67,7 @@ export function render_ui(
         {
             src: `card_images/${card_val}.svg`,
         });
-      $card_img.addClass("opening-cards");
+      $card_img.addClass('login-cards');
     $five_cards.append($card_img)
     }
     
@@ -361,7 +361,7 @@ export function render_ui(
     
     const $chips_stack_display = $('<span />');
     $chips_stack_display.addClass('chips-display');
-    $chips_stack_display.text(`${current_player.chips} chips`);
+    $chips_stack_display.text(`${current_player.name + ": " + current_player.chips} chips`);
 
     $player_controls.append($chips_stack_display);
     $player_controls.append($fold_button);
@@ -526,7 +526,6 @@ export function render_ui(
 
 
 
-      //still a number, for now:
 //      const $chips_stack_display = $('<span />');
 //      $chips_stack_display.addClass('chips-display');
 
@@ -579,6 +578,13 @@ export function render_ui(
             $card_img.addClass('down-card');
           }
           $card_img.addClass('last');
+          
+          //TO-DO: flip this specific card:
+          $card_img.on('click', function ()
+          {
+            game.flip_card(1);
+          });
+
 
           return $card_img;
         });

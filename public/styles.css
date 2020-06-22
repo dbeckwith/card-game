@@ -220,9 +220,14 @@ border-radius:0px;
   font-style:italic;
   float:right;
 }
-.opening-cards{
+.login-cards{
   margin-top:100px;
-      width: 200px;
+/*      width: 200px;*/
     border: 4px solid transparent;
     border-radius: 6px;
+}
+.chips-display{
+  margin-right:50px;
+  color:yellow;
+  font-size:20px;
 }

@@ -107,7 +107,9 @@ class RPC(object):
         self.game_state.active_player.give_card(PlayerCard(card, up))
         self.game_state.next_active_player()
         
-
+    def flip_card(self, card_num):
+        self.player.hand[card_num].up = True
+        
     def deal_common(self):
         self.game_state.hand_started = True
         
