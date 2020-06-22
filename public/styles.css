@@ -155,7 +155,8 @@ button:hover {
 
 .player-seat > * {
     margin-right: 4px;
-    font-family: monospace;
+  font-family: 'PT Mono', monospace;
+/*    font-family: monospace;*/
 }
 .one-card-buttons{
   border: solid 2px orange;

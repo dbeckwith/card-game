@@ -366,7 +366,7 @@ export function render_ui(
     
     const $chips_stack_display = $('<span />');
     $chips_stack_display.addClass('chips-display');
-    $chips_stack_display.text(`${current_player.name + ": " + current_player.chips} chips`);
+    $chips_stack_display.text(`${current_player.name + " ($" + current_player.chips * 0.25})`);
 
     $player_controls.append($chips_stack_display);
     $player_controls.append($fold_button);
@@ -457,7 +457,7 @@ export function render_ui(
     {
       id: "pot-display",
     });
-    $pot_display.text(`POT: ${game_state.pot} chips`);
+    $pot_display.text(`POT: \$${game_state.pot * 0.25}`);
 
 
     $common_info.append($pot_display);
