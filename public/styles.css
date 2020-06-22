@@ -19,7 +19,6 @@ img:hover {
 /* last card (or 1 card) slides in */
 .last {
     animation: 0.5s ease-out 0s 1 slideInFromLeft;
-    background: #333;
 }
 /**/
 @keyframes slideInFromLeft {
@@ -64,7 +63,7 @@ td {
 
 .card {
     width: 60px;
-/*    border: 4px solid transparent;*/
+    border: 4px solid transparent;
     border-radius: 6px;
 }
 
@@ -164,8 +163,15 @@ button:hover {
 .one-all-buttons{
   border: solid 2px red;
 }
+#player-chips{
+  float:left;
+}
 #first-of-group{
   margin-left: 15px;
+}
+#new-game-button{
+  margin-left: 15px;
+  margin-right:15px;
 }
 #dealer-controls-bottom{
   margin-top: 8px;
@@ -187,6 +193,11 @@ input
     font-size:22px;
 }
 #change-active-player-select{
+  width:80px;
+  height:30px;
+  margin-right:10px;
+}
+#winners-select{
   width:80px;
   height:30px;
 }
