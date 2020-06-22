@@ -56,13 +56,18 @@ export function render_ui(
     //TO-DO: deal a hand of five random cards:
     const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
     const suits = ['C', 'D', 'H', 'S'];
-    
+    let chosen = "";
     const $five_cards = $('<div />');
     for(let i = 0; i < 5; i++)
     {
-       const v = values[Math.floor(Math.random() * values.length)]
-       const s = suits[Math.floor(Math.random() * suits.length)]
-       const card_val = v + s;
+      let card_val = "";
+      while (chosen.indexOf(card_val) != -1)
+      {
+        const v = values[Math.floor(Math.random() * values.length)]
+        const s = suits[Math.floor(Math.random() * suits.length)]
+        card_val = v + s;
+      }
+      chosen += card_val;
         const $card_img = $('<img />',
         {
             src: `card_images/${card_val}.svg`,
