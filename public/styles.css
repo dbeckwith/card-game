@@ -139,24 +139,10 @@ button:hover {
     margin-bottom: 10px;
 }
 
-.player-connected .kick-button {
-    display: none;
-}
-
-.player-disconnected .player-name {
-    opacity: 0.4;
-    font-style: italic;
-}
-
 #player-controls button {
     font-size: 20px;
 }
 
-.player-seat > * {
-    margin-right: 4px;
-  font-family: 'PT Mono', monospace;
-/*    font-family: monospace;*/
-}
 .one-card-buttons{
   border: solid 2px orange;
 }
@@ -226,7 +212,7 @@ input
 }
 #logout-btn{
   margin-left:40px;
-  
+
 border-radius:0px;
 }
 #current-game{
@@ -240,8 +226,68 @@ border-radius:0px;
     border: 4px solid transparent;
     border-radius: 6px;
 }
-.chips-display{
-  margin-right:50px;
-  color:yellow;
-  font-size:20px;
+
+
+.player-seat {
+  display: grid;
+  grid-gap: 4px;
+  grid-template-columns: 150px 100px 1fr;
+  grid-template-rows: auto 1fr;
+
+  font-family: 'PT Mono', monospace;
+
+  padding: 4px;
+  border: 4px solid transparent;
+  border-radius: 4px;
+}
+
+.player-seat.active-player {
+  border-color: yellow;
+}
+
+.player-seat.player-connected .kick-button {
+  display: none;
+}
+
+.player-seat.dealer .player-name {
+  color: orange;
+  font-weight: bold;
+}
+
+.player-seat.player-disconnected .player-name {
+  opacity: 0.4;
+  font-style: italic;
+}
+
+.player-name {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.chips-shy {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.chips-display {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  vertical-align: center;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  color: yellow;
+}
+
+.chips-display img {
+  /* this calc should be updated if these values change */
+  /* (first column width + second column width) / (starting chip amount / chips per chip image) */
+  width: calc((150px + 100px) / (100 / 20));
+}
+
+.hand {
+  grid-column: 3;
+  grid-row: 1 / span 2;
 }

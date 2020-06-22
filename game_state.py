@@ -99,7 +99,7 @@ class GameState(object):
         # reset each player
         for player in self.players:
             player.new_game()
-            
+
         self.common_cards = []
         # shuffle a new deck
         self.deck = cards.new_deck()
@@ -126,7 +126,6 @@ class GameState(object):
                 self.active_player = self.next_player_after(self.active_player)
                 if self.active_player is original:
                     # we've looped back around
-                    self.active_player = None
                     break
                 if self.active_player.in_hand:
                     # found a player in the hand

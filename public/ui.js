@@ -75,9 +75,9 @@ export function render_ui(
       $card_img.addClass('login-cards');
     $five_cards.append($card_img)
     }
-    
-   
-    
+
+
+
     $center.append($name_input);
     $center.append('<br />');
     $center.append($login_button);
@@ -219,14 +219,14 @@ export function render_ui(
       const player = $(this).val();
       game.change_active_player(player);
     });
-    
+
     //winners selector:
     const $winners_select = $('<select />',
     {
       id: 'winners-select',
     });
-    
-    
+
+
     //set game selector to show name of game on screen:
     const $set_game_select = $('<select />',
     {
@@ -322,7 +322,7 @@ export function render_ui(
       game.fold();
     });
 
-  
+
     const $bet_input = $('<input />',
     {
       id: 'bet-input',
@@ -344,7 +344,7 @@ export function render_ui(
     });
 
     const $bet_buttons = $('<span />');
-    
+
     for (let i = 1; i <= 6; i++)
     {
       const $bet_button_num = $('<button />',
@@ -375,7 +375,7 @@ export function render_ui(
     {
       id:'current-game',
     });
-    
+
     const $player_money_display = $('<span />',{
       id:'player-chips',
     });
@@ -387,7 +387,7 @@ export function render_ui(
     $player_controls.append($check_button);
     $player_controls.append($bet_button);
     $player_controls.append($bet_input);
- 
+
     $player_controls.append($bet_buttons);
 
 
@@ -460,9 +460,9 @@ export function render_ui(
       }
     });
        //show games list in the menu:
-    const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw', 
-                            '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball', 
-                            'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey', 
+    const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw',
+                            '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball',
+                            'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey',
                             'Woolworths');
     const $set_game_select = $('#set-game-select');
     $set_game_select.empty();
@@ -476,7 +476,7 @@ export function render_ui(
         $a_game.prop('selected', game_state.game = $games[i]);
         $set_game_select.append($a_game);
       }
-    
+
 
     const $common_info = $('#common-info');
     $common_info.empty();
@@ -528,41 +528,26 @@ export function render_ui(
       {
         $player_seat.addClass('player-disconnected');
       }
+      if (game_state.dealer === player.id) {
+        $player_seat.addClass('dealer');
+      }
+      if (game_state.active_player === player.id) {
+        $player_seat.addClass('active-player');
+      }
 
-      const $player_name = $('<span />');
+      const $player_name = $('<div />');
       $player_name.addClass('player-name');
       $player_name.text(player.name);
 
-      const $active_player_indicator = $('<span />');
-      $active_player_indicator.addClass('active-player-indicator');
-      $active_player_indicator.text('>>');
-      if (game_state.active_player !== player.id)
-      {
-        // TODO: do this with CSS
-        $active_player_indicator.hide();
-      }
-
-      const $dealer_indicator = $('<span />');
-      const $player_indicator = $('<span />');
-
-      $dealer_indicator.addClass('dealer-indicator');
-      $dealer_indicator.text('D ');
-      if (game_state.dealer !== player.id)
-      {
-        $dealer_indicator.hide();
-      }
-      if (game_state.active_player !== player.id &&
-        game_state.dealer != player.id) //everyone else gets a ..
-      {
-        $player_indicator.addClass('player-indicator');
-        $player_indicator.text('..');
-      }
-
-
-
-      const $chip_stack_display = $('<span />');
+      const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
-      $chip_stack_display.text(player.chips);
+      _.forEach(new Array(Math.ceil(player.chips / 20)), () => {
+        $chip_stack_display.append('<img src="chips_images/chip.png" />');
+      });
+
+      const $chips_shy = $('<div />');
+      $chips_shy.addClass('chips-shy');
+      $chips_shy.text('???');
 
 //      const $winner_checkbox = $('<input />',
 //      {
@@ -587,10 +572,11 @@ export function render_ui(
       });
 
       //SHOW CARDS FOR EACH PLAYER (also determine up and down):
-      let $hand;
+      const $hand = $('<div />');
+      $hand.addClass('hand');
       if (player.in_hand)
       {
-        $hand = _.map(player.hand, (card, idx) =>
+        _.forEach(player.hand, (card, idx) =>
         {
           let card_img_name;
           if (card.up || player.id === current_player.id)
@@ -624,34 +610,25 @@ export function render_ui(
           {
             game.flip_card(idx);
           });
-          
 
-          return $card_img;
+          $hand.append($card_img);
         });
-
-      }
-      else
-      {
-        $hand = [];
       }
 
       //add all HTML to each player
-      $player_seat.append($active_player_indicator);
+      $player_name.append($kick_button);
 
-      $player_seat.append($dealer_indicator);
-      $player_seat.append($player_indicator);
       $player_seat.append($player_name);
+      $player_seat.append($chips_shy);
       $player_seat.append($chip_stack_display);
+      $player_seat.append($hand);
 
 //      if (game_state.dealer === current_player.id)
 //      {
 //        $player_seat.append($winner_checkbox);
 //        $player_seat.append($winner_checkbox_label);
-//        
+//
 //      }
-      $player_seat.append('<br>');
-      $player_seat.append($kick_button);
-      $player_seat.append($hand);
 
       return $player_seat;
     });
