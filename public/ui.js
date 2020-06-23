@@ -541,7 +541,7 @@ export function render_ui(
 
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
-      _.forEach(new Array(Math.ceil(player.chips / 20)), () => {
+      _.forEach(new Array(Math.ceil(player.chips / 40)), () => {
         $chip_stack_display.append('<img src="chips_images/chip.png" />');
       });
 
@@ -599,12 +599,12 @@ export function render_ui(
             $card_img.addClass('down-card');
           }
           //for slide in animation
-          let $card_dealt = true; //change this to depend on what just happened
-          if(player.id === current_player.id && idx == player.hand.length - 1
-            && $card_dealt)
-            $card_img.addClass('last');
-          else
-            $card_img.removeClass('last');
+//          let $card_dealt = true; //change this to depend on what just happened
+//          if(player.id === current_player.id && idx == player.hand.length - 1
+//            && $card_dealt)
+//            $card_img.addClass('last');
+//          else
+//            $card_img.removeClass('last');
           //TO-DO: flip this specific card:
           $card_img.on('click', function ()
           {
