@@ -277,7 +277,7 @@ border-radius:0px;
 .player-seat {
   display: grid;
   grid-gap: 2px;
-  grid-template-columns: 100px 75px 1fr;
+  grid-template-columns: 100px 85px 1fr;
   grid-template-rows: auto 1fr;
 
   font-family: 'PT Mono', monospace;
@@ -313,6 +313,7 @@ border-radius:0px;
 .chips-shy {
   grid-column: 2;
   grid-row: 1;
+  font-size:16px;
 }
 
 .chips-display {
@@ -328,7 +329,7 @@ border-radius:0px;
 .chips-display img {
   /* this calc should be updated if these values change */
   /* (first column width + second column width) / (starting chip amount / chips per chip image) */
-  width: calc((100px + 75px) / (400 / 40));
+  width: calc((100px + 85px) / (400 / 40));
 }
 
 .hand {

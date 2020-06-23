@@ -4,9 +4,7 @@
 // TODO: pass deal to specific player
 
 // TODO: button to take everyone's cards and shuffle without new game, but still shift dealer
-
 // TODO: show errors
-
 // TODO: show number of remaining cards in deck
 
 let showing_login_screen = false;
@@ -573,7 +571,7 @@ export function render_ui(
 
       const $chips_shy = $('<div />');
       $chips_shy.addClass('chips-shy');
-      $chips_shy.text('???');
+      $chips_shy.text('($ shy)');
 
 //      const $winner_checkbox = $('<input />',
 //      {
