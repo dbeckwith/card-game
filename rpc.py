@@ -140,7 +140,7 @@ class RPC(object):
 
         self.player.chips -= amount
         self.game_state.pot += amount
-
+        self.game_state.last_bet = amount
         self.game_state.next_active_player()
 
     def payout(self, winners):

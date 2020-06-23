@@ -498,7 +498,7 @@ export function render_ui(
     {
       id: "pot-display",
     });
-    $pot_display.text(`POT: \$${(game_state.pot * 0.25).toFixed(2)}`);
+    $pot_display.text(`POT: \$${(game_state.pot * 0.25).toFixed(2)} (+${(game_state.last_bet * 0.25).toFixed(2)})`);
 
 
     $common_info.append($pot_display);

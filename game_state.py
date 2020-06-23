@@ -20,6 +20,7 @@ class GameState(object):
         self.active_player = None
         self.common_cards = []
         self.pot = 0
+        self.last_bet = 0
         self.game_name = None
         
         self.current_game = None
@@ -37,6 +38,7 @@ class GameState(object):
             'dealer': self.dealer.id if self.dealer is not None else None,
             'active_player': self.active_player.id if self.active_player is not None else None,
             'pot': self.pot,
+            'last_bet': self.last_bet,
             'common_cards': self.common_cards,
             'game_name': self.game_name,
         }
