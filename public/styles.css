@@ -104,10 +104,10 @@ button:hover {
     font-size: 20px;
 }
 
-#common_btn {
-    border: solid 2px red;
-    border-radius: 0px;
+#common-button {
+    border: solid 4px blue;
     margin-left: 20px;
+  
 }
 
 .next {
@@ -174,7 +174,10 @@ button:hover {
 }
 #draw-btn{
   border-radius:1px;
-  margin-left: 15px;
+  margin-left: 45px;
+    color:yellow;
+  background-color: darkgreen;
+  border-color:aqua;
 }
 #bet-input{
   width:60px;

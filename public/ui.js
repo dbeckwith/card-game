@@ -181,16 +181,18 @@ export function render_ui(
     $next_up_button.attr('id', 'first-of-group'); //to add some left margin space
 
     //NEXT DOWN BUTTON  - deals one card up down to one player
-    const $common_button = $('<button />');
+    const $common_button = $('<button />',
+    {
+      id: 'common-button',
+    });
     $common_button.text('COMMON (up)');
     $common_button.on('click', function ()
     {
       game.deal_common();
     });
-    $common_button.addClass('common-button');
 
 
-
+ 
     //NEXT DOWN BUTTON  - deals one card up down to one player
     const $next_down_button = $('<button />');
     $next_down_button.text('Next DN');
