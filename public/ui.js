@@ -227,17 +227,6 @@ export function render_ui(
     });
 
 
-    //set game selector to show name of game on screen:
-    const $set_game_select = $('<select />',
-    {
-      id: 'set-game-select',
-    });
-    $set_game_select.on('change', function ()
-    {
-      const curr_game = $(this).val();
-      $current_game.empty();
-      $current_game.append(curr_game);
-    });
 
     //payout checkboxes:
     const $payout_button = $('<button />');
@@ -265,7 +254,6 @@ export function render_ui(
       game.new_game();
     });
 
-    // TODO: always show this (not part of dealer controls)
     const $logout_button = $('<button />',
     {
       id: "logout-btn",
@@ -275,12 +263,41 @@ export function render_ui(
     {
       game.logout();
     });
+    
+    const $game_name_display = $('<span />', {
+      id: 'game-name-display',
+    });
 
     const $game_board = $('<div />',
     {
       id: 'game-board',
     });
 
+    //show games list in the menu:
+    const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw',
+                            '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball',
+                            'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey',
+                            'Woolworths');
+    
+    
+    //set game selector to show name of game on screen:
+    const $set_game_select = $('<select />');
+    
+    $set_game_select.empty();
+    $set_game_select.on('change', function(){
+      game.set_game_name($(this).val()); 
+    });
+    
+    for(let i = 0; i < $games.length; i++)
+      {
+        const $a_game = $('<option />',
+        {
+          value: $games[i],
+        });
+        $a_game.text($games[i]);
+        $a_game.prop('selected', game_state.game_name == $games[i]);
+        $set_game_select.append($a_game);
+      }
     //ADD ALL DEALER CONTROLS HTML TO PAGE:
 
     $dealer_controls.append($deal_all_buttons);
@@ -396,7 +413,7 @@ export function render_ui(
     $header.append($player_controls);
     $header.append($common_info);
     $header.append($logout_button);
-    $header.append($current_game);
+    $header.append($game_name_display);
 
 
     $header.append('<hr />');
@@ -457,24 +474,11 @@ export function render_ui(
         $winners_select.append($player_option);
       }
     });
-       //show games list in the menu:
-    const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw',
-                            '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball',
-                            'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey',
-                            'Woolworths');
+       
     const $set_game_select = $('#set-game-select');
-    $set_game_select.empty();
-    for(let i = 0; i < $games.length; i++)
-      {
-        const $a_game = $('<option />',
-        {
-          value: $games[i],
-        });
-        $a_game.text($games[i]);
-        $a_game.prop('selected', game_state.game = $games[i]);
-        $set_game_select.append($a_game);
-      }
-
+    $set_game_select.val(game_state.game_name);
+    const $game_name_display = $('#game-name-display');
+    $game_name_display.text(game_state.game_name);
 
     const $common_info = $('#common-info');
     $common_info.empty();

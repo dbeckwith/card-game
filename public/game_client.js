@@ -97,4 +97,7 @@ export class CardGame {
   flip_card(card_num){
     this._send('flip_card', { card_num });
   }
+  set_game_name(name){
+    this._send('set_game_name', { name });
+  }
 }

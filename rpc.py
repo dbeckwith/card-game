@@ -183,7 +183,9 @@ class RPC(object):
             raise ClientError('player not found')
 
         self.game_state.active_player = player
-
+    def set_game_name(self, name):
+        self.game_state.game_name = name
+        
 class ClientError(Exception):
     def __init__(self, message):
         super().__init__(message)
