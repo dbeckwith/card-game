@@ -184,6 +184,12 @@ button:hover {
   background-color: darkgreen;
   border-color:aqua;
 }
+#buy-10-btn{
+  background-color:black;
+  color:white;
+  border-color:red;
+  border-radius:4px;
+}
 #bet-input{
   width:42px;
   height:23px;
@@ -240,9 +246,12 @@ input
   border:solid 1px black;
 }
 #logout-btn{
-  margin-left:40px;
+  margin-left:10px;
 
 border-radius:0px;
+  border-color:white;
+  color:white;
+  background-color:black;
 }
 /*
 #current-game{ 

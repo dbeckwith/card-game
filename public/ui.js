@@ -256,11 +256,22 @@ export function render_ui(
     {
       id: "logout-btn",
     });
-    $logout_button.text('Logout');
+    $logout_button.text('LOGOUT');
     $logout_button.on('click', function ()
     {
       game.logout();
     });
+    
+    const $buy_10_button = $('<button />',
+    {
+      id: "buy-10-btn",
+    });
+    $buy_10_button.text('+$10');
+    $buy_10_button.on('click', function ()
+    {
+//      game.logout();
+    });
+    
     
     const $game_name_display = $('<span />', {
       id: 'game-name-display',
@@ -422,6 +433,7 @@ export function render_ui(
     $header.append($dealer_controls_bottom);
     $header.append($player_controls);
     $header.append($common_info);
+    $header.append($buy_10_button);
     $header.append($logout_button);
     $header.append($game_name_display);
 
@@ -498,7 +510,7 @@ export function render_ui(
     {
       id: "pot-display",
     });
-    $pot_display.text(`POT: \$${(game_state.pot * 0.25).toFixed(2)} (+${(game_state.last_bet * 0.25).toFixed(2)})`);
+    $pot_display.text(`POT \$${(game_state.pot * 0.25).toFixed(2)} (+${(game_state.last_bet * 0.25).toFixed(2)})`);
 
 
     $common_info.append($pot_display);
@@ -522,10 +534,10 @@ export function render_ui(
     }
     else
     {
-      $('#fold-button').text('Sit Out');
+      $('#fold-button').text('SitOut');
     }
     
-    $('#player-money-display').text(`${current_player.name + " ($" + (current_player.chips * 0.25).toFixed(2)})`);
+    $('#player-money-display').text(`${current_player.name + " $" + (current_player.chips * 0.25).toFixed(2)}/total`);
 
     const $game_board = $('#game-board');
     $game_board.empty();

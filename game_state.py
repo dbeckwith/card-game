@@ -99,7 +99,7 @@ class GameState(object):
     def new_game(self):
         if self.pot != 0:
             raise ClientError('pot must be empty')
-
+        self.last_bet = 0
         # reset each player
         for player in self.players:
             player.new_game()
