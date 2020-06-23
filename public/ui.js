@@ -647,7 +647,6 @@ export function render_ui(
 
       return $player_seat;
     });
-
     //COMMON CARDS:
     const $common_display = $('<div />',
     {
