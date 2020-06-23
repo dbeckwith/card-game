@@ -227,6 +227,12 @@ border-radius:0px;
     border-radius: 6px;
 }
 
+#player-money-display {
+  float: left;
+  color: yellow;
+  margin-left: 5px;
+}
+
 
 .player-seat {
   display: grid;
@@ -277,8 +283,6 @@ border-radius:0px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-
-  color: yellow;
 }
 
 .chips-display img {

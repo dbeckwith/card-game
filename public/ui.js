@@ -377,10 +377,8 @@ export function render_ui(
     });
 
     const $player_money_display = $('<span />',{
-      id:'player-chips',
+      id:'player-money-display',
     });
-    $player_money_display.addClass('chips-display');
-    $player_money_display.text(`${current_player.name + " ($" + (current_player.chips * 0.25).toFixed(2)})`);
 
     $player_controls.append($player_money_display);
     $player_controls.append($fold_button);
@@ -512,6 +510,8 @@ export function render_ui(
     {
       $('#fold-button').text('Sit Out');
     }
+    
+    $('#player-money-display').text(`${current_player.name + " ($" + (current_player.chips * 0.25).toFixed(2)})`);
 
     const $game_board = $('#game-board');
     $game_board.empty();
