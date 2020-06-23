@@ -412,7 +412,6 @@ export function render_ui(
     $player_controls.append($call_button);
     $player_controls.append($bet_button);
     $player_controls.append($bet_input);
-
     $player_controls.append($bet_buttons);
 
 

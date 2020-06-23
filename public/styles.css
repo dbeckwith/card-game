@@ -185,8 +185,9 @@ button:hover {
   border-color:aqua;
 }
 #bet-input{
-  width:60px;
-  height:30px;
+  width:42px;
+  height:23px;
+  font-size:15px;
 }
 input
 {
@@ -232,6 +233,11 @@ input
 }
 #bet-button{
   margin-left:15px;
+}
+.bet-buttons{
+  margin:0px;
+  border-radius:0px;
+  border:solid 1px black;
 }
 #logout-btn{
   margin-left:40px;
@@ -322,6 +328,7 @@ border-radius:0px;
 }
 #game-name-display{
   margin-right: 10px;
+  font-size:16x;
   font-style:italic;
   float:right;
   color:yellow;
