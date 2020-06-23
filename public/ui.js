@@ -417,6 +417,7 @@ export function render_ui(
 
 
     //PUT EVERYTHING INTO THE  HTML:
+    $header.append('<hr \>');
     $header.append($logo_link);
     $header.append($dealer_controls);
     $header.append($dealer_controls_bottom);

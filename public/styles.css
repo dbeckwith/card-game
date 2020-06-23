@@ -1,7 +1,5 @@
 body {
     font-family: 'PT Mono', monospace;
-
-/*    font-family: verdana;*/
     font-size: 20px;
     background-image: linear-gradient(to bottom, #007712, #2AcF15 );
     color: white;
@@ -128,6 +126,7 @@ button:hover {
     padding: 4px 7px;
     font-size: 10px;
    background-color:deepskyblue;
+
 }
 
 /* number of cards remaining display */
@@ -149,6 +148,7 @@ button:hover {
 
 .one-card-buttons{
   border: solid 2px orange;
+  
 }
 .one-all-buttons{
   border: solid 2px red;
@@ -166,11 +166,11 @@ button:hover {
   background-color: blue;
 }
 #dealer-controls-bottom{
-  margin-top: 8px;
+  margin-top: 6px;
 }
 #dealer-controls{
   margin-top: 8px;
-  margin-bottom:8px;
+  margin-bottom:0px;
 }
 #draw-btn{
   border-radius:1px;
