@@ -224,9 +224,10 @@ export function render_ui(
 
 
     //payout checkboxes:
-    const $payout_button = $('<button />');
+    const $payout_button = $('<button />',{
+      id:'payout-button',
+    });
     $payout_button.text('Pay-out');
-    $payout_button.attr('id', 'first-of-group'); //to add some left margin space
 
     $payout_button.on('click', function ()
     {
@@ -276,7 +277,9 @@ export function render_ui(
     
     
     //set game selector to show name of game on screen:
-    const $set_game_select = $('<select />');
+    const $set_game_select = $('<select />',{
+      id:'set-game-select',
+    });
     
     $set_game_select.empty();
     $set_game_select.on('change', function(){

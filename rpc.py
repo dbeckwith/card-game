@@ -144,35 +144,37 @@ class RPC(object):
         self.game_state.next_active_player()
 
     def payout(self, winners):
-        if len(winners) < 1:
-            raise ClientError('winners list must not be empty')
-
-        # convert list of ids to list of player objects
-        winner_ids = winners
-        winners = []
-        for id in winner_ids:
-            player = self.game_state.get_player(id)
-            if player is None:
-                raise ClientError('player not found')
-            winners.append(player)
-
-        # get remainder chips after dividing evenly among winners
-        extra_chips = self.game_state.pot % len(winners)
-
-        # distribute chips evenly to all winners
-        for player in winners:
-            player.chips += self.game_state.pot // len(winners)
-
-        # distribute extra chips to players
-        # give to the players with the least chips first
-        for player in sorted(winners, key=lambda player: player.chips):
-            if extra_chips == 0:
-                # no more extra chips
-                break
-            # take one from the pile
-            extra_chips -= 1
-            # give it to the player
-            player.chips += 1
+        debug = True
+        if not debug:
+            if len(winners) < 1:
+                raise ClientError('winners list must not be empty')
+    
+            # convert list of ids to list of player objects
+            winner_ids = winners
+            winners = []
+            for id in winner_ids:
+                player = self.game_state.get_player(id)
+                if player is None:
+                    raise ClientError('player not found')
+                winners.append(player)
+    
+            # get remainder chips after dividing evenly among winners
+            extra_chips = self.game_state.pot % len(winners)
+    
+            # distribute chips evenly to all winners
+            for player in winners:
+                player.chips += self.game_state.pot // len(winners)
+    
+            # distribute extra chips to players
+            # give to the players with the least chips first
+            for player in sorted(winners, key=lambda player: player.chips):
+                if extra_chips == 0:
+                    # no more extra chips
+                    break
+                # take one from the pile
+                extra_chips -= 1
+                # give it to the player
+                player.chips += 1
 
         # empty the pot
         self.game_state.pot = 0
