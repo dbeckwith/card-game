@@ -80,7 +80,7 @@ button {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 14px;
+    font-size: 12px;
     margin: 4px 2px;
     transition-duration: 0.4s;
     cursor: pointer;
@@ -144,7 +144,7 @@ button:hover {
 }
 
 #player-controls button {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .one-card-buttons{

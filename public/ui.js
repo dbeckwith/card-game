@@ -339,6 +339,7 @@ export function render_ui(
       game.fold();
     });
 
+  
 
     const $bet_input = $('<input />',
     {
@@ -376,7 +377,7 @@ export function render_ui(
       });
       $bet_buttons.append($bet_button_num);
     }
-
+    //CHECK BUTTON:
     const $check_button = $('<button />',
     {
       id: 'check-button',
@@ -388,10 +389,18 @@ export function render_ui(
       $bet_input.val('');
     });
 
-//    const $current_game = $('<span />',
+    //CALL BUTTON
+     const $call_button = $('<button />',
+    {
+      id: 'call-button',
+    });
+    $call_button.text('Call');
+//    $check_button.on('click', function ()
 //    {
-//      id:'current-game',
+//      game.bet(0);
+//      $bet_input.val('');
 //    });
+
 
     const $player_money_display = $('<span />',{
       id:'player-money-display',
@@ -400,6 +409,7 @@ export function render_ui(
     $player_controls.append($player_money_display);
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
+    $player_controls.append($call_button);
     $player_controls.append($bet_button);
     $player_controls.append($bet_input);
 
