@@ -1,9 +1,6 @@
 // TODO: indicator for if in hand or not
 // show cards as gray background
 
-// TODO: reveal cards
-// click on your down card to make it up
-
 // TODO: pass deal to specific player
 
 // TODO: button to take everyone's cards and shuffle without new game, but still shift dealer
@@ -11,8 +8,6 @@
 // TODO: show errors
 
 // TODO: show number of remaining cards in deck
-
-// TODO: show green outline around name of who the bet is to (instead of >>)
 
 let showing_login_screen = false;
 
@@ -388,10 +383,10 @@ export function render_ui(
       $bet_input.val('');
     });
 
-    const $current_game = $('<span />',
-    {
-      id:'current-game',
-    });
+//    const $current_game = $('<span />',
+//    {
+//      id:'current-game',
+//    });
 
     const $player_money_display = $('<span />',{
       id:'player-money-display',
