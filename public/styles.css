@@ -197,9 +197,6 @@ button:hover {
 
 
 
-
-
-
 /* number of cards remaining display */
 #numcards {
     font-size: 14px;
@@ -242,7 +239,9 @@ input
 }
 
 
-
+/****************************
+ * GRID FOR EACH PLAYER SEAT
+**************************/
 .player-seat {
   display: grid;
   grid-gap: 2px;
@@ -297,6 +296,7 @@ input
 
 .chips-display img {
   /* this calc should be updated if these values change */
+  /* CHANGE ABOVE ALSO
   /* (first column width + second column width) / (starting chip amount / chips per chip image) */
   width: calc((100px + 85px) / (400 / 40));
 }
