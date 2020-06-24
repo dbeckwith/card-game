@@ -108,7 +108,8 @@ button:hover {
 
 /* selector for players to receive payout */
 #winners-select {
-  width: 200px;
+  width: 150px;
+  display:inline-block;
 }
 
 #winners-select-box {
@@ -134,6 +135,10 @@ button:hover {
   position: absolute;
   background-color: white;
   color: black;
+  width: 147px;
+  text-align:left;
+
+  
 }
 
 #winners-select-content label {
