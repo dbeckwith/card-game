@@ -190,7 +190,7 @@ export function render_ui(
     {
       id: 'dealer-controls-bottom',
     });
-    
+
     //COMMON BUTTON  - deals one card up for all players
     const $common_button = $('<button />',
     {
@@ -201,7 +201,7 @@ export function render_ui(
     {
       game.deal_common();
     });
-    
+
     //DRAW MODE button:
     const $draw_button = $('<button />',
     {
@@ -212,12 +212,12 @@ export function render_ui(
     {
       //outline button to show toggle happened
       //set draw_mode in game_state
-      
+
       game.toggle_draw_mode();
       game_state.draw_mode = ! game_state.draw_mode; //but toggle does this already
       console.log(game_state.draw_mode);
     });
-    
+
     //change active better selector:
     const $change_active_player_select = $('<select />',
     {
@@ -263,24 +263,24 @@ export function render_ui(
     {
       game.new_game();
     });
-    
+
     //GAME SELECTOR setup: shows which game is being played
     const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw',
                             '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball',
                             'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey',
                             'Woolworths');
-    
-    
+
+
     //set game selector to show name of game on screen:
     const $set_game_select = $('<select />',{
       id:'set-game-select',
     });
-    
+
     $set_game_select.empty();
     $set_game_select.on('change', function(){
-      game.set_game_name($(this).val()); 
+      game.set_game_name($(this).val());
     });
-    
+
     for(let i = 0; i < $games.length; i++)
       {
         const $a_game = $('<option />',
@@ -292,7 +292,7 @@ export function render_ui(
         $set_game_select.append($a_game);
       }
 
-   
+
     /*******************************************
      * ADD ALL DEALER CONTROLS HTML TO PAGE:
      *******************************************/
@@ -320,17 +320,17 @@ export function render_ui(
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
 
-    
+
      /*****************************
      * PLAYER CONTROLS
      *****************************/
-    
+
     //THE WHOLE FIELD OF PLAYERS WITH INFO AND CARDS:
     const $game_board = $('<div />',
     {
       id: 'game-board',
     });
-    
+
     //LOG OUT button:
     const $logout_button = $('<button />',
     {
@@ -341,7 +341,7 @@ export function render_ui(
     {
       game.logout();
     });
-    
+
     //CHECK BUTTON:
     const $check_button = $('<button />',
     {
@@ -365,8 +365,8 @@ export function render_ui(
 //      game.bet(0);
 //      $bet_input.val('');
 //    });
-    
-    
+
+
     //BUY-IN 10 CHIPS BUTTON:
     const $buy_10_button = $('<button />',
     {
@@ -375,14 +375,14 @@ export function render_ui(
     $buy_10_button.text('+$10');
     $buy_10_button.on('click', function ()
     {
-     
+
     });
-    
+
     //GAME NAME DISPLAY:
     const $game_name_display = $('<span />', {
       id: 'game-name-display',
     });
-    
+
     const $common_info = $('<span />',
     {
       id: 'common-info',
@@ -443,7 +443,7 @@ export function render_ui(
       });
       $bet_buttons.append($bet_button_num);
     }
-  
+
     //DISPLAY AMOUNT EACH PLAYER HAS:
     const $player_money_display = $('<span />',{
       id:'player-money-display',
@@ -451,9 +451,9 @@ export function render_ui(
 
     /*******************************************
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
-     *******************************************/ 
+     *******************************************/
     $player_controls.append($player_money_display);
-    
+
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
     $player_controls.append($call_button);
@@ -467,10 +467,10 @@ export function render_ui(
      *******************************************/
     $header.append('<hr \>');
     $header.append($logo_link);
-    
+
     $header.append($dealer_controls);
     $header.append($dealer_controls_bottom);
-    
+
     $header.append($player_controls);
     $header.append($common_info);
     $header.append($buy_10_button);
@@ -535,9 +535,9 @@ export function render_ui(
         $change_active_player_select.append($player_option);
       }
     });
-    
+
    // https://stackoverflow.com/questions/17714705/how-to-use-checkbox-inside-select-option
-    
+
     /* USE THIS FOR MULTISELECT
     <form>
     <div class="multiselect">
@@ -557,8 +557,8 @@ export function render_ui(
       </div>
     </div>
   </form>
-    
-    
+
+
     */
     //show all active players in the winners select menu
     const $winners_select = $('#winners-select');
@@ -575,8 +575,8 @@ export function render_ui(
         $winners_select.append($player_option);
       }
     });
-       
-    
+
+
     const $set_game_select = $('#set-game-select');
     $set_game_select.val(game_state.game_name);
     const $game_name_display = $('#game-name-display');
@@ -627,13 +627,15 @@ export function render_ui(
     /****************************
      * EACH PLAYER'S NAME/CARDS:
      ***************************/
-    
+
+    const $player_seats = $('<div />');
+    $player_seats.addClass('player-seats');
     //CREATE EACH player BASED ON players in game_state
-    const $player_seats = _.map(game_state.players, (player) =>
+    _.forEach(game_state.players, (player) =>
     {
       const $player_seat = $('<div />');
       $player_seat.addClass('player-seat');
-      
+
       if (player.connected)
       {
         $player_seat.addClass('player-connected');
@@ -679,7 +681,7 @@ export function render_ui(
       //CARDS FOR EACH PLAYER (also determines up and down):
       const $hand = $('<div />');
       $hand.addClass('hand');
-      
+
       if (player.in_hand)
       {
         _.forEach(player.hand, (card, idx) =>
@@ -700,7 +702,7 @@ export function render_ui(
           });
 
           $card_img.addClass('card');
-          
+
           if (!card.up && player.id === current_player.id)
           {
             $card_img.addClass('down-card');
@@ -712,7 +714,7 @@ export function render_ui(
 //            $card_img.addClass('last');
 //          else
 //            $card_img.removeClass('last');
-          
+
           //allow player to click down card to make up:
           $card_img.on('click', function ()
           {
@@ -731,9 +733,9 @@ export function render_ui(
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
 
-      return $player_seat;
+      $player_seats.append($player_seat);
     });
-    
+
     //COMMON CARDS:
     const $common_display = $('<div />',
     {

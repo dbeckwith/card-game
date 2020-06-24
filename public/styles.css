@@ -130,7 +130,7 @@ button:hover {
   color:yellow;
 }
 /***********************
- * PLAYER CONTROLS 
+ * PLAYER CONTROLS
  ***********************/
 
 #player-controls button {
@@ -228,7 +228,7 @@ input
 }
 
 /*
-#current-game{ 
+#current-game{
   margin-left: 100px;
   font-style:italic;
   float:right;
@@ -242,6 +242,12 @@ input
 }
 
 
+.player-seats {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: calc(105px * 5);
+}
 
 .player-seat {
   display: grid;
