@@ -234,9 +234,28 @@ export function render_ui(
     });
 
     //SELECTOR FOR WINNERS/Payout:
-    const $winners_select = $('<select />',
-    {
-      id: 'winners-select',
+    const $winners_select = $(`
+      <div id="winners-select">
+        <div id="winners-select-box">
+          <select id="winners-select-select">
+            <option>Select winners</option>
+          </select>
+          <div id="winners-select-over-select"></div>
+        </div>
+        <div id="winners-select-content">
+        </div>
+      </div>
+    `);
+    $winners_select.children().first().on('click', function() {
+      $('#winners-select-content').toggle();
+    });
+    $(document).on('click', function(event) {
+      const $target = $(event.target);
+      const is_over_select = $target.prop('id') === 'winners-select-over-select' ||
+        $.contains($('#winners-select-content')[0], $target[0]);
+      if (!is_over_select) {
+        $('#winners-select-content').hide();
+      }
     });
     // use:     game.payout(winners);
 
@@ -250,10 +269,11 @@ export function render_ui(
     $payout_button.on('click', function ()
     {
       //get which players were checked:
-      const winners = $('.winner-checkbox:checked').map(function ()
-      {
-        return $(this).val();
-      }).toArray();
+      const winners = $('#winners-select-content input:checked')
+        .map(function() {
+          return $(this).prop('id').slice('winners-select-player-'.length);
+        })
+        .toArray();
       //pay all those that were checked:
       game.payout(winners);
     });
@@ -487,19 +507,6 @@ export function render_ui(
     $app.append($game_board);
   }
 
-  /**** for checkboxes - see below ****/
-    var expanded = false;
-
-  function showCheckboxes() {
-    var checkboxes = document.getElementById("checkboxes");
-    if (!expanded) {
-      checkboxes.style.display = "block";
-      expanded = true;
-    } else {
-      checkboxes.style.display = "none";
-      expanded = false;
-    }
-  }
   /*********************************
    * RENDER ALL COMPONENTS OF GAME
    ********************************/
@@ -540,43 +547,26 @@ export function render_ui(
       }
     });
 
-   // https://stackoverflow.com/questions/17714705/how-to-use-checkbox-inside-select-option
-
-    /* USE THIS FOR MULTISELECT
-    <form>
-    <div class="multiselect">
-      <div class="selectBox" onclick="showCheckboxes()">
-        <select>
-          <option>Select an option</option>
-        </select>
-        <div class="overSelect"></div>
-      </div>
-      <div id="checkboxes">
-        <label for="one">
-          <input type="checkbox" id="one" />First checkbox</label>
-        <label for="two">
-          <input type="checkbox" id="two" />Second checkbox</label>
-        <label for="three">
-          <input type="checkbox" id="three" />Third checkbox</label>
-      </div>
-    </div>
-  </form>
-
-
-    */
     //show all active players in the winners select menu
-    const $winners_select = $('#winners-select');
-    $winners_select.empty();
+    const $winners_select_content = $('#winners-select-content');
+    $winners_select_content.empty();
     _.forEach(game_state.players, player =>
     {
       if (player.in_hand)
       {
-        const $player_option = $('<option />',
-        {
-          value: player.id,
+        const $player_row = $('<label />', {
+          for: `winners-select-player-${player.id}`,
         });
-        $player_option.text(player.name);
-        $winners_select.append($player_option);
+
+        const $player_input = $('<input />', {
+          type: 'checkbox',
+          id: `winners-select-player-${player.id}`,
+        });
+
+        $player_row.append($player_input);
+        $player_row.append(player.name);
+
+        $winners_select_content.append($player_row);
       }
     });
 

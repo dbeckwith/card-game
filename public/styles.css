@@ -104,11 +104,47 @@ button:hover {
   margin-left:10px;
   color:yellow;
 }
+
+
 /* selector for players to receive payout */
-#winners-select{
-  width:80px;
-  height:30px;
+#winners-select {
+  width: 200px;
 }
+
+#winners-select-box {
+  position: relative;
+}
+
+#winners-select-select {
+  width: 100%;
+  font-weight: bold;
+}
+
+#winners-select-over-select {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+#winners-select-content {
+  display: none;
+  border: 1px #dadada solid;
+  position: absolute;
+  background-color: white;
+  color: black;
+}
+
+#winners-select-content label {
+  display: block;
+  padding: 4px;
+}
+
+#winners-select-content label:hover {
+  background-color: #1e90ff;
+}
+
 
 /* new game button */
 #new-game-button{
@@ -324,41 +360,6 @@ input
 
 .down-card {
     border: 4px solid blue;
-}
-
-/* FOR MULTI-SELECT FOR WINNER NAMES DROP DOWN */
-.multiselect {
-  width: 200px;
-}
-
-.selectBox {
-  position: relative;
-}
-
-.selectBox select {
-  width: 100%;
-  font-weight: bold;
-}
-
-.overSelect {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-#checkboxes {
-  display: none;
-  border: 1px #dadada solid;
-}
-
-#checkboxes label {
-  display: block;
-}
-
-#checkboxes label:hover {
-  background-color: #1e90ff;
 }
 
 /***** ANIMATIONS ******/
