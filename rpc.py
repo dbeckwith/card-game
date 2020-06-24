@@ -138,6 +138,9 @@ class RPC(object):
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
          
+    def toggle_draw_mode(self):
+        self.game_state.draw_mode = not self.game_state.draw_mode  
+        
     def fold(self):
         '''fold current player'''
         if self.player is None:

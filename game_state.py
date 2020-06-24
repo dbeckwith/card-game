@@ -25,6 +25,7 @@ class GameState(object):
         self.deck = cards.new_deck()
         
         self.hand_started  = False
+        self.draw_mode     = False
         self.dealer        = None
         self.active_player = None
         self.common_cards  = []
@@ -51,6 +52,7 @@ class GameState(object):
             'last_bet'     : self.last_bet,
             'common_cards' : self.common_cards,
             'game_name'    : self.game_name,
+            'draw_mode'    : self.draw_mode,
         }
 
     async def connect(self, rpc):
@@ -148,6 +150,8 @@ class GameState(object):
             # pick the first active player
             self.active_player = self.next_player_after(self.dealer)
 
+
+        
     def next_dealer(self):
         if self.dealer is not None:
             self.dealer = self.next_player_after(self.dealer)

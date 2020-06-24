@@ -210,7 +210,12 @@ export function render_ui(
     $draw_button.text('DRAW MODE');
     $draw_button.on('click', function ()
     {
-      // TODO: draw mode
+      //outline button to show toggle happened
+      //set draw_mode in game_state
+      
+      game.toggle_draw_mode();
+      game_state.draw_mode = ! game_state.draw_mode; //but toggle does this already
+      console.log(game_state.draw_mode);
     });
     
     //change active better selector:
@@ -478,6 +483,19 @@ export function render_ui(
     $app.append($game_board);
   }
 
+  /**** for checkboxes - see below ****/
+    var expanded = false;
+
+  function showCheckboxes() {
+    var checkboxes = document.getElementById("checkboxes");
+    if (!expanded) {
+      checkboxes.style.display = "block";
+      expanded = true;
+    } else {
+      checkboxes.style.display = "none";
+      expanded = false;
+    }
+  }
   /*********************************
    * RENDER ALL COMPONENTS OF GAME
    ********************************/
@@ -518,6 +536,30 @@ export function render_ui(
       }
     });
     
+   // https://stackoverflow.com/questions/17714705/how-to-use-checkbox-inside-select-option
+    
+    /* USE THIS FOR MULTISELECT
+    <form>
+    <div class="multiselect">
+      <div class="selectBox" onclick="showCheckboxes()">
+        <select>
+          <option>Select an option</option>
+        </select>
+        <div class="overSelect"></div>
+      </div>
+      <div id="checkboxes">
+        <label for="one">
+          <input type="checkbox" id="one" />First checkbox</label>
+        <label for="two">
+          <input type="checkbox" id="two" />Second checkbox</label>
+        <label for="three">
+          <input type="checkbox" id="three" />Third checkbox</label>
+      </div>
+    </div>
+  </form>
+    
+    
+    */
     //show all active players in the winners select menu
     const $winners_select = $('#winners-select');
     $winners_select.empty();

@@ -100,4 +100,7 @@ export class CardGame {
   set_game_name(name){
     this._send('set_game_name', { name });
   }
+  toggle_draw_mode(){
+    this._send('toggle_draw_mode');
+  }
 }
