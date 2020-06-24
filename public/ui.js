@@ -9,7 +9,9 @@
 
 let showing_login_screen = false;
 
-//SETS UP LOGIN SCREEN
+/****************************
+ * SETS UP LOGIN SCREEN
+ ***************************/
 export function render_ui(
 {
   game,
@@ -88,7 +90,10 @@ export function render_ui(
     $current_players.text(`CURRENT PLAYERS: ${_.join(current_players, ', ')}`);
   }
 
-  //SETS UP HTML - called by render_game
+  /*********************************
+   * INITIAL SETUP of game screen
+   * called by render_game
+   ***********************************/
   function setup_game_html()
   {
     $app.empty();
@@ -113,15 +118,9 @@ export function render_ui(
       id: 'dealer-controls',
     });
 
-    const $draw_button = $('<button />',
-    {
-      id: 'draw-btn',
-    });
-    $draw_button.text('DRAW MODE');
-    $draw_button.on('click', function ()
-    {
-      // TODO: draw
-    });
+    /*************************
+     * ALL DEALER BUTTONS
+     ************************/
 
     const deal_all_up_down_numbers = [
       [5, 0],
@@ -130,7 +129,7 @@ export function render_ui(
       [1, 0],
     ];
 
-    //CREATE ALL DEAL BUTTONS for dealer view:
+    //CREATE DEALING BUTTONS: 5DN, 2DN/1UP, 1UP, 1DN
     const $deal_all_buttons = _.map(deal_all_up_down_numbers, ([down, up]) =>
     {
       const $deal_all_button = $('<button />');
@@ -178,20 +177,7 @@ export function render_ui(
     $next_up_button.addClass('one-card-buttons');
     $next_up_button.attr('id', 'first-of-group'); //to add some left margin space
 
-    //NEXT DOWN BUTTON  - deals one card up down to one player
-    const $common_button = $('<button />',
-    {
-      id: 'common-button',
-    });
-    $common_button.text('COMMON (up)');
-    $common_button.on('click', function ()
-    {
-      game.deal_common();
-    });
-
-
- 
-    //NEXT DOWN BUTTON  - deals one card up down to one player
+    //NEXT DOWN BUTTON  - deals one card down to one player
     const $next_down_button = $('<button />');
     $next_down_button.text('Next DN');
     $next_down_button.on('click', function ()
@@ -204,7 +190,30 @@ export function render_ui(
     {
       id: 'dealer-controls-bottom',
     });
-    //change active player selector:
+    
+    //COMMON BUTTON  - deals one card up for all players
+    const $common_button = $('<button />',
+    {
+      id: 'common-button',
+    });
+    $common_button.text('COMMON (up)');
+    $common_button.on('click', function ()
+    {
+      game.deal_common();
+    });
+    
+    //DRAW MODE button:
+    const $draw_button = $('<button />',
+    {
+      id: 'draw-btn',
+    });
+    $draw_button.text('DRAW MODE');
+    $draw_button.on('click', function ()
+    {
+      // TODO: draw mode
+    });
+    
+    //change active better selector:
     const $change_active_player_select = $('<select />',
     {
       id: 'change-active-player-select',
@@ -215,15 +224,15 @@ export function render_ui(
       game.change_active_player(player);
     });
 
-    //winners selector:
+    //SELECTOR FOR WINNERS/Payout:
     const $winners_select = $('<select />',
     {
       id: 'winners-select',
     });
+    // use:     game.payout(winners);
 
 
-
-    //payout checkboxes:
+    //PAYOUT BUTTON:
     const $payout_button = $('<button />',{
       id:'payout-button',
     });
@@ -249,38 +258,8 @@ export function render_ui(
     {
       game.new_game();
     });
-
-    const $logout_button = $('<button />',
-    {
-      id: "logout-btn",
-    });
-    $logout_button.text('LOGOUT');
-    $logout_button.on('click', function ()
-    {
-      game.logout();
-    });
     
-    const $buy_10_button = $('<button />',
-    {
-      id: "buy-10-btn",
-    });
-    $buy_10_button.text('+$10');
-    $buy_10_button.on('click', function ()
-    {
-//      game.logout();
-    });
-    
-    
-    const $game_name_display = $('<span />', {
-      id: 'game-name-display',
-    });
-
-    const $game_board = $('<div />',
-    {
-      id: 'game-board',
-    });
-
-    //show games list in the menu:
+    //GAME SELECTOR setup: shows which game is being played
     const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw',
                             '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball',
                             'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey',
@@ -307,85 +286,57 @@ export function render_ui(
         $a_game.prop('selected', game_state.game_name == $games[i]);
         $set_game_select.append($a_game);
       }
-    //ADD ALL DEALER CONTROLS HTML TO PAGE:
 
+   
+    /*******************************************
+     * ADD ALL DEALER CONTROLS HTML TO PAGE:
+     *******************************************/
+
+    //deal buttons:
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
 
+    //bettor selector:
     $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
     $dealer_controls_bottom.append($change_active_player_select);
 
+    //payout button and selector:
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($winners_select);
 
+    //new game button & game selector:
     $dealer_controls_bottom.append($new_game_button);
     $dealer_controls_bottom.append('<span>Game: </span>');
     $dealer_controls_bottom.append($set_game_select);
 
+    //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
 
-    const $common_info = $('<span />',
+    
+     /*****************************
+     * PLAYER CONTROLS
+     *****************************/
+    
+    //THE WHOLE FIELD OF PLAYERS WITH INFO AND CARDS:
+    const $game_board = $('<div />',
     {
-      id: 'common-info',
+      id: 'game-board',
     });
-
-    // SET UP ALL PLAYER CONTROLS:
-    const $player_controls = $('<span />',
+    
+    //LOG OUT button:
+    const $logout_button = $('<button />',
     {
-      id: 'player-controls',
+      id: "logout-btn",
     });
-
-    const $fold_button = $('<button />',
+    $logout_button.text('LOGOUT');
+    $logout_button.on('click', function ()
     {
-      id: 'fold-button',
+      game.logout();
     });
-    $fold_button.text('Fold');
-    $fold_button.on('click', function ()
-    {
-      game.fold();
-    });
-
-  
-
-    const $bet_input = $('<input />',
-    {
-      id: 'bet-input',
-      type: 'number',
-      min: 0,
-    });
-
-    //BET BUTTON:
-    const $bet_button = $('<button />',
-    {
-      id: 'bet-button',
-    });
-    $bet_button.text('Bet');
-    $bet_button.on('click', function ()
-    {
-      const amount = +$bet_input.val();
-      game.bet(amount);
-      $bet_input.val('');
-    });
-
-    const $bet_buttons = $('<span />');
-
-    for (let i = 1; i <= 6; i++)
-    {
-      const $bet_button_num = $('<button />',
-      {
-        class: 'bet-buttons',
-      });
-      $bet_button_num.text(i);
-      $bet_button_num.on('click', function ()
-      {
-        const amount = +i;
-        game.bet(i);
-      });
-      $bet_buttons.append($bet_button_num);
-    }
+    
     //CHECK BUTTON:
     const $check_button = $('<button />',
     {
@@ -409,13 +360,95 @@ export function render_ui(
 //      game.bet(0);
 //      $bet_input.val('');
 //    });
+    
+    
+    //BUY-IN 10 CHIPS BUTTON:
+    const $buy_10_button = $('<button />',
+    {
+      id: "buy-10-btn",
+    });
+    $buy_10_button.text('+$10');
+    $buy_10_button.on('click', function ()
+    {
+     
+    });
+    
+    //GAME NAME DISPLAY:
+    const $game_name_display = $('<span />', {
+      id: 'game-name-display',
+    });
+    
+    const $common_info = $('<span />',
+    {
+      id: 'common-info',
+    });
 
+    // SET UP ALL PLAYER CONTROLS:
+    const $player_controls = $('<span />',
+    {
+      id: 'player-controls',
+    });
 
+    //FOLD BUTTON:
+    const $fold_button = $('<button />',
+    {
+      id: 'fold-button',
+    });
+    $fold_button.text('Fold');
+    $fold_button.on('click', function ()
+    {
+      game.fold();
+    });
+
+    //BET AMOUNT INPUT FIELD:
+    const $bet_input = $('<input />',
+    {
+      id: 'bet-input',
+      type: 'number',
+      min: 0,
+    });
+
+    //BET BUTTON:
+    const $bet_button = $('<button />',
+    {
+      id: 'bet-button',
+    });
+    $bet_button.text('Bet');
+    $bet_button.on('click', function ()
+    {
+      const amount = +$bet_input.val();
+      game.bet(amount);
+      $bet_input.val('');
+    });
+
+    //BET BUTTONS 1-6:
+    const $bet_buttons = $('<span />');
+
+    for (let i = 1; i <= 6; i++)
+    {
+      const $bet_button_num = $('<button />',
+      {
+        class: 'bet-buttons',
+      });
+      $bet_button_num.text(i);
+      $bet_button_num.on('click', function ()
+      {
+        const amount = +i;
+        game.bet(i);
+      });
+      $bet_buttons.append($bet_button_num);
+    }
+  
+    //DISPLAY AMOUNT EACH PLAYER HAS:
     const $player_money_display = $('<span />',{
       id:'player-money-display',
     });
 
+    /*******************************************
+     * ADD ALL PLAYER CONTROLS HTML TO PAGE:
+     *******************************************/ 
     $player_controls.append($player_money_display);
+    
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
     $player_controls.append($call_button);
@@ -424,17 +457,20 @@ export function render_ui(
     $player_controls.append($bet_buttons);
 
 
-    //PUT EVERYTHING INTO THE  HTML:
+    /*******************************************
+     * BUILD ENTIRE PAGE:
+     *******************************************/
     $header.append('<hr \>');
     $header.append($logo_link);
+    
     $header.append($dealer_controls);
     $header.append($dealer_controls_bottom);
+    
     $header.append($player_controls);
     $header.append($common_info);
     $header.append($buy_10_button);
     $header.append($logout_button);
     $header.append($game_name_display);
-
 
     $header.append('<hr />');
 
@@ -442,20 +478,22 @@ export function render_ui(
     $app.append($game_board);
   }
 
-
+  /*********************************
+   * RENDER ALL COMPONENTS OF GAME
+   ********************************/
   function render_game()
   {
+    //if no players in game, call setup:
     if ($('#game-board').length === 0)
     {
       setup_game_html();
     }
 
-    //SHOW CONTROLS TO CURRENT DEALER:
+    //SHOW CONTROLS IN CURRENT DEALER's VIEW:
     if (game_state.dealer === current_player.id)
     {
       $('#dealer-controls').show();
       $('#dealer-controls-bottom').show();
-
     }
     else
     {
@@ -463,7 +501,7 @@ export function render_ui(
       $('#dealer-controls-bottom').hide();
     }
 
-    //show active players in the set next bettor menu:
+    //show all active players in the set next bettor menu:
     const $change_active_player_select = $('#change-active-player-select');
     $change_active_player_select.empty();
     _.forEach(game_state.players, player =>
@@ -479,8 +517,9 @@ export function render_ui(
         $change_active_player_select.append($player_option);
       }
     });
-    //show active players in the winners select menu
-      const $winners_select = $('#winners-select');
+    
+    //show all active players in the winners select menu
+    const $winners_select = $('#winners-select');
     $winners_select.empty();
     _.forEach(game_state.players, player =>
     {
@@ -495,6 +534,7 @@ export function render_ui(
       }
     });
        
+    
     const $set_game_select = $('#set-game-select');
     $set_game_select.val(game_state.game_name);
     const $game_name_display = $('#game-name-display');
@@ -503,17 +543,17 @@ export function render_ui(
     const $common_info = $('#common-info');
     $common_info.empty();
 
-
+    //update pot display:
     const $pot_display = $('<span />',
     {
       id: "pot-display",
     });
+    //POT: amt (+last_bet_amt):
     $pot_display.text(`POT \$${(game_state.pot * 0.25).toFixed(2)} (+${(game_state.last_bet * 0.25).toFixed(2)})`);
-
 
     $common_info.append($pot_display);
 
-    //show or hide each player's hand:
+    //show hand of all active players:
     if (current_player.in_hand)
     {
       $('#player-controls').show();
@@ -523,9 +563,10 @@ export function render_ui(
       $('#player-controls').hide();
     }
 
+    //set the max a player can bet to their chips:
     $('#bet-input').prop('max', current_player.chips);
 
-    //SHOW OR HIDE FOLD OR SIT-OUT BUTTONS:
+    //sit-out/fold button depends on if game started:
     if (game_state.hand_started)
     {
       $('#fold-button').text('Fold');
@@ -534,16 +575,23 @@ export function render_ui(
     {
       $('#fold-button').text('SitOut');
     }
-    
+    //update player's money amount:
     $('#player-money-display').text(`${current_player.name + " $" + (current_player.chips * 0.25).toFixed(2)}/total`);
 
+    //game board has all players:
     const $game_board = $('#game-board');
     $game_board.empty();
 
+    /****************************
+     * EACH PLAYER'S NAME/CARDS:
+     ***************************/
+    
+    //CREATE EACH player BASED ON players in game_state
     const $player_seats = _.map(game_state.players, (player) =>
     {
       const $player_seat = $('<div />');
       $player_seat.addClass('player-seat');
+      
       if (player.connected)
       {
         $player_seat.addClass('player-connected');
@@ -552,6 +600,7 @@ export function render_ui(
       {
         $player_seat.addClass('player-disconnected');
       }
+      //determine if this player is the dealer:
       if (game_state.dealer === player.id) {
         $player_seat.addClass('dealer');
       }
@@ -559,34 +608,24 @@ export function render_ui(
         $player_seat.addClass('active-player');
       }
 
+      //add name:
       const $player_name = $('<div />');
       $player_name.addClass('player-name');
       $player_name.text(player.name);
 
+      //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
       _.forEach(new Array(Math.ceil(player.chips / 40)), () => {
         $chip_stack_display.append('<img src="chips_images/chip.png" />');
       });
 
+      //chips shy display:
       const $chips_shy = $('<div />');
       $chips_shy.addClass('chips-shy');
       $chips_shy.text('($ shy)');
 
-//      const $winner_checkbox = $('<input />',
-//      {
-//        id: `winner-checkbox-${player.id}`,
-//        type: 'checkbox',
-//        value: player.id,
-//      });
-//      $winner_checkbox.addClass('winner-checkbox');
-//
-//      const $winner_checkbox_label = $('<label />',
-//      {
-//        for: `winner-checkbox-${player.id}`,
-//      });
-//      $winner_checkbox_label.text('Won');
-
+      //button to kick if disconnected:
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
       $kick_button.text('Kick');
@@ -595,13 +634,15 @@ export function render_ui(
         game.kick(player.id);
       });
 
-      //SHOW CARDS FOR EACH PLAYER (also determine up and down):
+      //CARDS FOR EACH PLAYER (also determines up and down):
       const $hand = $('<div />');
       $hand.addClass('hand');
+      
       if (player.in_hand)
       {
         _.forEach(player.hand, (card, idx) =>
         {
+          //show card image or back of card:
           let card_img_name;
           if (card.up || player.id === current_player.id)
           {
@@ -611,25 +652,26 @@ export function render_ui(
           {
             card_img_name = '2B';
           }
-
           const $card_img = $('<img />',
           {
             src: `card_images/${card_img_name}.svg`,
           });
 
           $card_img.addClass('card');
+          
           if (!card.up && player.id === current_player.id)
           {
             $card_img.addClass('down-card');
           }
-          //for slide in animation
+          //TODO: slide in animation
 //          let $card_dealt = true; //change this to depend on what just happened
 //          if(player.id === current_player.id && idx == player.hand.length - 1
 //            && $card_dealt)
 //            $card_img.addClass('last');
 //          else
 //            $card_img.removeClass('last');
-          //TO-DO: flip this specific card:
+          
+          //allow player to click down card to make up:
           $card_img.on('click', function ()
           {
             game.flip_card(idx);
@@ -647,21 +689,15 @@ export function render_ui(
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
 
-//      if (game_state.dealer === current_player.id)
-//      {
-//        $player_seat.append($winner_checkbox);
-//        $player_seat.append($winner_checkbox_label);
-//
-//      }
-
       return $player_seat;
     });
+    
     //COMMON CARDS:
     const $common_display = $('<div />',
     {
       id: "common-display",
     });
-
+    //common card images:
     const $common_hand = _.map(game_state.common_cards, (card) =>
     {
       let card_img_name;
