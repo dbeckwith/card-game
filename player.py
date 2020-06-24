@@ -7,8 +7,8 @@ class Player(object):
         self.connected = False
         self.hand = []
         self.in_hand = False
-        # TODO: buy-in system
-        self.chips = 100
+        self.chips = 0
+        self.buy_in = 0
 
     def __json__(self):
         '''returns: JSON of all player fields'''
@@ -19,6 +19,7 @@ class Player(object):
             'hand': self.hand,
             'in_hand': self.in_hand,
             'chips': self.chips,
+            'buy_in': self.buy_in,
         }
 
     def new_game(self):

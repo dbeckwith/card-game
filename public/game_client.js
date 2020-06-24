@@ -94,13 +94,20 @@ export class CardGame {
   change_active_player(player) {
     this._send('change_active_player', { player });
   }
-  flip_card(card_num){
+
+  flip_card(card_num) {
     this._send('flip_card', { card_num });
   }
-  set_game_name(name){
+
+  set_game_name(name) {
     this._send('set_game_name', { name });
   }
-  toggle_draw_mode(){
+
+  toggle_draw_mode() {
     this._send('toggle_draw_mode');
+  }
+
+  buy_in(amount) {
+    this._send('buy_in', { amount });
   }
 }

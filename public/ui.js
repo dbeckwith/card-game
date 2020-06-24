@@ -9,6 +9,10 @@
 
 let showing_login_screen = false;
 
+function formatChips(chips) {
+  return (chips * 0.25).toFixed(2);
+}
+
 /****************************
  * SETS UP LOGIN SCREEN
  ***************************/
@@ -375,7 +379,7 @@ export function render_ui(
     $buy_10_button.text('+$10');
     $buy_10_button.on('click', function ()
     {
-
+      game.buy_in(40);
     });
 
     //GAME NAME DISPLAY:
@@ -590,8 +594,14 @@ export function render_ui(
     {
       id: "pot-display",
     });
+    const $pot_display_pot = $('<span />');
+    const $pot_display_last_bet = $('<span />');
+    $pot_display_last_bet.addClass('pot-display-last-bet');
     //POT: amt (+last_bet_amt):
-    $pot_display.text(`POT \$${(game_state.pot * 0.25).toFixed(2)} (+${(game_state.last_bet * 0.25).toFixed(2)})`);
+    $pot_display_pot.text(`POT $${formatChips(game_state.pot)}`);
+    $pot_display_last_bet.text(`(+${formatChips(game_state.last_bet)})`);
+    $pot_display.append($pot_display_pot);
+    $pot_display.append($pot_display_last_bet);
 
     $common_info.append($pot_display);
 
@@ -618,7 +628,7 @@ export function render_ui(
       $('#fold-button').text('SitOut');
     }
     //update player's money amount:
-    $('#player-money-display').text(`${current_player.name + " $" + (current_player.chips * 0.25).toFixed(2)}/total`);
+    $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
     //game board has all players:
     const $game_board = $('#game-board');
