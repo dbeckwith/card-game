@@ -9,6 +9,10 @@
 
 let showing_login_screen = false;
 
+function formatChips(chips) {
+  return (chips * 0.25).toFixed(2);
+}
+
 /****************************
  * SETS UP LOGIN SCREEN
  ***************************/
@@ -190,7 +194,7 @@ export function render_ui(
     {
       id: 'dealer-controls-bottom',
     });
-    
+
     //COMMON BUTTON  - deals one card up for all players
     const $common_button = $('<button />',
     {
@@ -201,7 +205,7 @@ export function render_ui(
     {
       game.deal_common();
     });
-    
+
     //DRAW MODE button:
     const $draw_button = $('<button />',
     {
@@ -212,12 +216,12 @@ export function render_ui(
     {
       //outline button to show toggle happened
       //set draw_mode in game_state
-      
+
       game.toggle_draw_mode();
       game_state.draw_mode = ! game_state.draw_mode; //but toggle does this already
       console.log(game_state.draw_mode);
     });
-    
+
     //change active better selector:
     const $change_active_player_select = $('<select />',
     {
@@ -230,9 +234,28 @@ export function render_ui(
     });
 
     //SELECTOR FOR WINNERS/Payout:
-    const $winners_select = $('<select />',
-    {
-      id: 'winners-select',
+    const $winners_select = $(`
+      <div id="winners-select">
+        <div id="winners-select-box">
+          <select id="winners-select-select">
+            <option>Select winners</option>
+          </select>
+          <div id="winners-select-over-select"></div>
+        </div>
+        <div id="winners-select-content">
+        </div>
+      </div>
+    `);
+    $winners_select.children().first().on('click', function() {
+      $('#winners-select-content').toggle();
+    });
+    $(document).on('click', function(event) {
+      const $target = $(event.target);
+      const is_over_select = $target.prop('id') === 'winners-select-over-select' ||
+        $.contains($('#winners-select-content')[0], $target[0]);
+      if (!is_over_select) {
+        $('#winners-select-content').hide();
+      }
     });
     // use:     game.payout(winners);
 
@@ -246,10 +269,11 @@ export function render_ui(
     $payout_button.on('click', function ()
     {
       //get which players were checked:
-      const winners = $('.winner-checkbox:checked').map(function ()
-      {
-        return $(this).val();
-      }).toArray();
+      const winners = $('#winners-select-content input:checked')
+        .map(function() {
+          return $(this).prop('id').slice('winners-select-player-'.length);
+        })
+        .toArray();
       //pay all those that were checked:
       game.payout(winners);
     });
@@ -263,24 +287,24 @@ export function render_ui(
     {
       game.new_game();
     });
-    
+
     //GAME SELECTOR setup: shows which game is being played
     const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw',
                             '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball',
                             'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey',
                             'Woolworths');
-    
-    
+
+
     //set game selector to show name of game on screen:
     const $set_game_select = $('<select />',{
       id:'set-game-select',
     });
-    
+
     $set_game_select.empty();
     $set_game_select.on('change', function(){
-      game.set_game_name($(this).val()); 
+      game.set_game_name($(this).val());
     });
-    
+
     for(let i = 0; i < $games.length; i++)
       {
         const $a_game = $('<option />',
@@ -292,7 +316,7 @@ export function render_ui(
         $set_game_select.append($a_game);
       }
 
-   
+
     /*******************************************
      * ADD ALL DEALER CONTROLS HTML TO PAGE:
      *******************************************/
@@ -320,17 +344,17 @@ export function render_ui(
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
 
-    
+
      /*****************************
      * PLAYER CONTROLS
      *****************************/
-    
+
     //THE WHOLE FIELD OF PLAYERS WITH INFO AND CARDS:
     const $game_board = $('<div />',
     {
       id: 'game-board',
     });
-    
+
     //LOG OUT button:
     const $logout_button = $('<button />',
     {
@@ -341,7 +365,7 @@ export function render_ui(
     {
       game.logout();
     });
-    
+
     //CHECK BUTTON:
     const $check_button = $('<button />',
     {
@@ -365,8 +389,8 @@ export function render_ui(
 //      game.bet(0);
 //      $bet_input.val('');
 //    });
-    
-    
+
+
     //BUY-IN 10 CHIPS BUTTON:
     const $buy_10_button = $('<button />',
     {
@@ -375,14 +399,14 @@ export function render_ui(
     $buy_10_button.text('+$10');
     $buy_10_button.on('click', function ()
     {
-     
+      game.buy_in(40);
     });
-    
+
     //GAME NAME DISPLAY:
     const $game_name_display = $('<span />', {
       id: 'game-name-display',
     });
-    
+
     const $common_info = $('<span />',
     {
       id: 'common-info',
@@ -443,7 +467,7 @@ export function render_ui(
       });
       $bet_buttons.append($bet_button_num);
     }
-  
+
     //DISPLAY AMOUNT EACH PLAYER HAS:
     const $player_money_display = $('<span />',{
       id:'player-money-display',
@@ -451,9 +475,9 @@ export function render_ui(
 
     /*******************************************
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
-     *******************************************/ 
+     *******************************************/
     $player_controls.append($player_money_display);
-    
+
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
     $player_controls.append($call_button);
@@ -467,10 +491,10 @@ export function render_ui(
      *******************************************/
     $header.append('<hr \>');
     $header.append($logo_link);
-    
+
     $header.append($dealer_controls);
     $header.append($dealer_controls_bottom);
-    
+
     $header.append($player_controls);
     $header.append($common_info);
     $header.append($buy_10_button);
@@ -483,19 +507,6 @@ export function render_ui(
     $app.append($game_board);
   }
 
-  /**** for checkboxes - see below ****/
-    var expanded = false;
-
-  function showCheckboxes() {
-    var checkboxes = document.getElementById("checkboxes");
-    if (!expanded) {
-      checkboxes.style.display = "block";
-      expanded = true;
-    } else {
-      checkboxes.style.display = "none";
-      expanded = false;
-    }
-  }
   /*********************************
    * RENDER ALL COMPONENTS OF GAME
    ********************************/
@@ -535,48 +546,31 @@ export function render_ui(
         $change_active_player_select.append($player_option);
       }
     });
-    
-   // https://stackoverflow.com/questions/17714705/how-to-use-checkbox-inside-select-option
-    
-    /* USE THIS FOR MULTISELECT
-    <form>
-    <div class="multiselect">
-      <div class="selectBox" onclick="showCheckboxes()">
-        <select>
-          <option>Select an option</option>
-        </select>
-        <div class="overSelect"></div>
-      </div>
-      <div id="checkboxes">
-        <label for="one">
-          <input type="checkbox" id="one" />First checkbox</label>
-        <label for="two">
-          <input type="checkbox" id="two" />Second checkbox</label>
-        <label for="three">
-          <input type="checkbox" id="three" />Third checkbox</label>
-      </div>
-    </div>
-  </form>
-    
-    
-    */
+
     //show all active players in the winners select menu
-    const $winners_select = $('#winners-select');
-    $winners_select.empty();
+    const $winners_select_content = $('#winners-select-content');
+    $winners_select_content.empty();
     _.forEach(game_state.players, player =>
     {
       if (player.in_hand)
       {
-        const $player_option = $('<option />',
-        {
-          value: player.id,
+        const $player_row = $('<label />', {
+          for: `winners-select-player-${player.id}`,
         });
-        $player_option.text(player.name);
-        $winners_select.append($player_option);
+
+        const $player_input = $('<input />', {
+          type: 'checkbox',
+          id: `winners-select-player-${player.id}`,
+        });
+
+        $player_row.append($player_input);
+        $player_row.append(player.name);
+
+        $winners_select_content.append($player_row);
       }
     });
-       
-    
+
+
     const $set_game_select = $('#set-game-select');
     $set_game_select.val(game_state.game_name);
     const $game_name_display = $('#game-name-display');
@@ -590,8 +584,14 @@ export function render_ui(
     {
       id: "pot-display",
     });
+    const $pot_display_pot = $('<span />');
+    const $pot_display_last_bet = $('<span />');
+    $pot_display_last_bet.addClass('pot-display-last-bet');
     //POT: amt (+last_bet_amt):
-    $pot_display.text(`POT \$${(game_state.pot * 0.25).toFixed(2)} (+${(game_state.last_bet * 0.25).toFixed(2)})`);
+    $pot_display_pot.text(`POT $${formatChips(game_state.pot)}`);
+    $pot_display_last_bet.text(`(+${formatChips(game_state.last_bet)})`);
+    $pot_display.append($pot_display_pot);
+    $pot_display.append($pot_display_last_bet);
 
     $common_info.append($pot_display);
 
@@ -618,7 +618,7 @@ export function render_ui(
       $('#fold-button').text('SitOut');
     }
     //update player's money amount:
-    $('#player-money-display').text(`${current_player.name + " $" + (current_player.chips * 0.25).toFixed(2)}/total`);
+    $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
     //game board has all players:
     const $game_board = $('#game-board');
@@ -627,13 +627,15 @@ export function render_ui(
     /****************************
      * EACH PLAYER'S NAME/CARDS:
      ***************************/
-    
+
+    const $player_seats = $('<div />');
+    $player_seats.addClass('player-seats');
     //CREATE EACH player BASED ON players in game_state
-    const $player_seats = _.map(game_state.players, (player) =>
+    _.forEach(game_state.players, (player) =>
     {
       const $player_seat = $('<div />');
       $player_seat.addClass('player-seat');
-      
+
       if (player.connected)
       {
         $player_seat.addClass('player-connected');
@@ -679,7 +681,7 @@ export function render_ui(
       //CARDS FOR EACH PLAYER (also determines up and down):
       const $hand = $('<div />');
       $hand.addClass('hand');
-      
+
       if (player.in_hand)
       {
         _.forEach(player.hand, (card, idx) =>
@@ -700,7 +702,7 @@ export function render_ui(
           });
 
           $card_img.addClass('card');
-          
+
           if (!card.up && player.id === current_player.id)
           {
             $card_img.addClass('down-card');
@@ -712,7 +714,7 @@ export function render_ui(
 //            $card_img.addClass('last');
 //          else
 //            $card_img.removeClass('last');
-          
+
           //allow player to click down card to make up:
           $card_img.on('click', function ()
           {
@@ -731,9 +733,9 @@ export function render_ui(
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
 
-      return $player_seat;
+      $player_seats.append($player_seat);
     });
-    
+
     //COMMON CARDS:
     const $common_display = $('<div />',
     {

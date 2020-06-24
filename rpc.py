@@ -110,7 +110,7 @@ class RPC(object):
         for _ in range(up):
             for player in players:
                 card = self.game_state.draw_card()
-                
+
                 player.give_card(PlayerCard(card, True))
     def one_card(self, up):
         '''
@@ -118,29 +118,29 @@ class RPC(object):
         :param up: True if up card, False if down card
         '''
         self.game_state.hand_started = True
-        
+
         card = self.game_state.draw_card()
-        
+
         self.game_state.active_player.give_card(PlayerCard(card, up))
         self.game_state.next_active_player()
-        
+
     def flip_card(self, card_num):
         '''
         flip down card to up
         :param card_num: card to flip
         '''
         self.player.hand[card_num].up = True
-        
+
     def deal_common(self):
         '''deal one common up card'''
         self.game_state.hand_started = True
-        
+
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
-         
+
     def toggle_draw_mode(self):
-        self.game_state.draw_mode = not self.game_state.draw_mode  
-        
+        self.game_state.draw_mode = not self.game_state.draw_mode
+
     def fold(self):
         '''fold current player'''
         if self.player is None:
@@ -175,37 +175,35 @@ class RPC(object):
         split pot between winners
         :param winners: list of winner ids
         '''
-        debug = True
-        if not debug:
-            if len(winners) < 1:
-                raise ClientError('winners list must not be empty')
-    
-            # convert list of ids to list of player objects
-            winner_ids = winners
-            winners = []
-            for id in winner_ids:
-                player = self.game_state.get_player(id)
-                if player is None:
-                    raise ClientError('player not found')
-                winners.append(player)
-    
-            # get remainder chips after dividing evenly among winners
-            extra_chips = self.game_state.pot % len(winners)
-    
-            # distribute chips evenly to all winners
-            for player in winners:
-                player.chips += self.game_state.pot // len(winners)
-    
-            # distribute extra chips to players
-            # give to the players with the least chips first
-            for player in sorted(winners, key=lambda player: player.chips):
-                if extra_chips == 0:
-                    # no more extra chips
-                    break
-                # take one from the pile
-                extra_chips -= 1
-                # give it to the player
-                player.chips += 1
+        if len(winners) < 1:
+            raise ClientError('winners list must not be empty')
+
+        # convert list of ids to list of player objects
+        winner_ids = winners
+        winners = []
+        for id in winner_ids:
+            player = self.game_state.get_player(id)
+            if player is None:
+                raise ClientError('player not found')
+            winners.append(player)
+
+        # get remainder chips after dividing evenly among winners
+        extra_chips = self.game_state.pot % len(winners)
+
+        # distribute chips evenly to all winners
+        for player in winners:
+            player.chips += self.game_state.pot // len(winners)
+
+        # distribute extra chips to players
+        # give to the players with the least chips first
+        for player in sorted(winners, key=lambda player: player.chips):
+            if extra_chips == 0:
+                # no more extra chips
+                break
+            # take one from the pile
+            extra_chips -= 1
+            # give it to the player
+            player.chips += 1
 
         # empty the pot
         self.game_state.pot = 0
@@ -217,11 +215,20 @@ class RPC(object):
             raise ClientError('player not found')
 
         self.game_state.active_player = player
-        
+
     def set_game_name(self, name):
         '''set name of current game'''
         self.game_state.game_name = name
-        
+
+    def buy_in(self, amount):
+        '''add amount to player's chips and buy-in'''
+
+        if self.player is None:
+            raise ClientError('not logged-in')
+
+        self.player.chips += amount
+        self.player.buy_in += amount
+
 class ClientError(Exception):
     def __init__(self, message):
         super().__init__(message)
