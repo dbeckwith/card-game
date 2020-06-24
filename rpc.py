@@ -1,3 +1,5 @@
+__author__ = 'D. Beckwith'
+
 from player import Player, PlayerCard
 
 
@@ -26,6 +28,11 @@ class RPC(object):
 
 
     def login(self, name):
+        '''
+        called by Join button in opening screen
+        makes new player object, adds player to game
+        :param name: name of player
+        '''
         if self.player is not None:
             raise ClientError('already logged-in')
         if self.player_id is None:
@@ -40,6 +47,7 @@ class RPC(object):
         self.player = player
 
     def logout(self):
+        '''called by Login button - takes player out of game'''
         if self.player is None:
             raise ClientError('not logged-in')
 
@@ -55,6 +63,7 @@ class RPC(object):
             rpc.player = None
 
     def kick(self, player_id):
+        '''kick player out of game when kick clicked (for disconnected players)'''
         # find the player
         player = self.game_state.get_player(player_id)
         if player is None:
@@ -77,6 +86,11 @@ class RPC(object):
         self.game_state.new_game()
 
     def deal_all(self, down, up):
+        '''
+        Deal cards to every active player
+        :param down: number of down cards to deal
+        :param up: number of up cards to deal
+        '''
         # dealing cards starts the hand
         self.game_state.hand_started = True
 
@@ -87,13 +101,16 @@ class RPC(object):
         if len(self.game_state.deck) < (down + up) * len(players):
             raise ClientError('deck does not have enough cards')
 
+        # deal down cards:
         for _ in range(down):
             for player in players:
                 card = self.game_state.draw_card()
                 player.give_card(PlayerCard(card, False))
+        # deal up cards:
         for _ in range(up):
             for player in players:
                 card = self.game_state.draw_card()
+                
                 player.give_card(PlayerCard(card, True))
     def one_card(self, up):
         '''
@@ -108,15 +125,21 @@ class RPC(object):
         self.game_state.next_active_player()
         
     def flip_card(self, card_num):
+        '''
+        flip down card to up
+        :param card_num: card to flip
+        '''
         self.player.hand[card_num].up = True
         
     def deal_common(self):
+        '''deal one common up card'''
         self.game_state.hand_started = True
         
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
          
     def fold(self):
+        '''fold current player'''
         if self.player is None:
             raise ClientError('not logged-in')
         if not self.player.in_hand:
@@ -129,6 +152,7 @@ class RPC(object):
         self.game_state.next_active_player()
 
     def bet(self, amount):
+        '''player bet - subtract from chips, add to pot, move to next player'''
         if self.player is None:
             raise ClientError('not logged-in')
         if not self.player.in_hand:
@@ -144,6 +168,10 @@ class RPC(object):
         self.game_state.next_active_player()
 
     def payout(self, winners):
+        '''
+        split pot between winners
+        :param winners: list of winner ids
+        '''
         debug = True
         if not debug:
             if len(winners) < 1:
@@ -180,12 +208,15 @@ class RPC(object):
         self.game_state.pot = 0
 
     def change_active_player(self, player):
+        '''sets active player for betting'''
         player = self.game_state.get_player(player)
         if player is None:
             raise ClientError('player not found')
 
         self.game_state.active_player = player
+        
     def set_game_name(self, name):
+        '''set name of current game'''
         self.game_state.game_name = name
         
 class ClientError(Exception):

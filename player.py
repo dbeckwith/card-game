@@ -1,3 +1,5 @@
+__author__ = 'D. Beckwith'
+
 class Player(object):
     def __init__(self, id, name):
         self.id = id
@@ -9,6 +11,7 @@ class Player(object):
         self.chips = 100
 
     def __json__(self):
+        '''returns: JSON of all player fields'''
         return {
             'id': self.id,
             'name': self.name,
@@ -19,10 +22,12 @@ class Player(object):
         }
 
     def new_game(self):
+        '''reset player's hand nad put them in game'''
         self.hand = []
         self.in_hand = True
 
     def give_card(self, card):
+        '''deal one card'''
         self.hand.append(card)
 
 class PlayerCard(object):

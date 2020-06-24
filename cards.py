@@ -1,3 +1,7 @@
+__author__ = 'D. Beckwith'
+
+'''card values & suits and function to produce newly shuffle deck'''
+
 import random
 
 

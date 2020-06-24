@@ -1,3 +1,10 @@
+__author__ = 'D. Beckwith'
+
+'''
+provides gamestate object to track all values in game
+provides methods for updating gamestate values
+'''
+
 import asyncio
 from collections import defaultdict
 import json
@@ -12,19 +19,22 @@ from rpc import ClientError
 # but seat stays at the table, keep chips
 
 class GameState(object):
+    '''tracks the state of all variables for the game and players'''
     def __init__(self):
         self.players = []
         self.deck = cards.new_deck()
-        self.hand_started = False
-        self.dealer = None
-        self.active_player = None
-        self.common_cards = []
-        self.pot = 0
-        self.last_bet = 0
-        self.game_name = None
         
-        self.current_game = None
-        self.connections = []
+        self.hand_started  = False
+        self.dealer        = None
+        self.active_player = None
+        self.common_cards  = []
+        self.pot           = 0
+        self.last_bet      = 0
+        self.game_name     = None
+        
+        self.current_game  = None
+        self.connections   = []
+        
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -32,15 +42,15 @@ class GameState(object):
 
     def __json__(self):
         return {
-            'players': self.players,
-            'deck': self.deck,
-            'hand_started': self.hand_started,
-            'dealer': self.dealer.id if self.dealer is not None else None,
+            'players'      : self.players,
+            'deck'         : self.deck,
+            'hand_started' : self.hand_started,
+            'dealer'       : self.dealer.id if self.dealer is not None else None,
             'active_player': self.active_player.id if self.active_player is not None else None,
-            'pot': self.pot,
-            'last_bet': self.last_bet,
-            'common_cards': self.common_cards,
-            'game_name': self.game_name,
+            'pot'          : self.pot,
+            'last_bet'     : self.last_bet,
+            'common_cards' : self.common_cards,
+            'game_name'    : self.game_name,
         }
 
     async def connect(self, rpc):
@@ -62,6 +72,11 @@ class GameState(object):
                 rpc.player.connected = False
 
     def add_player(self, player):
+        '''
+        adds player when they login
+        :param player: player object to login
+        :return: None
+        '''
         if any(p.id == player.id for p in self.players):
             raise ClientError('player with same id already in game')
 
@@ -72,6 +87,11 @@ class GameState(object):
             self.dealer = player
 
     def remove_player(self, player):
+        '''
+        removes player from game
+        :param player: player object for player to remove
+        :return: None
+        '''
         if player not in self.players:
             raise ClientError('player is not in game')
 
@@ -87,16 +107,26 @@ class GameState(object):
         self.players.remove(player)
 
     def get_player(self, player_id):
+        '''
+        finds playern object based on id
+        :param player_id: id number of current player
+        :return player object matching the id
+        '''
         for player in self.players:
             if player.id == player_id:
                 return player
 
     def players_in_hand(self):
+        
         for player in self.players:
             if player.in_hand:
                 yield player
 
     def new_game(self):
+        '''
+        creates new game: 0 pot, set players, new deck, clear common cards,
+        new dealer
+        '''
         if self.pot != 0:
             raise ClientError('pot must be empty')
         self.last_bet = 0
@@ -149,20 +179,22 @@ class GameState(object):
             raise ClientError('deck is empty')
 
     def mark_dirty(self):
-        # notify Event objects for client update and backup
-        # this will trigger those loops to run
+        ''' 
+        notify Event objects for client update and backup
+        this will trigger those loops to run
+        '''
         self.client_update_event.set()
         self.backup_event.set()
 
     async def send_to_all(self):
-        # send the game state to every connection concurrently
+        '''send the game state to every connection concurrently'''
         await asyncio.gather(*(
             self.send(rpc)
             for rpc in self.connections
         ))
 
     async def send(self, rpc):
-        # format a message to send to the connection
+        '''format a message to send to the connection'''
         msg = {
             'type': 'game_state',
             'game_state': self,
@@ -214,8 +246,8 @@ class GameState(object):
 
 class GameStateSerializer(json.JSONEncoder):
     def default(self, value):
-        # if the value isn't a primitive JSON, see if it has a special __json__ method
-        # and use the value from that instead
+        '''if the value isn't a primitive JSON, see if it has a special __json__ method
+        and use the value from that instead'''
         if hasattr(value, '__json__'):
             return value.__json__()
         return super(GameStateSerializer, self).default(value)

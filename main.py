@@ -1,3 +1,5 @@
+__author__ = 'D. Beckwith'
+
 import sys
 assert sys.version_info >= (3, 8)
 

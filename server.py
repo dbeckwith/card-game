@@ -1,3 +1,5 @@
+__author__ = 'D. Beckwith'
+
 import asyncio
 import aiohttp
 from aiohttp import web
