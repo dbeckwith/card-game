@@ -122,7 +122,7 @@ class RPC(object):
         card = self.game_state.draw_card()
 
         self.game_state.active_player.give_card(PlayerCard(card, up))
-        if not game_state.draw_mode:
+        if not self.game_state.draw_mode:
             self.game_state.next_active_player()
 
     def flip(self, card_num):
@@ -226,8 +226,7 @@ class RPC(object):
         
     def increment_bettor_drawer(self):
         '''sets active player for betting'''
-        if game_state.draw_mode:
-            self.game_state.next_active_player()
+        self.game_state.next_active_player()
         
 
     def set_game_name(self, name):

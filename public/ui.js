@@ -103,7 +103,7 @@ export function render_ui(
 
     //THIS AND DRAW AREAN'T TARGETED AT CORRECT PLAYERS
     //player: f/102 = fold, b/98 = bet,  c/99 = call, K/107 = check, 1-6 (49-54) bets,
-    //dealer: u/117 = next up, d/100 = next down, n/110 = new game
+    //dealer: u/117 = next up, d/100 = next down, n/110 = next better/drawer
 
     $(document).keypress(function (e)
     {
@@ -119,7 +119,7 @@ export function render_ui(
         game.bet(key - 48);
       }
       else if(key == 110)
-        game.new_game();
+        game.increment_bettor_drawer();
     });
 
     $app.empty();
