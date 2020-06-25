@@ -153,8 +153,7 @@ button:hover {
 
 /* new game button */
 #new-game-button{
-  margin-left: 35px;
-  margin-right:35px;
+  margin-left: 25px;
   color:white;
   background-color: blue;
 }
@@ -367,7 +366,9 @@ input
 .down-card {
     border: 4px solid blue;
 }
-
+.draw-ready{
+  border: 4px solid black;
+}
 /***** ANIMATIONS ******/
 /* shake card on hover */
 /*

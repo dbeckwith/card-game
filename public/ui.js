@@ -211,15 +211,25 @@ export function render_ui(
     {
       id: 'draw-btn',
     });
-    $draw_button.text('DRAW MODE');
+    $draw_button.text('DRAW MODE OFF');
     $draw_button.on('click', function ()
     {
       //outline button to show toggle happened
       //set draw_mode in game_state
 
       game.toggle_draw_mode();
-      game_state.draw_mode = ! game_state.draw_mode; //but toggle does this already
-      console.log(game_state.draw_mode);
+      game_state.draw_mode = ! game_state.draw_mode; //but toggle does this already?
+      
+      //make down cards outline in black to show discarding
+      var downs = $( ".down-card" ).children();
+      downs.toggleClass("draw-ready");
+
+      if(game_state.draw_mode){
+        $draw_button.text('DRAW MODE ON');
+      }
+      else
+        $draw_button.text('DRAW MODE OFF');
+
     });
 
     //change active better selector:
@@ -337,9 +347,9 @@ export function render_ui(
     $dealer_controls_bottom.append($winners_select);
 
     //new game button & game selector:
-    $dealer_controls_bottom.append($new_game_button);
-    $dealer_controls_bottom.append('<span>Game: </span>');
+    $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
     $dealer_controls_bottom.append($set_game_select);
+    $dealer_controls_bottom.append($new_game_button);
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
@@ -718,7 +728,7 @@ export function render_ui(
           //allow player to click down card to make up:
           $card_img.on('click', function ()
           {
-            game.flip_card(idx);
+            game.flip_or_discard(idx);
           });
 
           $hand.append($card_img);

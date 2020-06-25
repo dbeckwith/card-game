@@ -124,12 +124,18 @@ class RPC(object):
         self.game_state.active_player.give_card(PlayerCard(card, up))
         self.game_state.next_active_player()
 
-    def flip_card(self, card_num):
+    def flip_or_discard(self, card_num):
         '''
         flip down card to up
         :param card_num: card to flip
         '''
-        self.player.hand[card_num].up = True
+        if not self.game_state.draw_mode:
+            # flip card
+            self.player.hand[card_num].up = True
+        else:
+            # remove card from hand
+            del self.player.hand[card_num]
+            pass
 
     def deal_common(self):
         '''deal one common up card'''

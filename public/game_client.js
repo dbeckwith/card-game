@@ -95,8 +95,8 @@ export class CardGame {
     this._send('change_active_player', { player });
   }
 
-  flip_card(card_num) {
-    this._send('flip_card', { card_num });
+  flip_or_discard(card_num) {
+    this._send('flip_or_discard', { card_num });
   }
 
   set_game_name(name) {
