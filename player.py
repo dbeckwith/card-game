@@ -2,24 +2,24 @@ __author__ = 'D. Beckwith'
 
 class Player(object):
     def __init__(self, id, name):
-        self.id = id
-        self.name = name
-        self.connected = False
-        self.hand = []
-        self.in_hand = False
-        self.chips = 0
-        self.buy_in = 0
+        self.id         = id
+        self.name       = name
+        self.connected  = False
+        self.hand       = []
+        self.in_hand    = False
+        self.chips      = 0
+        self.buy_in     = 0
 
     def __json__(self):
         '''returns: JSON of all player fields'''
         return {
-            'id': self.id,
-            'name': self.name,
-            'connected': self.connected,
-            'hand': self.hand,
-            'in_hand': self.in_hand,
-            'chips': self.chips,
-            'buy_in': self.buy_in,
+            'id'        : self.id,
+            'name'      : self.name,
+            'connected' : self.connected,
+            'hand'      : self.hand,
+            'in_hand'   : self.in_hand,
+            'chips'     : self.chips,
+            'buy_in'    : self.buy_in,
         }
 
     def new_game(self):

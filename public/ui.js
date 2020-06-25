@@ -211,13 +211,13 @@ export function render_ui(
     {
       id: 'draw-btn',
     });
-    $draw_button.text('DRAW MODE OFF');
+    $draw_button.text('DRAW MODE NOW OFF');
     $draw_button.on('click', function ()
     {
       //outline button to show toggle happened
       //set draw_mode in game_state
 
-      game.toggle_draw_mode();
+//      game.toggle_draw_mode();
       game_state.draw_mode = ! game_state.draw_mode; //but toggle does this already?
       
       //make down cards outline in black to show discarding
@@ -225,11 +225,13 @@ export function render_ui(
       downs.toggleClass("draw-ready");
 
       if(game_state.draw_mode){
-        $draw_button.text('DRAW MODE ON');
+        $(this).css('background-color','red');
+        $(this).text('DRAW MODE NOW ON');
       }
-      else
-        $draw_button.text('DRAW MODE OFF');
-
+      else{
+          $(this).css('background-color','darkgreen');
+          $(this).text('DRAW MODE NOW OFF');
+      }
     });
 
     //change active better selector:
@@ -397,7 +399,6 @@ export function render_ui(
 //    $check_button.on('click', function ()
 //    {
 //      game.bet(0);
-//      $bet_input.val('');
 //    });
 
 

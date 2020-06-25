@@ -135,7 +135,6 @@ class RPC(object):
         else:
             # remove card from hand
             del self.player.hand[card_num]
-            pass
 
     def deal_common(self):
         '''deal one common up card'''
