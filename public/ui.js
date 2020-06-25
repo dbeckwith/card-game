@@ -100,9 +100,9 @@ export function render_ui(
    ***********************************/
   function setup_game_html()
   {
-    
+
     //THIS AND DRAW AREAN'T TARGETED AT CORRECT PLAYERS
-    //player: f/102 = fold, b/98 = bet,  c/99 = call, K/107 = check, 1-6 (49-54) bets, 
+    //player: f/102 = fold, b/98 = bet,  c/99 = call, K/107 = check, 1-6 (49-54) bets,
     //dealer: u/117 = next up, d/100 = next down, n/110 = new game
 
     $(document).keypress(function (e)
@@ -121,7 +121,7 @@ export function render_ui(
       else if(key == 110)
         game.new_game();
     });
-    
+
     $app.empty();
 
     const $header = $('<center />');
@@ -233,27 +233,11 @@ export function render_ui(
     {
       id: 'draw-btn',
     });
-    $draw_button.text('DRAW MODE NOW OFF');
     $draw_button.on('click', function ()
     {
       //outline button to show toggle happened
       //set draw_mode in game_state
-
-//      game.toggle_draw_mode();
-      game_state.draw_mode = ! game_state.draw_mode; //but toggle does this already?
-      
-      //make down cards outline in black to show discarding
-      var downs = $( ".down-card" ).children();
-      downs.toggleClass("draw-ready");
-
-      if(game_state.draw_mode){
-        $(this).css('background-color','red');
-        $(this).text('DRAW MODE NOW ON');
-      }
-      else{
-          $(this).css('background-color','darkgreen');
-          $(this).text('DRAW MODE NOW OFF');
-      }
+       game.toggle_draw_mode();
     });
 
     //change active better selector:
@@ -604,6 +588,21 @@ export function render_ui(
     });
 
 
+    const $draw_button = $('#draw-btn');
+    //make down cards outline in black to show discarding
+    var downs = $( ".down-card" ).children();
+    downs.toggleClass("draw-ready");
+
+    if(game_state.draw_mode){
+      $draw_button.css('background-color','red');
+      $draw_button.text('DRAW MODE NOW ON');
+    }
+    else{
+        $draw_button.css('background-color','darkgreen');
+        $draw_button.text('DRAW MODE NOW OFF');
+    }
+
+
     const $set_game_select = $('#set-game-select');
     $set_game_select.val(game_state.game_name);
     const $game_name_display = $('#game-name-display');
@@ -749,10 +748,16 @@ export function render_ui(
 //            $card_img.removeClass('last');
 
           //allow player to click down card to make up:
-          $card_img.on('click', function ()
-          {
-            game.flip_or_discard(idx);
-          });
+          if (player.id === current_player.id) {
+            $card_img.on('click', function ()
+            {
+              if (game_state.draw_mode) {
+                game.discard(idx);
+              } else {
+                game.flip(idx);
+              }
+            });
+          }
 
           $hand.append($card_img);
         });

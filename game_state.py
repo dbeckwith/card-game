@@ -23,7 +23,7 @@ class GameState(object):
     def __init__(self):
         self.players = []
         self.deck = cards.new_deck()
-        
+
         self.hand_started  = False
         self.draw_mode     = False
         self.dealer        = None
@@ -32,10 +32,10 @@ class GameState(object):
         self.pot           = 0
         self.last_bet      = 0
         self.game_name     = None
-        
+
         self.current_game  = None
         self.connections   = []
-        
+
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -119,7 +119,7 @@ class GameState(object):
                 return player
 
     def players_in_hand(self):
-        
+
         for player in self.players:
             if player.in_hand:
                 yield player
@@ -140,6 +140,8 @@ class GameState(object):
         # shuffle a new deck
         self.deck = cards.new_deck()
 
+        self.draw_mode = False
+
         # new hand
         self.hand_started = False
 
@@ -151,7 +153,7 @@ class GameState(object):
             self.active_player = self.next_player_after(self.dealer)
 
 
-        
+
     def next_dealer(self):
         if self.dealer is not None:
             self.dealer = self.next_player_after(self.dealer)
@@ -183,7 +185,7 @@ class GameState(object):
             raise ClientError('deck is empty')
 
     def mark_dirty(self):
-        ''' 
+        '''
         notify Event objects for client update and backup
         this will trigger those loops to run
         '''
