@@ -29,9 +29,11 @@ class GameState(object):
         self.dealer        = None
         self.active_player = None
         self.common_cards  = []
-        self.pot           = 0
-        self.last_bet      = 0
-        self.game_name     = None
+        
+        self.pot             = 0
+        self.last_bet        = 0
+        self.game_name       = None
+        self.chips_bet_in_round = 0 # reset when deal all or deal common
 
         self.current_game  = None
         self.connections   = []
@@ -53,6 +55,7 @@ class GameState(object):
             'common_cards' : self.common_cards,
             'game_name'    : self.game_name,
             'draw_mode'    : self.draw_mode,
+            'chips_bet_in_round': self.chips_bet_in_round,
         }
 
     async def connect(self, rpc):
@@ -144,6 +147,7 @@ class GameState(object):
 
         # new hand
         self.hand_started = False
+        self.chips_bet_in_round = 0
 
         if self.dealer is not None:
             # pick a new dealer

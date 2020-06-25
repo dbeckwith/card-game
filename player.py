@@ -9,6 +9,7 @@ class Player(object):
         self.in_hand    = False
         self.chips      = 0
         self.buy_in     = 0
+        self.chips_in   = 0 # how much bet in round for this player
 
     def __json__(self):
         '''returns: JSON of all player fields'''
@@ -20,12 +21,14 @@ class Player(object):
             'in_hand'   : self.in_hand,
             'chips'     : self.chips,
             'buy_in'    : self.buy_in,
+            'chips_in'  : self.chips_in,
         }
 
     def new_game(self):
         '''reset player's hand nad put them in game'''
         self.hand = []
         self.in_hand = True
+        self.chips_in = 0
 
     def give_card(self, card):
         '''deal one card'''

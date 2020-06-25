@@ -411,10 +411,10 @@ export function render_ui(
       id: 'call-button',
     });
     $call_button.text('Call');
-//    $check_button.on('click', function ()
-//    {
-//      game.bet(0);
-//    });
+    $call_button.on('click', function ()
+    {
+      game.bet(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in);
+    });
 
 
     //BUY-IN 10 CHIPS BUTTON:
@@ -708,7 +708,11 @@ export function render_ui(
       //chips shy display:
       const $chips_shy = $('<div />');
       $chips_shy.addClass('chips-shy');
-      $chips_shy.text('($ shy)');
+      
+      let $chips_in_disp = _.max(_.map(game_state.players, 'chips_in')) - player.chips_in;
+//      $chips_in_disp = formatChips($chips_in_disp);
+      
+      $chips_shy.text(`shy:${$chips_in_disp}`);
 
       //button to kick if disconnected:
       const $kick_button = $('<button />');
@@ -743,11 +747,14 @@ export function render_ui(
           });
 
           $card_img.addClass('card');
-
-          if (!card.up && player.id === current_player.id)
+          if(!card.up && player.id === current_player.id && game_state.draw_mode){
+              $card_img.addClass('draw-ready');
+             }
+          else if (!card.up && player.id === current_player.id)
           {
             $card_img.addClass('down-card');
           }
+          
           //TODO: slide in animation
 //          let $card_dealt = true; //change this to depend on what just happened
 //          if(player.id === current_player.id && idx == player.hand.length - 1

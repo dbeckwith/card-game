@@ -23,6 +23,7 @@ export class CardGame {
         case 'error': {
           const { error } = message;
           console.log(`Error from server: ${error}`)
+          alert(error);
           this.on_error?.(error);
           break;
         }

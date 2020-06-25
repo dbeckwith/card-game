@@ -93,7 +93,7 @@ class RPC(object):
         '''
         # dealing cards starts the hand
         self.game_state.hand_started = True
-
+        self.game_state.chips_bet_in_round = 0
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
 
@@ -124,6 +124,7 @@ class RPC(object):
         self.game_state.active_player.give_card(PlayerCard(card, up))
         if not self.game_state.draw_mode:
             self.game_state.next_active_player()
+        self.chips_in = 0
 
     def flip(self, card_num):
         '''
@@ -142,6 +143,7 @@ class RPC(object):
     def deal_common(self):
         '''deal one common up card'''
         self.game_state.hand_started = True
+        self.game_state.chips_bet_in_round = 0
 
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
@@ -159,6 +161,7 @@ class RPC(object):
             raise ClientError('not your turn')
 
         self.player.in_hand = False
+        self.game_state.chips_bet_in_round = 0
 
         self.game_state.next_active_player()
 
@@ -173,9 +176,11 @@ class RPC(object):
         if self.player.chips < amount:
             raise ClientError('not enough chips')
 
-        self.player.chips -= amount
-        self.game_state.pot += amount
-        self.game_state.last_bet = amount
+        self.player.chips                 -= amount
+        self.game_state.pot               += amount
+        self.game_state.last_bet           = amount
+        self.game_state.chips_bet_in_round += amount
+        self.player.chips_in              += amount
         self.game_state.next_active_player()
 
     def payout(self, winners):

@@ -290,13 +290,13 @@ input
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  height: calc(105px * 5);
+  height: calc(105px * 4);
 }
 
 .player-seat {
   display: grid;
   grid-gap: 2px;
-  grid-template-columns: 100px 85px 1fr;
+  grid-template-columns: 115px 70px 1fr;
   grid-template-rows: auto 1fr;
 
   font-family: 'PT Mono', monospace;
@@ -349,7 +349,7 @@ input
   /* this calc should be updated if these values change */
   /* CHANGE ABOVE ALSO
   /* (first column width + second column width) / (starting chip amount / chips per chip image) */
-  width: calc((100px + 85px) / (400 / 40));
+  width: calc((115px + 70px) / (400 / 40));
 }
 
 .hand {
