@@ -122,7 +122,8 @@ class RPC(object):
         card = self.game_state.draw_card()
 
         self.game_state.active_player.give_card(PlayerCard(card, up))
-        self.game_state.next_active_player()
+        if not game_state.draw_mode:
+            self.game_state.next_active_player()
 
     def flip(self, card_num):
         '''
@@ -215,13 +216,19 @@ class RPC(object):
         # empty the pot
         self.game_state.pot = 0
 
-    def change_active_player(self, player):
-        '''sets active player for betting'''
-        player = self.game_state.get_player(player)
-        if player is None:
-            raise ClientError('player not found')
+    #def change_active_player(self, player):
+        #'''sets active player for betting'''
+        #player = self.game_state.get_player(player)
+        #if player is None:
+            #raise ClientError('player not found')
 
-        self.game_state.active_player = player
+        #self.game_state.active_player = player
+        
+    def increment_bettor_drawer(self):
+        '''sets active player for betting'''
+        if game_state.draw_mode:
+            self.game_state.next_active_player()
+        
 
     def set_game_name(self, name):
         '''set name of current game'''

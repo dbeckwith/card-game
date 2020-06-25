@@ -240,15 +240,24 @@ export function render_ui(
        game.toggle_draw_mode();
     });
 
-    //change active better selector:
-    const $change_active_player_select = $('<select />',
-    {
-      id: 'change-active-player-select',
+//    //change active better selector:
+//    const $change_active_player_select = $('<select />',
+//    {
+//      id: 'change-active-player-select',
+//    });
+//    $change_active_player_select.on('change', function ()
+//    {
+//      const player = $(this).val();
+//      game.change_active_player(player);
+//    });
+    const $increment_active_bettor_drawer_button = $('<button />',
+   {
+      id: 'increment-active-bettor-drawer-button',   
     });
-    $change_active_player_select.on('change', function ()
+    $increment_active_bettor_drawer_button.text("Next Bet/Draw");
+    $increment_active_bettor_drawer_button.on('click', function()
     {
-      const player = $(this).val();
-      game.change_active_player(player);
+        game.increment_bettor_drawer();
     });
 
     //SELECTOR FOR WINNERS/Payout:
@@ -347,9 +356,9 @@ export function render_ui(
     $dealer_controls.append($draw_button);
 
     //bettor selector:
-    $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
-    $dealer_controls_bottom.append($change_active_player_select);
-
+//    $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
+//    $dealer_controls_bottom.append($change_active_player_select);
+    $dealer_controls_bottom.append($increment_active_bettor_drawer_button);
     //payout button and selector:
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($winners_select);

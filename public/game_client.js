@@ -102,7 +102,9 @@ export class CardGame {
   discard(card_num) {
     this._send('discard', { card_num });
   }
-
+  increment_bettor_drawer(){
+    this._send('increment_bettor_drawer');
+}
   set_game_name(name) {
     this._send('set_game_name', { name });
   }
