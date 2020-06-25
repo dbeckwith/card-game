@@ -100,6 +100,28 @@ export function render_ui(
    ***********************************/
   function setup_game_html()
   {
+    
+    //THIS AND DRAW AREAN'T TARGETED AT CORRECT PLAYERS
+    //player: f/102 = fold, b/98 = bet,  c/99 = call, K/107 = check, 1-6 (49-54) bets, 
+    //dealer: u/117 = next up, d/100 = next down, n/110 = new game
+
+    $(document).keypress(function (e)
+    {
+      const key = e.which;
+
+      if (key == 102) //FOLD
+        game.fold();
+      else if (key == 107){ //CHECK
+        game.bet(0);
+        $bet_input.val('');
+      }
+      else if(key >= 49 && key <= 54){ //1-6
+        game.bet(key - 48);
+      }
+      else if(key == 110)
+        game.new_game();
+    });
+    
     $app.empty();
 
     const $header = $('<center />');
