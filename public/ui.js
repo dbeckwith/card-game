@@ -101,7 +101,8 @@ export function render_ui(
   function setup_game_html()
   {
 
-    //THIS AND DRAW AREAN'T TARGETED AT CORRECT PLAYERS
+    //KEYBOARD SHORTCUTS:
+    
     //player: f/102 = fold, b/98 = bet,  c/99 = call, K/107 = check, 1-6 (49-54) bets,
     //dealer: u/117 = next up, d/100 = next down, n/110 = next better/drawer
 
@@ -109,21 +110,22 @@ export function render_ui(
     {
       const key = e.which;
 
-      if (key == 102) //FOLD
+      if (key == 102) //FOLD - f
         game.fold();
-      else if (key == 107){ //CHECK
+      else if (key == 107){ //CHECK - k
         game.bet(0);
         $bet_input.val('');
       }
       else if(key >= 49 && key <= 54){ //1-6
         game.bet(key - 48);
       }
-      else if(key == 110)
+      else if(key == 110) //next bettor - n
         game.increment_bettor_drawer();
-      else if(key == 99) //call
-        {
-          document.getElementById("call-button").click();
-        }
+      else if(key == 99){ //call - c
+        document.getElementById("call-button").click();
+      }
+      else if(key == 97) //ante - a
+              game.ante();
     });
 
     $app.empty();
@@ -258,7 +260,7 @@ export function render_ui(
       id: 'increment-active-bettor-drawer-button', 
       title: 'Moves to the next player for both betting and getting a card dealt to them',
     });
-    $increment_active_bettor_drawer_button.text("Next Bet/Draw");
+    $increment_active_bettor_drawer_button.text("Next Bet/Draw(N)");
     $increment_active_bettor_drawer_button.on('click', function()
     {
         game.increment_bettor_drawer();
@@ -420,7 +422,7 @@ export function render_ui(
       id: 'check-button',
       title: 'To pass the bet (assuming you are not light any amount)'
     });
-    $check_button.text('Check');
+    $check_button.text('Chec(k)');
     $check_button.on('click', function ()
     {
       if(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0)
@@ -439,7 +441,7 @@ export function render_ui(
       id: 'call-button',
        title:'Call the current bet amount (your "shy" amount)'
     });
-    $call_button.text('Call');
+    $call_button.text('(C)all');
     $call_button.on('click', function ()
     {
       game.bet(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in);
@@ -451,7 +453,7 @@ export function render_ui(
       id: "ante-btn",
       title: "Ante 1 chip"
     });
-    $ante_button.text('Ante');
+    $ante_button.text('(A)nte');
     $ante_button.on('click', function ()
     {
       game.ante();
@@ -490,7 +492,7 @@ export function render_ui(
       id: 'fold-button',
       title: 'Fold.  Your cards will disappear',
     });
-    $fold_button.text('Fold');
+    $fold_button.text('Fold(F)');
     $fold_button.on('click', function ()
     {
       game.fold();
@@ -697,7 +699,7 @@ export function render_ui(
     //sit-out/fold button depends on if game started:
     if (game_state.hand_started)
     {
-      $('#fold-button').text('Fold');
+      $('#fold-button').text('(F)old');
     }
     else
     {
