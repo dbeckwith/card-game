@@ -60,6 +60,12 @@ button:hover {
 /****************
 * DEALER CONTROLS - 1ST ROW
 *****************/
+#cards-left{
+  color:white;
+  background-color:red;
+  padding: 2px 4px;
+  font-size:14px;
+}
 /* all dealer buttons are smaller */
 .dlrbtns {
     padding: 4px 7px;

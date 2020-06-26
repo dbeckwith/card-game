@@ -154,6 +154,10 @@ export function render_ui(
       id: 'dealer-controls',
     });
 
+    const $cards_left = $('<span />',{
+      id: "cards-left",
+    });
+    
     /*************************
      * ALL DEALER BUTTONS
      ************************/
@@ -376,6 +380,7 @@ export function render_ui(
      * ADD ALL DEALER CONTROLS HTML TO PAGE:
      *******************************************/
 
+    $dealer_controls.append($cards_left);
     //deal buttons:
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($next_up_button);
@@ -604,6 +609,7 @@ export function render_ui(
     {
       setup_game_html();
     }
+    $("#cards-left").text(`${game_state.deck.length} left`);
 //    if(game_state.game_name !== "Man-Mouse")
 //      $check_button.text('Chec(k)');
 //    else
