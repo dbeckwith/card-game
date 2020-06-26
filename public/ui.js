@@ -109,23 +109,27 @@ export function render_ui(
     $(document).keypress(function (e)
     {
       const key = e.which;
-
-      if (key == 102) //FOLD - f
-        game.fold();
-      else if (key == 107){ //CHECK - k
-        game.bet(0);
-        $bet_input.val('');
+      if(!showing_login_screen){
+        //fold - f, or out - o when in man-mouse mode
+        if (key == 102 || (key == 111 && game_state.game_name !== "Man-Mouse") )
+          game.fold();
+        else if (key == 107){ //CHECK - k
+          game.bet(0);
+          $bet_input.val('');
+        }
+//        else if(key >= 49 && key <= 54){ //1-6
+//          game.bet(key - 48);
+//        }
+        else if(key == 110){ //next bettor - n
+            if(game_state.dealer === current_player.id)
+              game.increment_bettor_drawer();
+        }
+        else if(key == 99){ //call - c
+          document.getElementById("call-button").click();
+        }
+        else if(key == 97) //ante - a
+            game.ante();
       }
-      else if(key >= 49 && key <= 54){ //1-6
-        game.bet(key - 48);
-      }
-      else if(key == 110) //next bettor - n
-        game.increment_bettor_drawer();
-      else if(key == 99){ //call - c
-        document.getElementById("call-button").click();
-      }
-      else if(key == 97) //ante - a
-              game.ante();
     });
 
     $app.empty();
@@ -351,6 +355,7 @@ export function render_ui(
     });
 
     $set_game_select.empty();
+    
     $set_game_select.on('change', function(){
       game.set_game_name($(this).val());
     });
@@ -422,12 +427,17 @@ export function render_ui(
       id: 'check-button',
       title: 'To pass the bet (assuming you are not light any amount)'
     });
-    $check_button.text('Chec(k)');
+//    if(game_state.game_name !== "Man-Mouse")
+      $check_button.text('Chec(k)');
+//    else
+//      $check_button.text('In(i)');
+
     $check_button.on('click', function ()
     {
-      if(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0)
+      //if not light any amount, you can check:
+      if(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0 ||
+        game_state.game_name === "Man-Mouse")
         {
-          console.log(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in)
           game.bet(0);
           $bet_input.val('');
         }
@@ -492,7 +502,11 @@ export function render_ui(
       id: 'fold-button',
       title: 'Fold.  Your cards will disappear',
     });
-    $fold_button.text('Fold(F)');
+//    if(game_state.game_name !== "Man-Mouse")
+      $fold_button.text('Fold(F)');
+//    else
+//      $fold_button.text('Out(o)');
+
     $fold_button.on('click', function ()
     {
       game.fold();
@@ -590,7 +604,10 @@ export function render_ui(
     {
       setup_game_html();
     }
-
+//    if(game_state.game_name !== "Man-Mouse")
+//      $check_button.text('Chec(k)');
+//    else
+//      $check_button.text('In(i)');
     //SHOW CONTROLS IN CURRENT DEALER's VIEW:
     if (game_state.dealer === current_player.id)
     {
@@ -603,22 +620,22 @@ export function render_ui(
       $('#dealer-controls-bottom').hide();
     }
 
-    //show all active players in the set next bettor menu:
-    const $change_active_player_select = $('#change-active-player-select');
-    $change_active_player_select.empty();
-    _.forEach(game_state.players, player =>
-    {
-      if (player.in_hand)
-      {
-        const $player_option = $('<option />',
-        {
-          value: player.id,
-        });
-        $player_option.text(player.name);
-        $player_option.prop('selected', game_state.active_player === player.id);
-        $change_active_player_select.append($player_option);
-      }
-    });
+//    //show all active players in the set next bettor menu:
+//    const $change_active_player_select = $('#change-active-player-select');
+//    $change_active_player_select.empty();
+//    _.forEach(game_state.players, player =>
+//    {
+//      if (player.in_hand)
+//      {
+//        const $player_option = $('<option />',
+//        {
+//          value: player.id,
+//        });
+//        $player_option.text(player.name);
+//        $player_option.prop('selected', game_state.active_player === player.id);
+//        $change_active_player_select.append($player_option);
+//      }
+//    });
 
     //show all active players in the winners select menu
     const $winners_select_content = $('#winners-select-content');
@@ -759,8 +776,11 @@ export function render_ui(
       let $chips_in_disp = _.max(_.map(game_state.players, 'chips_in')) - player.chips_in;
 //      $chips_in_disp = formatChips($chips_in_disp);
       
-      $chips_shy.text(`shy:${$chips_in_disp}`);
-
+      //only show shy amount if not playing man-mouse
+      if(game_state.game_name !== "Man-Mouse")
+        $chips_shy.text(`shy:${$chips_in_disp}`);
+      else 
+        $chips_shy.text(' ');
       //button to kick if disconnected:
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
