@@ -290,7 +290,7 @@ input
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  height: calc(105px * 4);
+  height: calc(115px * 5);
 }
 
 .player-seat {
@@ -301,8 +301,8 @@ input
 
   font-family: 'PT Mono', monospace;
 
-  padding: 2px;
-  border: 2px solid transparent;
+  padding: 0px;
+  border: 1px solid transparent;
   border-radius: 4px;
 }
 
@@ -351,7 +351,16 @@ input
   /* (first column width + second column width) / (starting chip amount / chips per chip image) */
   width: calc((115px + 70px) / (400 / 40));
 }
+#common-display{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.common-card{
+      width: 70px;
+    border: 1px solid transparent;
 
+}
 .hand {
   grid-column: 3;
   grid-row: 1 / span 2;

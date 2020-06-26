@@ -120,6 +120,10 @@ export function render_ui(
       }
       else if(key == 110)
         game.increment_bettor_drawer();
+      else if(key == 99) //call
+        {
+          document.getElementById("call-button").click();
+        }
     });
 
     $app.empty();
@@ -158,7 +162,9 @@ export function render_ui(
     //CREATE DEALING BUTTONS: 5DN, 2DN/1UP, 1UP, 1DN
     const $deal_all_buttons = _.map(deal_all_up_down_numbers, ([down, up]) =>
     {
-      const $deal_all_button = $('<button />');
+      const $deal_all_button = $('<button />',{
+        title: 'Deals this many cards to every player simultaneously',
+      });
       let label = '';
 
       //add text to buttons based on how many up or down:
@@ -192,9 +198,11 @@ export function render_ui(
       });
       return $deal_all_button;
     });
-
+    
     //NEXT UP BUTTON  - deals one card up to one player
-    const $next_up_button = $('<button />');
+    const $next_up_button = $('<button />',{
+      title: 'Deals one card to the next player in line (they have an box around their hand)'
+    });
     $next_up_button.text('Next UP');
     $next_up_button.on('click', function ()
     {
@@ -204,7 +212,9 @@ export function render_ui(
     $next_up_button.attr('id', 'first-of-group'); //to add some left margin space
 
     //NEXT DOWN BUTTON  - deals one card down to one player
-    const $next_down_button = $('<button />');
+    const $next_down_button = $('<button />',{
+            title: 'Deals one card to the next player in line (they have an box around their hand)'
+    });
     $next_down_button.text('Next DN');
     $next_down_button.on('click', function ()
     {
@@ -221,6 +231,7 @@ export function render_ui(
     const $common_button = $('<button />',
     {
       id: 'common-button',
+      title: 'Deals 1 common card to center of table',
     });
     $common_button.text('COMMON (up)');
     $common_button.on('click', function ()
@@ -232,6 +243,8 @@ export function render_ui(
     const $draw_button = $('<button />',
     {
       id: 'draw-btn',
+      title: 'When draw mode is on, clicking on a card will remove it from players hand\n\n'+
+      'Also, dealing a card will not increment to next player',
     });
     $draw_button.on('click', function ()
     {
@@ -240,19 +253,10 @@ export function render_ui(
        game.toggle_draw_mode();
     });
 
-//    //change active better selector:
-//    const $change_active_player_select = $('<select />',
-//    {
-//      id: 'change-active-player-select',
-//    });
-//    $change_active_player_select.on('change', function ()
-//    {
-//      const player = $(this).val();
-//      game.change_active_player(player);
-//    });
     const $increment_active_bettor_drawer_button = $('<button />',
    {
-      id: 'increment-active-bettor-drawer-button',   
+      id: 'increment-active-bettor-drawer-button', 
+      title: 'Moves to the next player for both betting and getting a card dealt to them',
     });
     $increment_active_bettor_drawer_button.text("Next Bet/Draw");
     $increment_active_bettor_drawer_button.on('click', function()
@@ -290,6 +294,8 @@ export function render_ui(
     //PAYOUT BUTTON:
     const $payout_button = $('<button />',{
       id:'payout-button',
+      title: 'Splits the pot between all winners selected in winner menu\n\n'+
+      'If uneven split, gives extra to player with least chips',
     });
     $payout_button.text('Pay-out');
 
@@ -308,6 +314,8 @@ export function render_ui(
     //NEW GAME BUTTON:
     const $new_game_button = $('<button />',{
       id:'new-game-button',
+      title:'Reshuffles deck, moves dealer, ready for new game to be dealt\n\n'+
+      'Pot must be zero (game not started or payout happened) to start new game',
     });
     $new_game_button.text('New Game');
     $new_game_button.on('click', function ()
@@ -397,6 +405,7 @@ export function render_ui(
     const $check_button = $('<button />',
     {
       id: 'check-button',
+      title: 'To pass the bet (assuming you are not light any amount)'
     });
     $check_button.text('Check');
     $check_button.on('click', function ()
@@ -409,6 +418,7 @@ export function render_ui(
      const $call_button = $('<button />',
     {
       id: 'call-button',
+       title:'Call the current bet amount (your "shy" amount)'
     });
     $call_button.text('Call');
     $call_button.on('click', function ()
@@ -421,6 +431,7 @@ export function render_ui(
     const $buy_10_button = $('<button />',
     {
       id: "buy-10-btn",
+      title: "Buy-in to the game for $10 more"
     });
     $buy_10_button.text('+$10');
     $buy_10_button.on('click', function ()
@@ -448,6 +459,7 @@ export function render_ui(
     const $fold_button = $('<button />',
     {
       id: 'fold-button',
+      title: 'Fold.  Your cards will disappear',
     });
     $fold_button.text('Fold');
     $fold_button.on('click', function ()
@@ -467,6 +479,7 @@ export function render_ui(
     const $bet_button = $('<button />',
     {
       id: 'bet-button',
+      title:'Bet the amount you\'ve typed in the box',
     });
     $bet_button.text('Bet');
     $bet_button.on('click', function ()
@@ -484,6 +497,7 @@ export function render_ui(
       const $bet_button_num = $('<button />',
       {
         class: 'bet-buttons',
+        title: 'Bet this many chips',
       });
       $bet_button_num.text(i);
       $bet_button_num.on('click', function ()
@@ -604,11 +618,11 @@ export function render_ui(
 
     if(game_state.draw_mode){
       $draw_button.css('background-color','red');
-      $draw_button.text('DRAW MODE NOW ON');
+      $draw_button.text('DRAW MODE IS ON');
     }
     else{
         $draw_button.css('background-color','darkgreen');
-        $draw_button.text('DRAW MODE NOW OFF');
+        $draw_button.text('DRAW MODE IS OFF');
     }
 
 
@@ -806,15 +820,14 @@ export function render_ui(
         src: `card_images/${card_img_name}.svg`,
       });
 
-      $card_img.addClass('card');
-
+      $card_img.addClass('common-card');
       return $card_img;
     });
 
     $common_display.append($common_hand);
-
-    $game_board.append($player_seats);
+    
     $game_board.append($common_display);
+    $game_board.append($player_seats);
 
   }
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:

@@ -147,7 +147,6 @@ class GameState(object):
 
         # new hand
         self.hand_started = False
-        self.chips_bet_in_round = 0
 
         if self.dealer is not None:
             # pick a new dealer
