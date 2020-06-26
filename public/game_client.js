@@ -95,7 +95,9 @@ export class CardGame {
   change_active_player(player) {
     this._send('change_active_player', { player });
   }
-
+  ante(){
+    this._send('ante');
+  }
   flip(card_num) {
     this._send('flip', { card_num });
   }

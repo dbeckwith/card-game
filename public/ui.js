@@ -324,10 +324,23 @@ export function render_ui(
     });
 
     //GAME SELECTOR setup: shows which game is being played
-    const $games = new Array('7-Card Stud', 'Man/Mouse', 'Chicago Hi-Lo', '5-Card Draw',
-                            '5-Card Stud', 'Texas Hold-Em', 'Midnight Baseball',
-                            'Follow the Queen', 'Dirty Gertie', 'Acey-Ducey',
-                            'Woolworths');
+    const $games = new Array('7-Card Stud', 
+                             '5-Card Draw',
+                             '5-Card Stud', 
+                             '',
+                             'Chicago Hi-Lo',  
+                             'Woolworths', 
+                             'Midnight Baseball',
+                             'Follow the Queen', 
+                             'Gay Bar',
+                             'Dirty Gertie', 
+                             '',
+                              'Texas Hold-Em',
+                             'Criss-Cross', 
+                             '',
+                             'Acey-Ducey',
+                             'Man-Mouse',
+                             'Other');
 
 
     //set game selector to show name of game on screen:
@@ -410,8 +423,14 @@ export function render_ui(
     $check_button.text('Check');
     $check_button.on('click', function ()
     {
-      game.bet(0);
-      $bet_input.val('');
+      if(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0)
+        {
+          console.log(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in)
+          game.bet(0);
+          $bet_input.val('');
+        }
+      else
+        alert("You must match the amount you are shy or fold!")
     });
 
     //CALL BUTTON
@@ -426,7 +445,17 @@ export function render_ui(
       game.bet(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in);
     });
 
-
+    //ANTE BUTTON
+    const $ante_button = $('<button />',
+    {
+      id: "ante-btn",
+      title: "Ante 1 chip"
+    });
+    $ante_button.text('Ante');
+    $ante_button.on('click', function ()
+    {
+      game.ante();
+    });
     //BUY-IN 10 CHIPS BUTTON:
     const $buy_10_button = $('<button />',
     {
@@ -524,6 +553,7 @@ export function render_ui(
     $player_controls.append($bet_button);
     $player_controls.append($bet_input);
     $player_controls.append($bet_buttons);
+    $player_controls.append($ante_button);
 
 
     /*******************************************
@@ -537,6 +567,7 @@ export function render_ui(
 
     $header.append($player_controls);
     $header.append($common_info);
+    
     $header.append($buy_10_button);
     $header.append($logout_button);
     $header.append($game_name_display);

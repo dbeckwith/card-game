@@ -177,8 +177,15 @@ class RPC(object):
         self.game_state.pot               += amount
         self.game_state.last_bet           = amount
         self.player.chips_in              += amount
+        
         self.game_state.next_active_player()
 
+    def ante(self):
+        if self.player.chips == 0:
+            raise ClientError('not enough chips')        
+        self.player.chips -= 1
+        self.game_state.pot += 1
+        
     def payout(self, winners):
         '''
         split pot between winners
