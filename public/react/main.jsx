@@ -1,6 +1,9 @@
 const { useEffect, useState } = React;
 
 import { gameClient, useGameState, useGameConnect, useGameError } from './GameClient';
+import { LoginScreen } from './LoginScreen';
+import { Game } from './Game';
+import { VBox } from './Box';
 
 const AppContainer = styled.div`
   width: calc(100vw - 20px);
@@ -25,130 +28,6 @@ const ConnectionBanner = styled.div`
   background-color: red;
   text-transform: uppercase;
 `;
-
-const Box = styled.div`
-  display: flex;
-
-  width: ${({ width }) => width ?? 'auto'};
-  height: ${({ height }) => height ?? 'auto'};
-
-  padding: ${({ padding }) => padding ?? 'auto'};
-`;
-
-const HBox = styled(Box)`
-  flex-direction: row;
-
-  & > :not(:last-child) {
-    margin-right: ${({ spacing }) => spacing ?? '4px'};
-  }
-
-  justify-content: ${({ hAlign }) => {
-    switch (hAlign ?? 'left') {
-      case 'left':
-        return 'flex-start';
-      case 'right':
-        return 'flex-end';
-      case 'center':
-        return 'center';
-    }
-  }};
-
-  align-items: ${({ vAlign }) => {
-    switch (vAlign ?? 'top') {
-      case 'top':
-        return 'flex-start';
-      case 'bottom':
-        return 'flex-end';
-      case 'center':
-        return 'center';
-    }
-  }};
-`;
-
-const VBox = styled(Box)`
-  flex-direction: column;
-
-  & > :not(:last-child) {
-    margin-bottom: ${({ spacing }) => spacing ?? '4px'};
-  }
-
-  justify-content: ${({ vAlign }) => {
-    switch (vAlign ?? 'top') {
-      case 'top':
-        return 'flex-start';
-      case 'bottom':
-        return 'flex-end';
-      case 'center':
-        return 'center';
-    }
-  }};
-
-  align-items: ${({ hAlign }) => {
-    switch (hAlign ?? 'left') {
-      case 'left':
-        return 'flex-start';
-      case 'right':
-        return 'flex-end';
-      case 'center':
-        return 'center';
-    }
-  }};
-`;
-
-const Title = styled.h1`
-`;
-
-const LoginScreen = ({ gameState }) => {
-  const [name, setName] = useState('');
-
-  return (
-    <VBox width="100%" hAlign="center" spacing="32px">
-      <Title>Cambridge Poker</Title>
-      <VBox hAlign="center" spacing="8px">
-        <HBox>
-          <input
-            type="text"
-            onChange={(event) => {
-              setName(event.target.value);
-            }}
-          />
-          <button
-            onClick={() => {
-              gameClient.login(name);
-            }}
-          >
-            Log In
-          </button>
-        </HBox>
-        {gameState.players.length > 0 ? (
-          <VBox hAlign="center">
-            <span>Players Online ({gameState.players.length}):</span>
-            {_.map(gameState.players, (player, idx) => (
-              <span>{player.name}</span>
-            ))}
-          </VBox>
-        ) : (
-          <span>No players currently online</span>
-        )}
-      </VBox>
-    </VBox>
-  );
-};
-
-const Game = ({ gameState }) => {
-  return (
-    <VBox>
-      <span>You're playing the game!</span>
-      <button
-        onClick={() => {
-          gameClient.logout();
-        }}
-      >
-        Log Out
-      </button>
-    </VBox>
-  );
-}
 
 const App = () => {
   const gameState = useGameState();
