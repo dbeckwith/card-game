@@ -82,9 +82,21 @@ class RPC(object):
         for rpc in self.game_state.player_id_connections[player.id]:
             rpc.player = None
 
-    def new_game(self):
+    def change_dealer(self, player):
+        player = self.game_state.get_player(player)
+        if player is None:
+            raise ClientError('player not found')  
+        self.game_state.dealer = player
+        
+    def new_game(self):        
         self.game_state.new_game()
 
+    def reset_antes(self):
+        players = list(self.game_state.players_in_hand())
+        
+        for player in players:
+            player.anted = False 
+            
     def deal_all(self, down, up):
         '''
         Deal cards to every active player
@@ -93,13 +105,16 @@ class RPC(object):
         '''
         # dealing cards starts the hand
         self.game_state.hand_started = True
+        self.reset_antes()
+
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
-        self.player.anted = False
+        
+      
         # check that deck has enough cards to give to each player
         if len(self.game_state.deck) < (down + up) * len(players):
             raise ClientError('deck does not have enough cards')
-
+        
         # deal down cards:
         for _ in range(down):
             for player in players:
@@ -117,6 +132,7 @@ class RPC(object):
         :param up: True if up card, False if down card
         '''
         self.game_state.hand_started = True
+        self.reset_antes()
 
         card = self.game_state.draw_card()
 
@@ -142,6 +158,7 @@ class RPC(object):
     def deal_common(self):
         '''deal one common up card'''
         self.game_state.hand_started = True
+        self.reset_antes()
 
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
@@ -180,11 +197,12 @@ class RPC(object):
         
         self.game_state.next_active_player()
 
-    def ante(self):
-        if self.player.chips == 0:
+    def ante(self, amt):
+        amt = int(amt)
+        if self.player.chips < amt:
             raise ClientError('not enough chips')        
-        self.player.chips -= 1
-        self.game_state.pot += 1
+        self.player.chips -= amt
+        self.game_state.pot += amt
         self.player.anted = True
         
     def payout(self, winners):

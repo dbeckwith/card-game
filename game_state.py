@@ -126,7 +126,7 @@ class GameState(object):
         for player in self.players:
             if player.in_hand:
                 yield player
-
+            
     def new_game(self):
         '''
         creates new game: 0 pot, set players, new deck, clear common cards,
@@ -138,6 +138,7 @@ class GameState(object):
         # reset each player
         for player in self.players:
             player.new_game()
+            
 
         self.common_cards = []
         # shuffle a new deck

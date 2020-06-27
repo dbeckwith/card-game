@@ -316,28 +316,12 @@ export function render_ui(
     });
     
     //SELECTOR FOR Dealer:
-    const $dealer_select = $(`
-      <div id="dealer-select">
-        <div id="dealer-select-box">
-          <select id="dealer-select-select">
-            <option>Select Dealer</option>
-          </select>
-          <div id="dealer-select-over-select"></div>
-        </div>
-        <div id="dealer-select-content">
-        </div>
-      </div>
-    `);
-    $dealer_select.children().first().on('click', function() {
-      $('#dealer-select-content').toggle();
+    const $dealer_select = $(`<select />`, {
+      id: 'dealer-select',
     });
-    $(document).on('click', function(event) {
-      const $target = $(event.target);
-      const is_over_select = $target.prop('id') === 'dealer-select-over-select' ||
-        $.contains($('#dealer-select-content')[0], $target[0]);
-      if (!is_over_select) {
-        $('#dealer-select-content').hide();
-      }
+    $dealer_select.on('change', function() {
+      const dealer = $(this).val();
+      game.change_dealer(dealer);
     });
 
 
@@ -517,10 +501,9 @@ export function render_ui(
     $ante_button.on('click', function ()
     {
       if($ante_input.val().length !== 0)
-        for(let i = 0; i < $ante_input.val(); i++)
-          game.ante();
+          game.ante($ante_input.val());
       else
-        game.ante();
+        game.ante(1);
     });
     
     
@@ -720,49 +703,19 @@ export function render_ui(
       }
     });
 
-    
-//    //set dealer selector to show name of game on screen:
-//    const $set_dealer_select = $('<select />',{
-//      id:'set-dealer-select',
-//    });
-//
-//    $set_dealer_select.empty();
-//    
-//    $set_dealer_select.on('change', function(){
-//      game.set_game_name($(this).val());//***********SET DEALER  game_state.dealer === player.id
-//      //addClass('dealer')?
-//    });
-//
-//    for(let i = 0; i < $games.length; i++)
-//      {
-//        const $a_game = $('<option />',
-//        {
-//          value: $games[i],
-//        });
-//        $a_game.text($games[i]);
-//        $a_game.prop('selected', game_state.game_name == $games[i]);
-//        $set_dealer_select.append($a_game);
-//      }
-
      //show all active players in the dealer select menu
-    const $dealer_select_content = $('#dealer-select-content');
-    $dealer_select_content.empty();
+    const $dealer_select = $('#dealer-select');
+    $dealer_select.empty();
+    $dealer_select.append('<option selected disabled>Select Dealer</option>');
     _.forEach(game_state.players, player =>
     {
-  
-        const $player_row = $('<option />', {
-          for: `dealer-select-player-${player.id}`,
+      if (player.id !== current_player.id) {
+        const $player_option = $('<option />', {
+          value: player.id,
         });
-
-//        const $player_input = $('<input />', {
-//          type: 'checkbox',
-//          id: `dealer-select-player-${player.id}`,
-//        });
-
-//        $player_row.append($player_input);
-        $player_row.append(player.name);
-
-        $dealer_select_content.append($player_row);
+        $player_option.text(player.name);
+        $dealer_select.append($player_option);
+      }
     });
     
     const $draw_button = $('#draw-btn');
@@ -872,9 +825,15 @@ export function render_ui(
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
-      _.forEach(new Array(Math.round(player.chips / 40)), () => {
+      
+      let chip_count = Math.round(player.chips / 40);
+      if(player.chips > 0 && chip_count === 0)
+        chip_count = 1;
+      
+      _.forEach(new Array(chip_count), () => {
         $chip_stack_display.append('<img src="chips_images/chip.png" />');
       });
+   
 
       //chips shy display:
       const $chips_shy = $('<div />');

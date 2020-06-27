@@ -31,7 +31,9 @@ class Player(object):
         self.hand = []
         self.in_hand = True
         self.chips_in = 0
+        self.anted = False
 
+    
     def give_card(self, card):
         '''deal one card'''
         self.hand.append(card)

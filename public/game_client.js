@@ -95,13 +95,15 @@ export class CardGame {
   change_active_player(player) {
     this._send('change_active_player', { player });
   }
-  ante(){
-    this._send('ante');
+  ante(amt){
+    this._send('ante', {amt});
   }
   flip(card_num) {
     this._send('flip', { card_num });
   }
-
+ change_dealer(player){
+   this._send('change_dealer', { player });
+ }
   discard(card_num) {
     this._send('discard', { card_num });
   }
