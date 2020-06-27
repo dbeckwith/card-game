@@ -720,28 +720,49 @@ export function render_ui(
       }
     });
 
+    
+//    //set dealer selector to show name of game on screen:
+//    const $set_dealer_select = $('<select />',{
+//      id:'set-dealer-select',
+//    });
+//
+//    $set_dealer_select.empty();
+//    
+//    $set_dealer_select.on('change', function(){
+//      game.set_game_name($(this).val());//***********SET DEALER  game_state.dealer === player.id
+//      //addClass('dealer')?
+//    });
+//
+//    for(let i = 0; i < $games.length; i++)
+//      {
+//        const $a_game = $('<option />',
+//        {
+//          value: $games[i],
+//        });
+//        $a_game.text($games[i]);
+//        $a_game.prop('selected', game_state.game_name == $games[i]);
+//        $set_dealer_select.append($a_game);
+//      }
 
      //show all active players in the dealer select menu
     const $dealer_select_content = $('#dealer-select-content');
     $dealer_select_content.empty();
     _.forEach(game_state.players, player =>
     {
-      if (player.in_hand)
-      {
-        const $player_row = $('<label />', {
+  
+        const $player_row = $('<option />', {
           for: `dealer-select-player-${player.id}`,
         });
 
-        const $player_input = $('<input />', {
+//        const $player_input = $('<input />', {
 //          type: 'checkbox',
-          id: `dealer-select-player-${player.id}`,
-        });
+//          id: `dealer-select-player-${player.id}`,
+//        });
 
 //        $player_row.append($player_input);
         $player_row.append(player.name);
 
         $dealer_select_content.append($player_row);
-      }
     });
     
     const $draw_button = $('#draw-btn');
