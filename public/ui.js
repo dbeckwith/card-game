@@ -864,7 +864,10 @@ export function render_ui(
       //add name:
       const $player_name = $('<div />');
       $player_name.addClass('player-name');
-      $player_name.text(player.name);
+      if(player.in_hand && player.anted)
+        $player_name.text('•' + player.name);
+      else
+        $player_name.text(player.name);
 
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');

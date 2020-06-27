@@ -95,7 +95,7 @@ class RPC(object):
         self.game_state.hand_started = True
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
-
+        self.player.anted = False
         # check that deck has enough cards to give to each player
         if len(self.game_state.deck) < (down + up) * len(players):
             raise ClientError('deck does not have enough cards')
@@ -185,6 +185,7 @@ class RPC(object):
             raise ClientError('not enough chips')        
         self.player.chips -= 1
         self.game_state.pot += 1
+        self.player.anted = True
         
     def payout(self, winners):
         '''
