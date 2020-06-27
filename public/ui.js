@@ -219,7 +219,7 @@ export function render_ui(
 
     //set text:
     $five_down_button.text('5DN');
-    $two_down_one_up_button.text('2UP/1DN');
+    $two_down_one_up_button.text('2DN/1UP');
     $one_up_button.text('1UP');
     $one_down_button.text('1DN');
 
