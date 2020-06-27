@@ -1,8 +1,14 @@
 import { gameClient } from './GameClient';
 import { HBox, VBox } from './Box';
+import { Grid } from './Grid';
 
 const CardImage = styled.img`
   height: 100px;
+  object-fit: contain;
+`;
+
+const ChipImage = styled.img`
+  height: calc(120px / (50 / 10));
   object-fit: contain;
 `;
 
@@ -15,9 +21,18 @@ const PlayerCard = ({ player, card, up }) => {
 const PlayerSeat = ({ player }) => {
   return (
     <HBox>
-      <span>{player.name}</span>
+      <VBox width="120px" spacing="4px">
+        <HBox>{player.name}</HBox>
+        <HBox spacing="0" wrap={true}>
+          {_.map(_.range(Math.round(player.chips / 4 / 10)), (idx) => (
+            <ChipImage key={idx} src="/chips_images/chip.png" />
+          ))}
+        </HBox>
+      </VBox>
       <HBox>
-        {_.map(player.hand, ({ card, up }, idx) => <PlayerCard key={idx} player={player} card={card} up={up} />)}
+        {_.map(player.hand, ({ card, up }, idx) => (
+          <PlayerCard key={idx} player={player} card={card} up={up} />
+        ))}
       </HBox>
     </HBox>
   );
@@ -35,7 +50,9 @@ export const Game = ({ gameState }) => {
         Log Out
       </button>
       <VBox>
-        {_.map(gameState.players, (player, idx) => <PlayerSeat key={idx} player={player} />)}
+        {_.map(gameState.players, (player, idx) => (
+          <PlayerSeat key={idx} player={player} />
+        ))}
       </VBox>
     </VBox>
   );
