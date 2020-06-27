@@ -55,7 +55,7 @@ export function render_ui(
 
     //TO-DO: deal a hand of five random cards:
     const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
-    const suits = ['C', 'D', 'H', 'S'];
+    const suits = ['C', 'M', 'H', 'S'];
     let chosen = "";
     const $five_cards = $('<div />');
     for (let i = 0; i < 5; i++)
@@ -298,7 +298,7 @@ export function render_ui(
       id: 'increment-active-bettor-drawer-button',
       title: 'Moves to the next player for both betting and getting a card dealt to them',
     });
-    $increment_active_bettor_drawer_button.text("Move Bettor");
+    $increment_active_bettor_drawer_button.text("Next Bettor");
     $increment_active_bettor_drawer_button.on('click', function ()
     {
       game.increment_bettor_drawer();
@@ -390,6 +390,18 @@ export function render_ui(
     {
       game.new_back();
     });
+    
+        //reset game button:
+    const $reset_game_button = $('<button />',
+    {
+      id: 'reset-game-button',
+      title: 'resets game - shuffles, gives back money, but same dealer',
+    });
+    $reset_game_button.text('RESET Game');
+    $reset_game_button.on('click', function ()
+    {
+      game.reset_game();
+    });
 
     //GAME SELECTOR setup: shows which game is being played
     const $games = new Array('7-Card Stud',
@@ -466,6 +478,7 @@ export function render_ui(
     $dealer_controls_bottom.append($set_game_select);
     $dealer_controls_bottom.append($new_game_button);
     $dealer_controls_bottom.append($new_back_button);
+    $dealer_controls_bottom.append($reset_game_button);
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
@@ -580,9 +593,6 @@ export function render_ui(
           break;
         case 'log-out':
           game.logout();
-          break;
-        case 'reset-game':
-          game.reset_game();
           break;
       }
       $(this).val('prompt');
@@ -746,7 +756,7 @@ export function render_ui(
     {
       setup_game_html();
     }
-    $("#cards-left").text(`${game_state.deck.length} left`);
+    $("#cards-left").text(`${game_state.deck.length} cards left`);
     //    if(game_state.game_name !== "Man-Mouse")
     //      $check_button.text('Chec(k)');
     //    else
@@ -910,12 +920,15 @@ export function render_ui(
       const $player_name = $('<div />');
       $player_name.addClass('player-name');
 
-      if (game_state.dealer === player.id)
-        $player_name.append("D:")
+    
+ 
       if (player.in_hand && player.anted)
         $player_name.append('•');
       $player_name.append(player.name);
-
+      if (game_state.dealer === player.id)
+        $player_name.append(".Dlr")
+      if (game_state.active_player == player.id)
+        $player_name.append(".Bet")
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
@@ -1023,14 +1036,11 @@ export function render_ui(
             $card_img.on('click', function ()
             {
               if (game_state.draw_mode)
-              {
                 game.discard(idx);
-              }
               else
-              {
                 game.flip(idx);
-              }
             });
+         
           }
 
 

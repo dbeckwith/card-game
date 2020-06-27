@@ -203,7 +203,9 @@ button:hover {
   background-color: #1e90ff;
 }
 
-
+#new-back-button{
+  margin-left:15px;
+}
 /* new game button */
 #new-game-button{
   margin-left: 25px;
@@ -217,7 +219,7 @@ button:hover {
 }
 #game-name-display{
   margin-right: 10px;
-  font-size:14x;
+  font-size:13x;
   font-style:italic;
   float:right;
   color:yellow;
@@ -240,6 +242,9 @@ button:hover {
 #fold {
     padding: 4px 7px;
     font-size: 10px;
+}
+#increment-active-bettor-drawer-button{
+  
 }
 
 /* ALL BETTING BUTTONS AND ENTRY */
@@ -350,6 +355,7 @@ input
   flex-wrap: wrap;
   flex-direction: column;
   height: calc(115px * 5);
+
 }
 
 .player-seat {
@@ -357,16 +363,19 @@ input
   grid-gap: 2px;
   grid-template-columns: 115px 70px 1fr;
   grid-template-rows: auto 1fr;
+  font-family: 'Open Sans Condensed', sans-serif;
 
-  font-family: 'PT Mono', monospace;
+/*  font-family: 'PT Mono', monospace;*/
   height:104px;
   padding: 0px;
   border: 1px solid transparent;
   border-radius: 4px;
 }
-
+#reset-game-button{
+  margin-left:20px;
+}
 .player-seat.active-player {
-  border-color: yellow;
+  color: yellow;
 }
 
 .player-seat.player-connected .kick-button {
@@ -374,8 +383,11 @@ input
 }
 
 .player-seat.dealer .player-name {
-  color: orange;
+  color: #7AD1EB;
   font-weight: italic;
+  font-family: 'Open Sans Condensed', sans-serif;
+
+/*  font-family: verdana;*/
 }
 
 .player-seat.player-disconnected .player-name {
@@ -392,6 +404,8 @@ input
   grid-column: 2;
   grid-row: 1;
   font-size:16px;
+        font-family: 'PT Mono', monospace;
+
 }
 
 .chips-display {
