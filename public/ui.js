@@ -168,54 +168,57 @@ export function render_ui(
      * ALL DEALER BUTTONS
      ************************/
 
-    const deal_all_up_down_numbers = [
-      [5, 0],
-      [2, 1],
-      [0, 1],
-      [1, 0],
-    ];
-
-    //CREATE DEALING BUTTONS: 5DN, 2DN/1UP, 1UP, 1DN
-    const $deal_all_buttons = _.map(deal_all_up_down_numbers, ([down, up]) =>
-    {
-      const $deal_all_button = $('<button />',{
-        title: 'Deals this many cards to every player simultaneously',
-      });
-      let label = '';
-
-      //add text to buttons based on how many up or down:
-      if (down > 0)
-      {
-        label += `${down} \u2193`;
-      }
-      if (up > 0)
-      {
-        if (label)
-        {
-          label += ' ';
-        }
-        label += `${up} \u2191`;
-      }
-      $deal_all_button.text(label);
-
-//      if (down == 0 && up == 1 || down == 5)
-//        $deal_all_button.attr('id', 'first-of-group'); //to add some left margin space
-
-      if (down + up == 1)
-        $deal_all_button.addClass('one-all-buttons');
-
-      if (down == 5 || down + up == 3)
-        $deal_all_button.addClass('opening-cards');
-
-      //bind to deal_all():
-      $deal_all_button.on('click', function ()
-      {
-        game.deal_all(down, up);
-      });
-      return $deal_all_button;
+    //create buttons:
+    const $deal_all_buttons = $('<span \>');
+    
+    const $five_down_button = $('<button />',{
+      title: 'Deals 5 down cards to every player simultaneously',
+      className: 'opening-cards', 
+    });
+    const $two_down_one_up_button = $('<button />',{
+      title: 'Deals 2 down and 1 up card to every player simultaneously',
+      className: 'opening-cards', 
+    });
+    const $one_up_button = $('<button />',{
+      title: 'Deals 1 up card to every player simultaneously',
+      className: 'one-all-buttons', 
+    });
+    const $one_down_button = $('<button />',{
+      title: 'Deals 1 down card to every player simultaneously',
+      className: 'one-all-buttons', 
     });
     
+    //add function:
+    $five_down_button.on('click', function ()
+    {
+        game.deal_all(5, 0);
+    });
+    $two_down_one_up_button.on('click', function ()
+    {
+        game.deal_all(2, 1);
+    });
+    $one_up_button.on('click', function ()
+    {
+        game.deal_all(0, 1);
+    });
+    $one_down_button.on('click', function ()
+    {
+        game.deal_all(1, 0);
+    });
     
+    //set text:
+    $five_down_button.text('5UP');
+    $two_down_one_up_button.text('2UP/1DN');
+    $one_up_button.text('1UP');
+    $one_down_button.text('1DN');
+    
+    //add:
+    $deal_all_buttons.append($five_down_button);
+    $deal_all_buttons.append($two_down_one_up_button);
+    $deal_all_buttons.append($one_up_button);
+    $deal_all_buttons.append($one_down_button);
+
+    //DEAL TO NEXT PLAYER BUTTONS:
     const $next_label = $('<span />',{
       id: "next-label",
     });
@@ -225,7 +228,7 @@ export function render_ui(
     const $next_up_button = $('<button />',{
       title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
-    $next_up_button.text('\u2191');
+    $next_up_button.text('UP');
     $next_up_button.on('click', function ()
     {
       game.one_card(true);
@@ -237,7 +240,7 @@ export function render_ui(
     const $next_down_button = $('<button />',{
             title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
-    $next_down_button.text('\u2193');
+    $next_down_button.text('DN');
     $next_down_button.on('click', function ()
     {
       game.one_card(false);
@@ -261,6 +264,7 @@ export function render_ui(
       game.deal_common();
     });
 
+    
     //DRAW MODE button:
     const $draw_button = $('<button />',
     {

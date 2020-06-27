@@ -7,20 +7,6 @@ body {
     margin:0px;
     padding:5px;
 }
-/* to separate groups of buttons from each other */
-#first-of-group{
-  margin-left: 15px;
-}
-
-/*  OBSOLETE?
-.field {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  height: 400px;
-}
-*/
-
 
 /** BASIC BUTTON SETUP **/
 button {
@@ -48,7 +34,17 @@ button:hover {
 .player_btn{
     font-size: 20px;
 }
+#next-label{
+  font-family: 'Verdana';
+  font-size:16px;
+  margin-left:8px;
+}
+#all-label{
+    font-family: 'Verdana';
+  font-size:16px;
+    margin-left:8px;
 
+}
 #dealer-controls{
   margin-top: 8px;
   margin-bottom:0px;
@@ -64,6 +60,7 @@ button:hover {
   color:white;
   background-color:red;
   padding: 2px 4px;
+  margin-right:20px;
   font-size:14px;
 }
 /* all dealer buttons are smaller */
@@ -79,7 +76,7 @@ button:hover {
 }
 /* next up and next down buttons */
 .one-card-buttons{
-  border: solid 2px orange;
+  border: solid 4px orange;
 }
 
 /* common up card button - is different color */
