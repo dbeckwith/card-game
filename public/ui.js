@@ -555,6 +555,7 @@ export function render_ui(
           game.logout();
           break;
         case 'reset-game':
+          game.reset_game();
           break;
       }
       $(this).val('prompt');

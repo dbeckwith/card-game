@@ -158,7 +158,31 @@ class GameState(object):
             # pick the first active player
             self.active_player = self.next_player_after(self.dealer)
 
+    def reset_game(self):
+        '''
+        creates new game: 0 pot, set players, new deck, clear common cards,
+        new dealer
+        '''
 
+        self.last_bet = 0
+
+        self.common_cards = []
+        # shuffle a new deck
+        self.deck = cards.new_deck()
+
+        self.draw_mode = False
+
+        # new hand
+        self.hand_started = False
+
+        self.pot = 0
+        for player in self.players:
+            player.chips += player.chips_in_hand
+            
+        # reset each player
+        for player in self.players:
+            player.new_game()  
+            
 
     def next_dealer(self):
         if self.dealer is not None:

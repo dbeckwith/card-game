@@ -11,6 +11,7 @@ class Player(object):
         self.buy_in     = 0
         self.chips_in   = 0 # how much bet in round for this player
         self.anted      = False
+        self.chips_in_hand = 0
         
     def __json__(self):
         '''returns: JSON of all player fields'''
@@ -24,6 +25,7 @@ class Player(object):
             'buy_in'    : self.buy_in,
             'chips_in'  : self.chips_in,
             'anted'     : self.anted,
+            'chips_in_hand': self.chips_in_hand,
         }
 
     def new_game(self):
@@ -31,6 +33,7 @@ class Player(object):
         self.hand = []
         self.in_hand = True
         self.chips_in = 0
+        self.chips_in_hand = 0
         self.anted = False
 
     

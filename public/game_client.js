@@ -123,4 +123,7 @@ export class CardGame {
   buy_in(amount) {
     this._send('buy_in', { amount });
   }
+  reset_game(){
+    this._send('reset_game');
+  }
 }

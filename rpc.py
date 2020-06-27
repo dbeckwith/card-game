@@ -90,12 +90,15 @@ class RPC(object):
         
     def new_game(self):        
         self.game_state.new_game()
+    def reset_game(self):
+        self.game_state.reset_game()
 
-    def reset_antes(self):
+    def reset_antes_and_chips_in(self):
         players = list(self.game_state.players_in_hand())
         
         for player in players:
             player.anted = False 
+            player.chips_in = 0
             
     def deal_all(self, down, up):
         '''
@@ -105,7 +108,7 @@ class RPC(object):
         '''
         # dealing cards starts the hand
         self.game_state.hand_started = True
-        self.reset_antes()
+        self.reset_antes_and_chips_in()
 
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
@@ -132,14 +135,13 @@ class RPC(object):
         :param up: True if up card, False if down card
         '''
         self.game_state.hand_started = True
-        self.reset_antes()
+        self.reset_antes_and_chips_in()
 
         card = self.game_state.draw_card()
 
         self.game_state.active_player.give_card(PlayerCard(card, up))
         if not self.game_state.draw_mode:
             self.game_state.next_active_player()
-        self.chips_in = 0
 
     def flip(self, card_num):
         '''
@@ -190,10 +192,11 @@ class RPC(object):
         if self.player.chips < amount:
             raise ClientError('not enough chips')
 
-        self.player.chips                 -= amount
+        self.player.chips         -= amount
         self.game_state.pot               += amount
         self.game_state.last_bet           = amount
         self.player.chips_in              += amount
+        self.player.chips_in_hand += amount
         
         self.game_state.next_active_player()
 
@@ -203,6 +206,7 @@ class RPC(object):
             raise ClientError('not enough chips')        
         self.player.chips -= amt
         self.game_state.pot += amt
+        self.player.chips_in_hand += amt
         self.player.anted = True
         
     def payout(self, winners):
@@ -242,6 +246,9 @@ class RPC(object):
 
         # empty the pot
         self.game_state.pot = 0
+        
+        for player in self.game_state.players:
+            player.chips_in_hand = 0
 
     #def change_active_player(self, player):
         #'''sets active player for betting'''
