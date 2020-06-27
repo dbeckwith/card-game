@@ -177,12 +177,13 @@ button:hover {
  ***********************/
 
 #player-controls button {
-    font-size: 16px;
+    font-size: 13px;
 }
 #player-money-display {
   float: left;
   color: yellow;
   margin-left: 5px;
+  font-size:14px;
 }
 
 /* fold button */
@@ -196,6 +197,11 @@ button:hover {
   margin-left:15px;
 }
 #bet-input{
+  width:42px;
+  height:23px;
+  font-size:15px;
+}
+#ante-input{
   width:42px;
   height:23px;
   font-size:15px;

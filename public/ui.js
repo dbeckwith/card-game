@@ -127,8 +127,8 @@ export function render_ui(
         else if(key == 99){ //call - c
           document.getElementById("call-button").click();
         }
-        else if(key == 97) //ante - a
-            game.ante();
+//        else if(key == 97) //ante - a
+//            game.ante();
       }
     });
 
@@ -488,11 +488,33 @@ export function render_ui(
       id: "ante-btn",
       title: "Ante 1 chip"
     });
-    $ante_button.text('(A)nte');
+    $ante_button.text('Ante-1');
     $ante_button.on('click', function ()
     {
-      game.ante();
+      if($ante_input.val().length !== 0)
+        for(let i = 0; i < $ante_input.val(); i++)
+          game.ante();
+      else
+        game.ante();
     });
+    
+    
+    //ANTE AMOUNT INPUT FIELD:
+    const $ante_input = $('<input />',
+    {
+      id: 'ante-input',
+      type: 'number',
+      min: 0,
+    });
+     $ante_button.on('click', function ()
+    {
+      if($bet_input.val() > 0){
+        const amount = +$bet_input.val();
+        game.bet(amount);
+        $bet_input.val('');
+      }
+    });
+
     //BUY-IN 10 CHIPS BUTTON:
     const $buy_10_button = $('<button />',
     {
@@ -542,7 +564,7 @@ export function render_ui(
     {
       id: 'bet-input',
       type: 'number',
-      min: 0,
+      min: 1,
     });
 
     //BET BUTTON:
@@ -554,9 +576,11 @@ export function render_ui(
     $bet_button.text('Bet');
     $bet_button.on('click', function ()
     {
-      const amount = +$bet_input.val();
-      game.bet(amount);
-      $bet_input.val('');
+      if($bet_input.val() > 0){
+        const amount = +$bet_input.val();
+        game.bet(amount);
+        $bet_input.val('');
+      }
     });
 
     //BET BUTTONS 1-6:
@@ -595,6 +619,7 @@ export function render_ui(
     $player_controls.append($bet_input);
     $player_controls.append($bet_buttons);
     $player_controls.append($ante_button);
+    $player_controls.append($ante_input);
 
 
     /*******************************************
@@ -791,7 +816,7 @@ export function render_ui(
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
-      _.forEach(new Array(Math.ceil(player.chips / 40)), () => {
+      _.forEach(new Array(Math.round(player.chips / 40)), () => {
         $chip_stack_display.append('<img src="chips_images/chip.png" />');
       });
 
