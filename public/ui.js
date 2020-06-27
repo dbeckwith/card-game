@@ -284,7 +284,7 @@ export function render_ui(
       id: 'increment-active-bettor-drawer-button', 
       title: 'Moves to the next player for both betting and getting a card dealt to them',
     });
-    $increment_active_bettor_drawer_button.text("Next Bet/Draw(N)");
+    $increment_active_bettor_drawer_button.text("Move Bettor");
     $increment_active_bettor_drawer_button.on('click', function()
     {
         game.increment_bettor_drawer();
@@ -488,6 +488,8 @@ export function render_ui(
     $call_button.text('(C)all');
     $call_button.on('click', function ()
     {
+      console.log(current_player.chips_in);
+      console.log(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in);
       game.bet(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in);
     });
 
@@ -817,10 +819,12 @@ export function render_ui(
       //add name:
       const $player_name = $('<div />');
       $player_name.addClass('player-name');
+      
+      if (game_state.dealer === player.id)
+        $player_name.append("D:")
       if(player.in_hand && player.anted)
-        $player_name.text('•' + player.name);
-      else
-        $player_name.text(player.name);
+        $player_name.append('•' );
+      $player_name.append(player.name);
 
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');

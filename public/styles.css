@@ -370,7 +370,7 @@ input
 
 .player-seat.dealer .player-name {
   color: orange;
-  font-weight: bold;
+  font-weight: italic;
 }
 
 .player-seat.player-disconnected .player-name {
