@@ -498,11 +498,8 @@ export function render_ui(
        title:'Call the current bet amount (your "shy" amount)'
     });
     $call_button.text('(C)all');
-    $call_button.on('click', function ()
-    {
-      console.log(current_player.chips_in);
-      console.log(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in);
-      game.bet(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in);
+    $call_button.on('click', function() {
+      game.call();
     });
 
     //ANTE BUTTON

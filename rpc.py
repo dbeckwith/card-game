@@ -178,6 +178,7 @@ class RPC(object):
             raise ClientError('not your turn')
 
         self.player.in_hand = False
+        self.player.chips_in = 0
 
         self.game_state.next_active_player()
 
@@ -189,16 +190,33 @@ class RPC(object):
             raise ClientError('not in hand')
         if self.game_state.active_player is not self.player:
             raise ClientError('not your turn')
+        
         if self.player.chips < amount:
             raise ClientError('not enough chips')
+        
+        bet_minimum = max(player.chips_in for player in self.game_state.players) \
+            - self.player.chips_in
+        if amount < bet_minimum:
+            raise ClientError(f'you must bet at least {bet_minimum} chips')
 
         self.player.chips         -= amount
-        self.game_state.pot               += amount
-        self.game_state.last_bet           = amount
-        self.player.chips_in              += amount
+        self.game_state.pot       += amount
+        self.game_state.last_bet   = amount
+        self.player.chips_in      += amount
         self.player.chips_in_hand += amount
         
         self.game_state.next_active_player()
+    
+    def call(self):
+        if self.player is None:
+            raise ClientError('not logged-in')
+        if not self.player.in_hand:
+            raise ClientError('not in hand')
+        if self.game_state.active_player is not self.player:
+            raise ClientError('not your turn')
+        
+        self.bet(max(player.chips_in for player in self.game_state.players) \
+            - self.player.chips_in)
 
     def ante(self, amt):
         amt = int(amt)

@@ -89,6 +89,9 @@ export class CardGame {
   bet(amount) {
     this._send('bet', { amount });
   }
+  call() {
+    this._send('call');
+  }
 
   payout(winners) {
     this._send('payout', { winners });
