@@ -55,7 +55,9 @@ export class CardGame {
   login(name) {
     this._send('login', { name });
   }
-
+  new_back(){
+    this._send('new_back');
+  }
   logout(name) {
     this._send('logout');
   }

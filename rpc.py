@@ -1,7 +1,7 @@
 __author__ = 'D. Beckwith'
 
 from player import Player, PlayerCard
-
+import random
 
 class RPC(object):
     def __init__(self, ws, game_state):
@@ -256,6 +256,10 @@ class RPC(object):
         self.game_state.next_active_player()
         
 
+    def new_back(self):
+        self.game_state.card_back_num += 1
+        self.game_state.card_back_num %= 12
+        
     def set_game_name(self, name):
         '''set name of current game'''
         self.game_state.game_name = name

@@ -354,7 +354,7 @@ input
   grid-template-rows: auto 1fr;
 
   font-family: 'PT Mono', monospace;
-
+  height:104px;
   padding: 0px;
   border: 1px solid transparent;
   border-radius: 4px;

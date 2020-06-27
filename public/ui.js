@@ -8,7 +8,7 @@
 // TODO: show number of remaining cards in deck
 
 let showing_login_screen = false;
-
+//let $back_num = 9;
 function formatChips(chips) {
   return (chips * 0.25).toFixed(2);
 }
@@ -356,6 +356,17 @@ export function render_ui(
     {
       game.new_game();
     });
+    
+    //change card backing button:
+    const $new_back_button = $('<button />',{
+      id:'new-back-button',
+      title:'picks randomly from card backs',
+    });
+    $new_back_button.text('Backs');
+    $new_back_button.on('click', function ()
+    {
+      game.new_back();
+    });
 
     //GAME SELECTOR setup: shows which game is being played
     const $games = new Array('7-Card Stud', 
@@ -429,6 +440,7 @@ export function render_ui(
     $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
     $dealer_controls_bottom.append($set_game_select);
     $dealer_controls_bottom.append($new_game_button);
+    $dealer_controls_bottom.append($new_back_button);
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
@@ -876,7 +888,7 @@ export function render_ui(
           }
           else
           {
-            card_img_name = '2B3';
+            card_img_name = '2B' + game_state.card_back_num;
           }
           const $card_img = $('<img />',
           {
