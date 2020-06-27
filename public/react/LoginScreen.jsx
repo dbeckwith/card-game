@@ -30,7 +30,7 @@ export const LoginScreen = ({ gameState }) => {
         </HBox>
         {gameState.players.length > 0 ? (
           <VBox hAlign="center">
-            <span>Players Online ({gameState.players.length}):</span>
+            <span>{`Players Online (${gameState.players.length}):`}</span>
             {_.map(gameState.players, (player, idx) => (
               <span key={idx}>{player.name}</span>
             ))}

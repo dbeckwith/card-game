@@ -4,7 +4,7 @@ import { VBox } from './Box';
 export const Game = ({ gameState }) => {
   return (
     <VBox>
-      <span>You're playing the game!</span>
+      <span>{`You're playing the game, ${gameState.current_player.name}!`}</span>
       <button
         onClick={() => {
           gameClient.logout();
