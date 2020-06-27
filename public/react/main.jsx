@@ -1,7 +1,6 @@
-const { useEffect } = React;
+const { useEffect, useState } = React;
 
-import { gameClient, useGameState, useGameConnect, useGameError } from './GameClient.js';
-import { generateRandomId } from './util.js';
+import { gameClient, useGameState, useGameConnect, useGameError } from './GameClient';
 
 const AppContainer = styled.div`
   width: calc(100vw - 20px);
@@ -29,43 +28,115 @@ const ConnectionBanner = styled.div`
 
 const Box = styled.div`
   display: flex;
+
+  width: ${({ width }) => width ?? 'auto'};
+  height: ${({ height }) => height ?? 'auto'};
+
+  padding: ${({ padding }) => padding ?? 'auto'};
 `;
 
 const HBox = styled(Box)`
   flex-direction: row;
 
   & > :not(:last-child) {
-    margin-right: 4px;
+    margin-right: ${({ spacing }) => spacing ?? '4px'};
   }
+
+  justify-content: ${({ hAlign }) => {
+    switch (hAlign ?? 'left') {
+      case 'left':
+        return 'flex-start';
+      case 'right':
+        return 'flex-end';
+      case 'center':
+        return 'center';
+    }
+  }};
+
+  align-items: ${({ vAlign }) => {
+    switch (vAlign ?? 'top') {
+      case 'top':
+        return 'flex-start';
+      case 'bottom':
+        return 'flex-end';
+      case 'center':
+        return 'center';
+    }
+  }};
 `;
 
 const VBox = styled(Box)`
   flex-direction: column;
 
   & > :not(:last-child) {
-    margin-bottom: 4px;
+    margin-bottom: ${({ spacing }) => spacing ?? '4px'};
   }
+
+  justify-content: ${({ vAlign }) => {
+    switch (vAlign ?? 'top') {
+      case 'top':
+        return 'flex-start';
+      case 'bottom':
+        return 'flex-end';
+      case 'center':
+        return 'center';
+    }
+  }};
+
+  align-items: ${({ hAlign }) => {
+    switch (hAlign ?? 'left') {
+      case 'left':
+        return 'flex-start';
+      case 'right':
+        return 'flex-end';
+      case 'center':
+        return 'center';
+    }
+  }};
 `;
 
-const Game = ({ state }) => {
+const LoginScreen = ({ gameState }) => {
+  const [name, setName] = useState('');
+
   return (
-    <VBox>
+    <VBox width="100%" hAlign="center" spacing="10px">
       <HBox>
+        <input
+          type="text"
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+        />
         <button
           onClick={() => {
-            gameClient.login('Daniel');
+            gameClient.login(name);
           }}
         >
           Log In
         </button>
       </HBox>
-      <HBox>
-        Current Players: {_.join(_.map(state.players, (player) => player.name), ', ')}
-      </HBox>
-      <textarea
-        readOnly={true}
-        value={JSON.stringify(state, null, 2)}
-      />
+      {gameState.players.length > 0 ? (
+        <span>
+          Current Players: {_.join(_.map(gameState.players, (player) => player.name), ', ')}
+        </span>
+      ) : (
+        <span>No players currently online</span>
+      )}
+    </VBox>
+  );
+};
+
+const Game = ({ gameState }) => {
+  return (
+    <VBox>
+      <span>You're playing the game!</span>
+      <button
+        onClick={() => {
+          gameClient.logout();
+        }}
+      >
+        Log Out
+      </button>
     </VBox>
   );
 }
@@ -81,7 +152,15 @@ const App = () => {
   return (
     <AppContainer>
       {!connected && <ConnectionBanner>Disconnected</ConnectionBanner>}
-      {gameState != null && <Game state={gameState} />}
+      {gameState != null && (
+        <VBox>
+          {gameState.current_player == null ? (
+            <LoginScreen gameState={gameState} />
+          ) : (
+            <Game gameState={gameState} />
+          )}
+        </VBox>
+      )}
     </AppContainer>
   );
 };

@@ -1,6 +1,7 @@
 const { useEffect, useState } = React;
 
 import { EventHandler } from './EventHandler';
+import { generateRandomId } from './util';
 
 class GameClient {
   constructor() {
@@ -60,6 +61,10 @@ class GameClient {
 
   login(name) {
     this.send('login', { name });
+  }
+
+  logout() {
+    this.send('logout');
   }
 }
 
