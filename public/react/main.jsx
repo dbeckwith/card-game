@@ -95,33 +95,42 @@ const VBox = styled(Box)`
   }};
 `;
 
+const Title = styled.h1`
+`;
+
 const LoginScreen = ({ gameState }) => {
   const [name, setName] = useState('');
 
   return (
-    <VBox width="100%" hAlign="center" spacing="10px">
-      <HBox>
-        <input
-          type="text"
-          onChange={(event) => {
-            setName(event.target.value);
-          }}
-        />
-        <button
-          onClick={() => {
-            gameClient.login(name);
-          }}
-        >
-          Log In
-        </button>
-      </HBox>
-      {gameState.players.length > 0 ? (
-        <span>
-          Current Players: {_.join(_.map(gameState.players, (player) => player.name), ', ')}
-        </span>
-      ) : (
-        <span>No players currently online</span>
-      )}
+    <VBox width="100%" hAlign="center" spacing="32px">
+      <Title>Cambridge Poker</Title>
+      <VBox hAlign="center" spacing="8px">
+        <HBox>
+          <input
+            type="text"
+            onChange={(event) => {
+              setName(event.target.value);
+            }}
+          />
+          <button
+            onClick={() => {
+              gameClient.login(name);
+            }}
+          >
+            Log In
+          </button>
+        </HBox>
+        {gameState.players.length > 0 ? (
+          <VBox hAlign="center">
+            <span>Players Online ({gameState.players.length}):</span>
+            {_.map(gameState.players, (player, idx) => (
+              <span>{player.name}</span>
+            ))}
+          </VBox>
+        ) : (
+          <span>No players currently online</span>
+        )}
+      </VBox>
     </VBox>
   );
 };
