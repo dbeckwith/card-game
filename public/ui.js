@@ -158,6 +158,12 @@ export function render_ui(
       id: "cards-left",
     });
     
+     const $all_label = $('<span />',{
+      id: "all-label",
+    });
+  
+    $all_label.text("ALL:");
+    
     /*************************
      * ALL DEALER BUTTONS
      ************************/
@@ -180,20 +186,20 @@ export function render_ui(
       //add text to buttons based on how many up or down:
       if (down > 0)
       {
-        label += `${down} DN`;
+        label += `${down} \u2193`;
       }
       if (up > 0)
       {
         if (label)
         {
-          label += ', ';
+          label += ' ';
         }
-        label += `${up} UP`;
+        label += `${up} \u2191`;
       }
       $deal_all_button.text(label);
 
-      if (down == 0 && up == 1 || down == 5)
-        $deal_all_button.attr('id', 'first-of-group'); //to add some left margin space
+//      if (down == 0 && up == 1 || down == 5)
+//        $deal_all_button.attr('id', 'first-of-group'); //to add some left margin space
 
       if (down + up == 1)
         $deal_all_button.addClass('one-all-buttons');
@@ -209,11 +215,17 @@ export function render_ui(
       return $deal_all_button;
     });
     
+    
+    const $next_label = $('<span />',{
+      id: "next-label",
+    });
+    $next_label.text("NEXT:");
+    
     //NEXT UP BUTTON  - deals one card up to one player
     const $next_up_button = $('<button />',{
       title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
-    $next_up_button.text('Next UP');
+    $next_up_button.text('\u2191');
     $next_up_button.on('click', function ()
     {
       game.one_card(true);
@@ -225,7 +237,7 @@ export function render_ui(
     const $next_down_button = $('<button />',{
             title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
-    $next_down_button.text('Next DN');
+    $next_down_button.text('\u2193');
     $next_down_button.on('click', function ()
     {
       game.one_card(false);
@@ -336,6 +348,7 @@ export function render_ui(
     //GAME SELECTOR setup: shows which game is being played
     const $games = new Array('7-Card Stud', 
                              '5-Card Draw',
+                             'Jacks or Better',
                              '5-Card Stud', 
                              '',
                              'Chicago Hi-Lo',  
@@ -381,8 +394,11 @@ export function render_ui(
      *******************************************/
 
     $dealer_controls.append($cards_left);
+    $dealer_controls.append($all_label);
     //deal buttons:
     $dealer_controls.append($deal_all_buttons);
+    $dealer_controls.append($next_label);
+
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
