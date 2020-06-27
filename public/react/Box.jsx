@@ -17,14 +17,14 @@ export const Box = styled.div`
     end: 'flex-end',
     center: 'center',
     stretch: 'space-between',
-  }[{ H: hAlign, V: vAlign }[direction]])};
+  }[{ H: hAlign, V: vAlign }[direction] ?? 'start'])};
 
   align-items: ${({ direction, hAlign, vAlign }) => ({
     start: 'flex-start',
     end: 'flex-end',
     center: 'center',
     stretch: 'stretch',
-  }[{ H: vAlign, V: hAlign }[direction]])};
+  }[{ H: vAlign, V: hAlign }[direction] ?? 'start'])};
 `;
 
 export const HBox = (props) => (<Box {...props} direction="H" />);
