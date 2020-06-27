@@ -4,7 +4,7 @@ import { Grid } from './Grid';
 
 const CardImage = styled.img`
   height: 100px;
-  object-fit: contain;
+  width: calc(100px * 240/336);
 `;
 
 const ChipImage = styled.img`
@@ -12,13 +12,13 @@ const ChipImage = styled.img`
   object-fit: contain;
 `;
 
-const PlayerCard = ({ player, card, up }) => {
+const PlayerCard = ({ owned, card, up }) => {
   return (
-    <CardImage src={`/card_images/${card}.svg`} />
+    <CardImage src={`/card_images/${up || owned ? card : '2B1'}.svg`} />
   );
 };
 
-const PlayerSeat = ({ player }) => {
+const PlayerSeat = ({ currentPlayer, player }) => {
   return (
     <HBox>
       <VBox width="120px" spacing="4px">
@@ -31,7 +31,12 @@ const PlayerSeat = ({ player }) => {
       </VBox>
       <HBox>
         {_.map(player.hand, ({ card, up }, idx) => (
-          <PlayerCard key={idx} player={player} card={card} up={up} />
+          <PlayerCard
+            key={idx}
+            owned={player.id === currentPlayer.id}
+            card={card}
+            up={up}
+          />
         ))}
       </HBox>
     </HBox>
@@ -51,7 +56,11 @@ export const Game = ({ gameState }) => {
       </button>
       <VBox>
         {_.map(gameState.players, (player, idx) => (
-          <PlayerSeat key={idx} player={player} />
+          <PlayerSeat
+            key={idx}
+            currentPlayer={gameState.current_player}
+            player={player}
+          />
         ))}
       </VBox>
     </VBox>
