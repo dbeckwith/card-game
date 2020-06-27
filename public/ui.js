@@ -537,6 +537,43 @@ export function render_ui(
       }
     });
 
+    //MENU for +$10, logout, reset game
+    
+     //set game selector to show name of game on screen:
+    const $other_select = $('<select />',{
+      id:'other-select',
+    });
+
+    $other_select.empty();
+    $other_select.append('<option selected disabled value="prompt">Action Menu</option>')
+    $other_select.on('change', function(){
+      switch($(this).val()){
+        case 'buy-in':
+          game.buy_in(40);
+          break;
+        case 'log-out':
+          game.logout();
+          break;
+        case 'reset-game':
+          break;
+      }
+      $(this).val('prompt');
+    });
+    
+    var other_functions = [
+      ['Buy-In $10', 'buy-in'],
+      ['Log Out', 'log-out'],
+      ['Reset Game (explanation)', 'reset-game'],
+    ];
+    
+    _.forEach(other_functions, ([label, id]) => {
+      const $a_function = $('<option />',
+      {
+        value: id,
+      });
+      $a_function.text(label);
+      $other_select.append($a_function);
+    });
     //BUY-IN 10 CHIPS BUTTON:
     const $buy_10_button = $('<button />',
     {
@@ -656,8 +693,9 @@ export function render_ui(
     $header.append($player_controls);
     $header.append($common_info);
     
-    $header.append($buy_10_button);
-    $header.append($logout_button);
+    $header.append($other_select);
+//    $header.append($buy_10_button);
+//    $header.append($logout_button);
     $header.append($game_name_display);
 
     $header.append('<hr />');
@@ -888,7 +926,7 @@ export function render_ui(
           }
           else
           {
-            card_img_name = '2B' + game_state.card_back_num;
+            card_img_name = '2B' +  game_state.card_back_num;
           }
           const $card_img = $('<img />',
           {

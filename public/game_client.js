@@ -51,7 +51,7 @@ export class CardGame {
   connect(player_id) {
     this._send('connect', { player_id });
   }
-
+  
   login(name) {
     this._send('login', { name });
   }
