@@ -295,7 +295,7 @@ export function render_ui(
       <div id="winners-select">
         <div id="winners-select-box">
           <select id="winners-select-select">
-            <option>Select winners</option>
+            <option>Select Winners</option>
           </select>
           <div id="winners-select-over-select"></div>
         </div>
@@ -314,7 +314,31 @@ export function render_ui(
         $('#winners-select-content').hide();
       }
     });
-    // use:     game.payout(winners);
+    
+    //SELECTOR FOR Dealer:
+    const $dealer_select = $(`
+      <div id="dealer-select">
+        <div id="dealer-select-box">
+          <select id="dealer-select-select">
+            <option>Select Dealer</option>
+          </select>
+          <div id="dealer-select-over-select"></div>
+        </div>
+        <div id="dealer-select-content">
+        </div>
+      </div>
+    `);
+    $dealer_select.children().first().on('click', function() {
+      $('#dealer-select-content').toggle();
+    });
+    $(document).on('click', function(event) {
+      const $target = $(event.target);
+      const is_over_select = $target.prop('id') === 'dealer-select-over-select' ||
+        $.contains($('#dealer-select-content')[0], $target[0]);
+      if (!is_over_select) {
+        $('#dealer-select-content').hide();
+      }
+    });
 
 
     //PAYOUT BUTTON:
@@ -415,6 +439,7 @@ export function render_ui(
     //payout button and selector:
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($winners_select);
+    $dealer_controls_bottom.append($dealer_select);
 
     //new game button & game selector:
     $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
@@ -696,6 +721,29 @@ export function render_ui(
     });
 
 
+     //show all active players in the dealer select menu
+    const $dealer_select_content = $('#dealer-select-content');
+    $dealer_select_content.empty();
+    _.forEach(game_state.players, player =>
+    {
+      if (player.in_hand)
+      {
+        const $player_row = $('<label />', {
+          for: `dealer-select-player-${player.id}`,
+        });
+
+        const $player_input = $('<input />', {
+//          type: 'checkbox',
+          id: `dealer-select-player-${player.id}`,
+        });
+
+//        $player_row.append($player_input);
+        $player_row.append(player.name);
+
+        $dealer_select_content.append($player_row);
+      }
+    });
+    
     const $draw_button = $('#draw-btn');
     //make down cards outline in black to show discarding
     var downs = $( ".down-card" ).children();
@@ -812,7 +860,7 @@ export function render_ui(
 //      $chips_in_disp = formatChips($chips_in_disp);
       
       //only show shy amount if not playing man-mouse and you are in the hand
-      if(game_state.game_name !== "Man-Mouse" && current_player.in_hand)
+      if(game_state.game_name !== "Man-Mouse" && player.in_hand)
         $chips_shy.text(`shy:${$chips_in_disp}`);
       else 
         $chips_shy.text(' ');
