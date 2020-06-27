@@ -9,7 +9,8 @@
 
 let showing_login_screen = false;
 //let $back_num = 9;
-function formatChips(chips) {
+function formatChips(chips)
+{
   return (chips * 0.25).toFixed(2);
 }
 
@@ -57,7 +58,7 @@ export function render_ui(
     const suits = ['C', 'D', 'H', 'S'];
     let chosen = "";
     const $five_cards = $('<div />');
-    for(let i = 0; i < 5; i++)
+    for (let i = 0; i < 5; i++)
     {
       let card_val = "";
       while (chosen.indexOf(card_val) != -1)
@@ -67,12 +68,12 @@ export function render_ui(
         card_val = v + s;
       }
       chosen += card_val;
-        const $card_img = $('<img />',
-        {
-            src: `card_images/${card_val}.svg`,
-        });
+      const $card_img = $('<img />',
+      {
+        src: `card_images/${card_val}.svg`,
+      });
       $card_img.addClass('login-cards');
-    $five_cards.append($card_img)
+      $five_cards.append($card_img)
     }
 
 
@@ -102,33 +103,37 @@ export function render_ui(
   {
 
     //KEYBOARD SHORTCUTS:
-    
+
     //player: f/102 = fold, b/98 = bet,  c/99 = call, K/107 = check, 1-6 (49-54) bets,
     //dealer: u/117 = next up, d/100 = next down, n/110 = next better/drawer
 
     $(document).keypress(function (e)
     {
       const key = e.which;
-      if(!showing_login_screen){
+      if (!showing_login_screen)
+      {
         //fold - f, or out - o when in man-mouse mode
-        if (key == 102 || (key == 111 && game_state.game_name !== "Man-Mouse") )
+        if (key == 102 || (key == 111 && game_state.game_name !== "Man-Mouse"))
           game.fold();
-        else if (key == 107){ //CHECK - k
+        else if (key == 107)
+        { //CHECK - k
           game.bet(0);
           $bet_input.val('');
         }
-//        else if(key >= 49 && key <= 54){ //1-6
-//          game.bet(key - 48);
-//        }
-        else if(key == 110){ //next bettor - n
-            if(game_state.dealer === current_player.id)
-              game.increment_bettor_drawer();
+        //        else if(key >= 49 && key <= 54){ //1-6
+        //          game.bet(key - 48);
+        //        }
+        else if (key == 110)
+        { //next bettor - n
+          if (game_state.dealer === current_player.id)
+            game.increment_bettor_drawer();
         }
-        else if(key == 99){ //call - c
+        else if (key == 99)
+        { //call - c
           document.getElementById("call-button").click();
         }
-//        else if(key == 97) //ante - a
-//            game.ante();
+        //        else if(key == 97) //ante - a
+        //            game.ante();
       }
     });
 
@@ -154,64 +159,70 @@ export function render_ui(
       id: 'dealer-controls',
     });
 
-    const $cards_left = $('<span />',{
+    const $cards_left = $('<span />',
+    {
       id: "cards-left",
     });
-    
-     const $all_label = $('<span />',{
+
+    const $all_label = $('<span />',
+    {
       id: "all-label",
     });
-  
+
     $all_label.text("ALL:");
-    
+
     /*************************
      * ALL DEALER BUTTONS
      ************************/
 
     //create buttons:
     const $deal_all_buttons = $('<span \>');
-    
-    const $five_down_button = $('<button />',{
+
+    const $five_down_button = $('<button />',
+    {
       title: 'Deals 5 down cards to every player simultaneously',
-      className: 'opening-cards', 
+      className: 'opening-cards',
     });
-    const $two_down_one_up_button = $('<button />',{
+    const $two_down_one_up_button = $('<button />',
+    {
       title: 'Deals 2 down and 1 up card to every player simultaneously',
-      className: 'opening-cards', 
+      className: 'opening-cards',
     });
-    const $one_up_button = $('<button />',{
+    const $one_up_button = $('<button />',
+    {
       title: 'Deals 1 up card to every player simultaneously',
-      className: 'one-all-buttons', 
+      className: 'one-all-buttons',
     });
-    const $one_down_button = $('<button />',{
+    const $one_down_button = $('<button />',
+    {
       title: 'Deals 1 down card to every player simultaneously',
-      className: 'one-all-buttons', 
+      className: 'one-all-buttons',
     });
-    
+
     //add function:
     $five_down_button.on('click', function ()
     {
-        game.deal_all(5, 0);
+      game.deal_all(5, 0);
     });
     $two_down_one_up_button.on('click', function ()
     {
-        game.deal_all(2, 1);
+      game.deal_all(2, 1);
     });
     $one_up_button.on('click', function ()
     {
-        game.deal_all(0, 1);
+      game.deal_all(0, 1);
     });
     $one_down_button.on('click', function ()
     {
-        game.deal_all(1, 0);
+      game.deal_all(1, 0);
     });
-    
+
     //set text:
-    $five_down_button.text('5UP');
+    $five_down_button.text('5DN');
     $two_down_one_up_button.text('2UP/1DN');
     $one_up_button.text('1UP');
     $one_down_button.text('1DN');
-    
+
     //add:
     $deal_all_buttons.append($five_down_button);
     $deal_all_buttons.append($two_down_one_up_button);
@@ -219,13 +230,15 @@ export function render_ui(
     $deal_all_buttons.append($one_down_button);
 
     //DEAL TO NEXT PLAYER BUTTONS:
-    const $next_label = $('<span />',{
+    const $next_label = $('<span />',
+    {
       id: "next-label",
     });
     $next_label.text("NEXT:");
-    
+
     //NEXT UP BUTTON  - deals one card up to one player
-    const $next_up_button = $('<button />',{
+    const $next_up_button = $('<button />',
+    {
       title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
     $next_up_button.text('UP');
@@ -237,8 +250,9 @@ export function render_ui(
     $next_up_button.attr('id', 'first-of-group'); //to add some left margin space
 
     //NEXT DOWN BUTTON  - deals one card down to one player
-    const $next_down_button = $('<button />',{
-            title: 'Deals one card to the next player in line (they have an box around their hand)'
+    const $next_down_button = $('<button />',
+    {
+      title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
     $next_down_button.text('DN');
     $next_down_button.on('click', function ()
@@ -264,30 +278,30 @@ export function render_ui(
       game.deal_common();
     });
 
-    
+
     //DRAW MODE button:
     const $draw_button = $('<button />',
     {
       id: 'draw-btn',
-      title: 'When draw mode is on, clicking on a card will remove it from players hand\n\n'+
-      'Also, dealing a card will not increment to next player',
+      title: 'When draw mode is on, clicking on a card will remove it from players hand\n\n' +
+        'Also, dealing a card will not increment to next player',
     });
     $draw_button.on('click', function ()
     {
       //outline button to show toggle happened
       //set draw_mode in game_state
-       game.toggle_draw_mode();
+      game.toggle_draw_mode();
     });
 
     const $increment_active_bettor_drawer_button = $('<button />',
-   {
-      id: 'increment-active-bettor-drawer-button', 
+    {
+      id: 'increment-active-bettor-drawer-button',
       title: 'Moves to the next player for both betting and getting a card dealt to them',
     });
     $increment_active_bettor_drawer_button.text("Move Bettor");
-    $increment_active_bettor_drawer_button.on('click', function()
+    $increment_active_bettor_drawer_button.on('click', function ()
     {
-        game.increment_bettor_drawer();
+      game.increment_bettor_drawer();
     });
 
     //SELECTOR FOR WINNERS/Payout:
@@ -303,33 +317,39 @@ export function render_ui(
         </div>
       </div>
     `);
-    $winners_select.children().first().on('click', function() {
+    $winners_select.children().first().on('click', function ()
+    {
       $('#winners-select-content').toggle();
     });
-    $(document).on('click', function(event) {
+    $(document).on('click', function (event)
+    {
       const $target = $(event.target);
       const is_over_select = $target.prop('id') === 'winners-select-over-select' ||
         $.contains($('#winners-select-content')[0], $target[0]);
-      if (!is_over_select) {
+      if (!is_over_select)
+      {
         $('#winners-select-content').hide();
       }
     });
-    
+
     //SELECTOR FOR Dealer:
-    const $dealer_select = $(`<select />`, {
+    const $dealer_select = $(`<select />`,
+    {
       id: 'dealer-select',
     });
-    $dealer_select.on('change', function() {
+    $dealer_select.on('change', function ()
+    {
       const dealer = $(this).val();
       game.change_dealer(dealer);
     });
 
 
     //PAYOUT BUTTON:
-    const $payout_button = $('<button />',{
-      id:'payout-button',
-      title: 'Splits the pot between all winners selected in winner menu\n\n'+
-      'If uneven split, gives extra to player with least chips',
+    const $payout_button = $('<button />',
+    {
+      id: 'payout-button',
+      title: 'Splits the pot between all winners selected in winner menu\n\n' +
+        'If uneven split, gives extra to player with least chips',
     });
     $payout_button.text('Pay-out');
 
@@ -337,7 +357,8 @@ export function render_ui(
     {
       //get which players were checked:
       const winners = $('#winners-select-content input:checked')
-        .map(function() {
+        .map(function ()
+        {
           return $(this).prop('id').slice('winners-select-player-'.length);
         })
         .toArray();
@@ -346,21 +367,23 @@ export function render_ui(
     });
 
     //NEW GAME BUTTON:
-    const $new_game_button = $('<button />',{
-      id:'new-game-button',
-      title:'Reshuffles deck, moves dealer, ready for new game to be dealt\n\n'+
-      'Pot must be zero (game not started or payout happened) to start new game',
+    const $new_game_button = $('<button />',
+    {
+      id: 'new-game-button',
+      title: 'Reshuffles deck, moves dealer, ready for new game to be dealt\n\n' +
+        'Pot must be zero (game not started or payout happened) to start new game',
     });
     $new_game_button.text('New Game');
     $new_game_button.on('click', function ()
     {
       game.new_game();
     });
-    
+
     //change card backing button:
-    const $new_back_button = $('<button />',{
-      id:'new-back-button',
-      title:'picks randomly from card backs',
+    const $new_back_button = $('<button />',
+    {
+      id: 'new-back-button',
+      title: 'picks randomly from card backs',
     });
     $new_back_button.text('Backs');
     $new_back_button.on('click', function ()
@@ -369,47 +392,49 @@ export function render_ui(
     });
 
     //GAME SELECTOR setup: shows which game is being played
-    const $games = new Array('7-Card Stud', 
-                             '5-Card Draw',
-                             'Jacks or Better',
-                             '5-Card Stud', 
-                             '',
-                             'Chicago Hi-Lo',  
-                             'Woolworths', 
-                             'Midnight Baseball',
-                             'Follow the Queen', 
-                             'Gay Bar',
-                             'Dirty Gertie', 
-                             '',
-                              'Texas Hold-Em',
-                             'Criss-Cross', 
-                             '',
-                             'Acey-Ducey',
-                             'Man-Mouse',
-                             'Other');
+    const $games = new Array('7-Card Stud',
+      '5-Card Draw',
+      'Jacks or Better',
+      '5-Card Stud',
+      '',
+      'Chicago Hi-Lo',
+      'Woolworths',
+      'Midnight Baseball',
+      'Follow the Queen',
+      'Gay Bar',
+      'Dirty Gertie',
+      '',
+      'Texas Hold-Em',
+      'Criss-Cross',
+      '',
+      'Acey-Ducey',
+      'Man-Mouse',
+      'Other');
 
 
     //set game selector to show name of game on screen:
-    const $set_game_select = $('<select />',{
-      id:'set-game-select',
+    const $set_game_select = $('<select />',
+    {
+      id: 'set-game-select',
     });
 
     $set_game_select.empty();
-    
-    $set_game_select.on('change', function(){
+
+    $set_game_select.on('change', function ()
+    {
       game.set_game_name($(this).val());
     });
 
-    for(let i = 0; i < $games.length; i++)
+    for (let i = 0; i < $games.length; i++)
+    {
+      const $a_game = $('<option />',
       {
-        const $a_game = $('<option />',
-        {
-          value: $games[i],
-        });
-        $a_game.text($games[i]);
-        $a_game.prop('selected', game_state.game_name == $games[i]);
-        $set_game_select.append($a_game);
-      }
+        value: $games[i],
+      });
+      $a_game.text($games[i]);
+      $a_game.prop('selected', game_state.game_name == $games[i]);
+      $set_game_select.append($a_game);
+    }
 
 
     /*******************************************
@@ -428,8 +453,8 @@ export function render_ui(
     $dealer_controls.append($draw_button);
 
     //bettor selector:
-//    $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
-//    $dealer_controls_bottom.append($change_active_player_select);
+    //    $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
+    //    $dealer_controls_bottom.append($change_active_player_select);
     $dealer_controls_bottom.append($increment_active_bettor_drawer_button);
     //payout button and selector:
     $dealer_controls_bottom.append($payout_button);
@@ -446,7 +471,7 @@ export function render_ui(
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
 
 
-     /*****************************
+    /*****************************
      * PLAYER CONTROLS
      *****************************/
 
@@ -473,32 +498,33 @@ export function render_ui(
       id: 'check-button',
       title: 'To pass the bet (assuming you are not light any amount)'
     });
-//    if(game_state.game_name !== "Man-Mouse")
-      $check_button.text('Chec(k)');
-//    else
-//      $check_button.text('In(i)');
+    //    if(game_state.game_name !== "Man-Mouse")
+    $check_button.text('Chec(k)');
+    //    else
+    //      $check_button.text('In(i)');
 
     $check_button.on('click', function ()
     {
       //if not light any amount, you can check:
-      if(_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0 ||
+      if (_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0 ||
         game_state.game_name === "Man-Mouse")
-        {
-          game.bet(0);
-          $bet_input.val('');
-        }
+      {
+        game.bet(0);
+        $bet_input.val('');
+      }
       else
         alert("You must match the amount you are shy or fold!")
     });
 
     //CALL BUTTON
-     const $call_button = $('<button />',
+    const $call_button = $('<button />',
     {
       id: 'call-button',
-       title:'Call the current bet amount (your "shy" amount)'
+      title: 'Call the current bet amount (your "shy" amount)'
     });
     $call_button.text('(C)all');
-    $call_button.on('click', function() {
+    $call_button.on('click', function ()
+    {
       game.call();
     });
 
@@ -511,13 +537,13 @@ export function render_ui(
     $ante_button.text('Ante-1');
     $ante_button.on('click', function ()
     {
-      if($ante_input.val().length !== 0)
-          game.ante($ante_input.val());
+      if ($ante_input.val().length !== 0)
+        game.ante($ante_input.val());
       else
         game.ante(1);
     });
-    
-    
+
+
     //ANTE AMOUNT INPUT FIELD:
     const $ante_input = $('<input />',
     {
@@ -525,9 +551,10 @@ export function render_ui(
       type: 'number',
       min: 0,
     });
-     $ante_button.on('click', function ()
+    $ante_button.on('click', function ()
     {
-      if($bet_input.val() > 0){
+      if ($bet_input.val() > 0)
+      {
         const amount = +$bet_input.val();
         game.bet(amount);
         $bet_input.val('');
@@ -535,16 +562,19 @@ export function render_ui(
     });
 
     //MENU for +$10, logout, reset game
-    
-     //set game selector to show name of game on screen:
-    const $other_select = $('<select />',{
-      id:'other-select',
+
+    //set game selector to show name of game on screen:
+    const $other_select = $('<select />',
+    {
+      id: 'other-select',
     });
 
     $other_select.empty();
-    $other_select.append('<option selected disabled value="prompt">Action Menu</option>')
-    $other_select.on('change', function(){
-      switch($(this).val()){
+    $other_select.append('<option selected disabled value="prompt">Action:</option>')
+    $other_select.on('change', function ()
+    {
+      switch ($(this).val())
+      {
         case 'buy-in':
           game.buy_in(40);
           break;
@@ -557,14 +587,15 @@ export function render_ui(
       }
       $(this).val('prompt');
     });
-    
+
     var other_functions = [
       ['Buy-In $10', 'buy-in'],
       ['Log Out', 'log-out'],
       ['Reset Game (explanation)', 'reset-game'],
     ];
-    
-    _.forEach(other_functions, ([label, id]) => {
+
+    _.forEach(other_functions, ([label, id]) =>
+    {
       const $a_function = $('<option />',
       {
         value: id,
@@ -585,7 +616,8 @@ export function render_ui(
     });
 
     //GAME NAME DISPLAY:
-    const $game_name_display = $('<span />', {
+    const $game_name_display = $('<span />',
+    {
       id: 'game-name-display',
     });
 
@@ -606,10 +638,10 @@ export function render_ui(
       id: 'fold-button',
       title: 'Fold.  Your cards will disappear',
     });
-//    if(game_state.game_name !== "Man-Mouse")
-      $fold_button.text('Fold(F)');
-//    else
-//      $fold_button.text('Out(o)');
+    //    if(game_state.game_name !== "Man-Mouse")
+    $fold_button.text('Fold(F)');
+    //    else
+    //      $fold_button.text('Out(o)');
 
     $fold_button.on('click', function ()
     {
@@ -628,12 +660,13 @@ export function render_ui(
     const $bet_button = $('<button />',
     {
       id: 'bet-button',
-      title:'Bet the amount you\'ve typed in the box',
+      title: 'Bet the amount you\'ve typed in the box',
     });
     $bet_button.text('Bet');
     $bet_button.on('click', function ()
     {
-      if($bet_input.val() > 0){
+      if ($bet_input.val() > 0)
+      {
         const amount = +$bet_input.val();
         game.bet(amount);
         $bet_input.val('');
@@ -660,8 +693,9 @@ export function render_ui(
     }
 
     //DISPLAY AMOUNT EACH PLAYER HAS:
-    const $player_money_display = $('<span />',{
-      id:'player-money-display',
+    const $player_money_display = $('<span />',
+    {
+      id: 'player-money-display',
     });
 
     /*******************************************
@@ -690,10 +724,10 @@ export function render_ui(
 
     $header.append($player_controls);
     $header.append($common_info);
-    
+
     $header.append($other_select);
-//    $header.append($buy_10_button);
-//    $header.append($logout_button);
+    //    $header.append($buy_10_button);
+    //    $header.append($logout_button);
     $header.append($game_name_display);
 
     $header.append('<hr />');
@@ -713,10 +747,10 @@ export function render_ui(
       setup_game_html();
     }
     $("#cards-left").text(`${game_state.deck.length} left`);
-//    if(game_state.game_name !== "Man-Mouse")
-//      $check_button.text('Chec(k)');
-//    else
-//      $check_button.text('In(i)');
+    //    if(game_state.game_name !== "Man-Mouse")
+    //      $check_button.text('Chec(k)');
+    //    else
+    //      $check_button.text('In(i)');
     //SHOW CONTROLS IN CURRENT DEALER's VIEW:
     if (game_state.dealer === current_player.id)
     {
@@ -737,11 +771,13 @@ export function render_ui(
     {
       if (player.in_hand)
       {
-        const $player_row = $('<label />', {
+        const $player_row = $('<label />',
+        {
           for: `winners-select-player-${player.id}`,
         });
 
-        const $player_input = $('<input />', {
+        const $player_input = $('<input />',
+        {
           type: 'checkbox',
           id: `winners-select-player-${player.id}`,
         });
@@ -753,33 +789,37 @@ export function render_ui(
       }
     });
 
-     //show all active players in the dealer select menu
+    //show all active players in the dealer select menu
     const $dealer_select = $('#dealer-select');
     $dealer_select.empty();
     $dealer_select.append('<option selected disabled>Select Dealer</option>');
     _.forEach(game_state.players, player =>
     {
-      if (player.id !== current_player.id) {
-        const $player_option = $('<option />', {
+      if (player.id !== current_player.id)
+      {
+        const $player_option = $('<option />',
+        {
           value: player.id,
         });
         $player_option.text(player.name);
         $dealer_select.append($player_option);
       }
     });
-    
+
     const $draw_button = $('#draw-btn');
     //make down cards outline in black to show discarding
-    var downs = $( ".down-card" ).children();
+    var downs = $(".down-card").children();
     downs.toggleClass("draw-ready");
 
-    if(game_state.draw_mode){
-      $draw_button.css('background-color','red');
+    if (game_state.draw_mode)
+    {
+      $draw_button.css('background-color', 'red');
       $draw_button.text('DRAW MODE IS ON');
     }
-    else{
-        $draw_button.css('background-color','darkgreen');
-        $draw_button.text('DRAW MODE IS OFF');
+    else
+    {
+      $draw_button.css('background-color', 'darkgreen');
+      $draw_button.text('DRAW MODE IS OFF');
     }
 
 
@@ -857,47 +897,50 @@ export function render_ui(
         $player_seat.addClass('player-disconnected');
       }
       //determine if this player is the dealer:
-      if (game_state.dealer === player.id) {
+      if (game_state.dealer === player.id)
+      {
         $player_seat.addClass('dealer');
       }
-      if (game_state.active_player === player.id) {
+      if (game_state.active_player === player.id)
+      {
         $player_seat.addClass('active-player');
       }
 
       //add name:
       const $player_name = $('<div />');
       $player_name.addClass('player-name');
-      
+
       if (game_state.dealer === player.id)
         $player_name.append("D:")
-      if(player.in_hand && player.anted)
-        $player_name.append('•' );
+      if (player.in_hand && player.anted)
+        $player_name.append('•');
       $player_name.append(player.name);
 
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
-      
+
       let chip_count = Math.round(player.chips / 40);
-      if(player.chips > 0 && chip_count === 0)
+      if (player.chips > 0 && chip_count === 0)
         chip_count = 1;
-      
-      _.forEach(new Array(chip_count), () => {
+
+      _.forEach(new Array(chip_count), () =>
+      {
         $chip_stack_display.append('<img src="chips_images/chip.png" />');
       });
-   
+
 
       //chips shy display:
       const $chips_shy = $('<div />');
       $chips_shy.addClass('chips-shy');
-      
+
       let $chips_in_disp = _.max(_.map(game_state.players, 'chips_in')) - player.chips_in;
-//      $chips_in_disp = formatChips($chips_in_disp);
-      
+      //      $chips_in_disp = formatChips($chips_in_disp);
+
       //only show shy amount if not playing man-mouse and you are in the hand
-      if(game_state.game_name !== "Man-Mouse" && player.in_hand)
+      if (game_state.game_name !== "Man-Mouse" && player.in_hand)
         $chips_shy.text(`shy:${$chips_in_disp}`);
-      else 
+      else
         $chips_shy.text(' ');
       //button to kick if disconnected:
       const $kick_button = $('<button />');
@@ -918,49 +961,80 @@ export function render_ui(
         {
           //show card image or back of card:
           let card_img_name;
+
+          var $up_with_down = $('<span />',
+          {
+            id: 'up-with-down',
+          });
+
+
+
+          //add down card - will be behind part of upcard, using z-index
+          var $card_img2;
+          if (!card.up && player.id === current_player.id)
+          {
+            card_img_name = '2B' + game_state.card_back_num;
+
+            $card_img2 = $('<img />',
+            {
+              src: `card_images/${card_img_name}.svg`,
+            });
+            $card_img2.addClass('card');
+
+            $card_img2.addClass('backing');
+
+          }
+          $up_with_down.append($card_img2);
+
+
           if (card.up || player.id === current_player.id)
-          {
             card_img_name = card.card;
-          }
           else
-          {
-            card_img_name = '2B' +  game_state.card_back_num;
-          }
+            card_img_name = '2B' + game_state.card_back_num;
           const $card_img = $('<img />',
           {
             src: `card_images/${card_img_name}.svg`,
           });
-
           $card_img.addClass('card');
-          if(!card.up && player.id === current_player.id && game_state.draw_mode){
-              $card_img.addClass('draw-ready');
-             }
-          else if (!card.up && player.id === current_player.id)
+          if (!card.up && player.id === current_player.id && game_state.draw_mode)
+          {
+            $card_img.addClass('draw-ready');
+          }
+          if (!card.up && player.id === current_player.id)
           {
             $card_img.addClass('down-card');
           }
-          
+          $up_with_down.append($card_img);
+
+
+
+
           //TODO: slide in animation
-//          let $card_dealt = true; //change this to depend on what just happened
-//          if(player.id === current_player.id && idx == player.hand.length - 1
-//            && $card_dealt)
-//            $card_img.addClass('last');
-//          else
-//            $card_img.removeClass('last');
+          //          let $card_dealt = true; //change this to depend on what just happened
+          //          if(player.id === current_player.id && idx == player.hand.length - 1
+          //            && $card_dealt)
+          //            $card_img.addClass('last');
+          //          else
+          //            $card_img.removeClass('last');
 
           //allow player to click down card to make up:
-          if (player.id === current_player.id) {
+          if (player.id === current_player.id)
+          {
             $card_img.on('click', function ()
             {
-              if (game_state.draw_mode) {
+              if (game_state.draw_mode)
+              {
                 game.discard(idx);
-              } else {
+              }
+              else
+              {
                 game.flip(idx);
               }
             });
           }
 
-          $hand.append($card_img);
+
+          $hand.append($up_with_down);
         });
       }
 
@@ -996,7 +1070,7 @@ export function render_ui(
     });
 
     $common_display.append($common_hand);
-    
+
     $game_board.append($common_display);
     $game_board.append($player_seats);
 
