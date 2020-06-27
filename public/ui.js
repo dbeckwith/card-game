@@ -671,22 +671,6 @@ export function render_ui(
       $('#dealer-controls-bottom').hide();
     }
 
-//    //show all active players in the set next bettor menu:
-//    const $change_active_player_select = $('#change-active-player-select');
-//    $change_active_player_select.empty();
-//    _.forEach(game_state.players, player =>
-//    {
-//      if (player.in_hand)
-//      {
-//        const $player_option = $('<option />',
-//        {
-//          value: player.id,
-//        });
-//        $player_option.text(player.name);
-//        $player_option.prop('selected', game_state.active_player === player.id);
-//        $change_active_player_select.append($player_option);
-//      }
-//    });
 
     //show all active players in the winners select menu
     const $winners_select_content = $('#winners-select-content');
@@ -827,8 +811,8 @@ export function render_ui(
       let $chips_in_disp = _.max(_.map(game_state.players, 'chips_in')) - player.chips_in;
 //      $chips_in_disp = formatChips($chips_in_disp);
       
-      //only show shy amount if not playing man-mouse
-      if(game_state.game_name !== "Man-Mouse")
+      //only show shy amount if not playing man-mouse and you are in the hand
+      if(game_state.game_name !== "Man-Mouse" && current_player.in_hand)
         $chips_shy.text(`shy:${$chips_in_disp}`);
       else 
         $chips_shy.text(' ');
@@ -857,7 +841,7 @@ export function render_ui(
           }
           else
           {
-            card_img_name = '2B';
+            card_img_name = '2B3';
           }
           const $card_img = $('<img />',
           {
