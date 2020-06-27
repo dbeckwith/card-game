@@ -3,18 +3,19 @@ export const Box = styled.div`
 
   flex-direction: ${({ direction }) => ({ H: 'row', V: 'column' }[direction])};
 
-  width: ${({ width }) => width ?? 'auto'};
-  height: ${({ height }) => height ?? 'auto'};
+  width: ${({ width }) => width};
+  height: ${({ height }) => height};
 
-  min-width: ${({ minWidth }) => minWidth ?? 'auto'};
-  min-height: ${({ minHeight }) => minHeight ?? 'auto'};
+  min-width: ${({ minWidth }) => minWidth};
+  min-height: ${({ minHeight }) => minHeight};
 
-  max-width: ${({ maxWidth }) => maxWidth ?? 'auto'};
-  max-height: ${({ maxHeight }) => maxHeight ?? 'auto'};
+  max-width: ${({ maxWidth }) => maxWidth};
+  max-height: ${({ maxHeight }) => maxHeight};
 
-  padding: ${({ padding }) => padding ?? 'auto'};
+  padding: ${({ padding }) => padding};
 
-  flex-wrap: ${({ wrap }) => wrap ? 'wrap' : 'auto'};
+  flex-wrap: ${({ wrap }) => wrap != null ? 'wrap' : undefined};
+  align-content: ${({ wrap }) => wrap};
 
   & > :not(:last-child) {
     margin-${({ direction }) => ({ H: 'right', V: 'bottom' }[direction])}: ${({ spacing }) => spacing ?? '4px'};

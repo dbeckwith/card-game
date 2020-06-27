@@ -12,6 +12,12 @@ const ChipImage = styled.img`
   object-fit: contain;
 `;
 
+const PlayerSeatContainer = styled(HBox)`
+  background-color: rgba(11, 219, 109, 0.25);
+  border: 1px solid rgba(11, 219, 109, 0.75);
+  border-radius: 4px;
+`;
+
 const PlayerCard = ({ owned, card, up }) => {
   return (
     <CardImage src={`/card_images/${up || owned ? card : '2B1'}.svg`} />
@@ -20,10 +26,10 @@ const PlayerCard = ({ owned, card, up }) => {
 
 const PlayerSeat = ({ currentPlayer, player }) => {
   return (
-    <HBox>
+    <PlayerSeatContainer padding="8px">
       <VBox width="120px" spacing="4px">
         <HBox>{player.name}</HBox>
-        <HBox spacing="0" wrap={true}>
+        <HBox spacing="0" wrap="flex-start">
           {_.map(_.range(Math.round(player.chips / 4 / 10)), (idx) => (
             <ChipImage key={idx} src="/chips_images/chip.png" />
           ))}
@@ -39,13 +45,13 @@ const PlayerSeat = ({ currentPlayer, player }) => {
           />
         ))}
       </HBox>
-    </HBox>
+    </PlayerSeatContainer>
   );
 };
 
 export const Game = ({ gameState }) => {
   return (
-    <VBox>
+    <VBox maxHeight="100%">
       <span>{`You're playing the game, ${gameState.current_player.name}!`}</span>
       <button
         onClick={() => {
@@ -54,7 +60,7 @@ export const Game = ({ gameState }) => {
       >
         Log Out
       </button>
-      <VBox>
+      <VBox width="100%" minHeight="0" wrap="stretch">
         {_.map(gameState.players, (player, idx) => (
           <PlayerSeat
             key={idx}

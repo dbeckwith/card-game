@@ -41,13 +41,11 @@ const App = () => {
     <AppContainer>
       {!connected && <ConnectionBanner>Disconnected</ConnectionBanner>}
       {gameState != null && (
-        <VBox>
-          {gameState.current_player == null ? (
+          gameState.current_player == null ? (
             <LoginScreen gameState={gameState} />
           ) : (
             <Game gameState={gameState} />
-          )}
-        </VBox>
+          )
       )}
     </AppContainer>
   );
