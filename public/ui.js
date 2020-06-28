@@ -177,6 +177,7 @@ export function render_ui(
     {
       id: "all-label",
     });
+    $all_label.addClass('non-acey');
 
     $all_label.text("ALL:");
 
@@ -189,23 +190,25 @@ export function render_ui(
     const $five_down_button = $('<button />',
     {
       title: 'Deals 5 down cards to every player simultaneously',
-      className: 'opening-cards',
     });
     const $two_down_one_up_button = $('<button />',
     {
       title: 'Deals 2 down and 1 up card to every player simultaneously',
-      className: 'opening-cards',
     });
     const $one_up_button = $('<button />',
     {
       title: 'Deals 1 up card to every player simultaneously',
-      className: 'one-all-buttons',
     });
     const $one_down_button = $('<button />',
     {
       title: 'Deals 1 down card to every player simultaneously',
-      className: 'one-all-buttons',
     });
+
+    $five_down_button.addClass('opening-cards non-acey');
+    $two_down_one_up_button.addClass('opening-cards non-acey');;
+    $one_up_button.addClass('one-all-buttons non-acey')
+    $one_down_button.addClass('one-all-buttons non-acey')
+
 
     //add function:
     $five_down_button.on('click', function ()
@@ -254,18 +257,50 @@ export function render_ui(
     {
       text: '(U)P',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
-      id: 'first-of-group',
+      id: 'next-up',
     });
+    //win-lose for acey-ducey
+    const $win_a_d_button = $('<button />',
+    {
+      text: 'W',
+      id: 'win-a-d-button',
+      hidden: true,
+      title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
+    });
+
+    const $lose_a_d_button = $('<button />',
+    {
+      text: 'L',
+      id: 'lose-a-d-button',
+      hidden: true,
+      title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
+    });
+
     const $next_down_button = $('<button />',
     {
       text: '(D)N',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
-      id: 'first-of-group',
+      id: 'next-down',
     });
+    $next_down_button.addClass('non-acey');
 
     $next_up_button.click(function ()
     {
       game.one_card(true);
+    });
+    //  
+    $win_a_d_button.click(function ()
+    {
+      game.clear_hand();
+      //payout:
+      game.pay_acey_ducey();
+      //nextplayer:
+      game.increment_bettor_drawer();
+    });
+    $lose_a_d_button.click(function ()
+    {
+      game.clear_hand();
+      game.increment_bettor_drawer();
     });
     $next_down_button.click(function ()
     {
@@ -287,6 +322,8 @@ export function render_ui(
       title: 'Deals 1 common card to center of table',
       text: 'COMMON UP',
     });
+    $('#common-button').addClass('non-acey');
+
     //DRAW MODE button:
     const $draw_button = $('<button />',
     {
@@ -294,6 +331,8 @@ export function render_ui(
       title: 'When draw mode is on, clicking on a card will remove it from players hand\n\n' +
         'Also, dealing a card will not increment to next player',
     });
+    $draw_button.addClass('non-acey');
+
     //NEXT ACTIVE PLAYER BUTTON  
     const $increment_active_bettor_drawer_button = $('<button />',
     {
@@ -441,29 +480,46 @@ export function render_ui(
     });
     $set_game_select.empty();
 
+    //WHEN GAME IS SELECTED, show game name and if...
+    //
+    //Acey-Ducey - add W, L buttons and set in acey-ducey mode
+    //Midnight Baseball - put automatically in draw mode
     $set_game_select.change(function ()
     {
-      game.set_game_name($(this).val());
+      let choice = $(this).val();
 
-      if ($(this).val() === "Acey-Ducey")
+      game.set_game_name(choice);
+
+      //ACEY-DUCEY: remove buttons/add W and L buttons
+      if (choice === "Acey-Ducey")
       {
         game.acey_ducey_on();
         $win_a_d_button.show();
-        $lose_a_d_button.show()
-        if (!game_state.draw_mode)
-          game.toggle_draw_mode();
+        $lose_a_d_button.show();
+        $(".non-acey").hide();
+        $common_button.hide();
 
         $draw_button.css('background-color', 'red');
         $draw_button.text('TURN DRAW MODE OFF');
       }
-
       else
       {
+        //put buttons back
         game.acey_ducey_off();
         $win_a_d_button.hide();
         $lose_a_d_button.hide();
-        $draw_button.css('background-color', 'darkgreen');
-        $draw_button.text('TURN DRAW MODE ON');
+        $(".non-acey").show();
+        $common_button.show();
+        
+        if (choice === "Midnight Baseball" && !game_state.draw_mode)
+          game.toggle_draw_mode();
+        else
+        {
+
+          $draw_button.css('background-color', 'darkgreen');
+          $draw_button.text('TURN DRAW MODE ON');
+        }
+
       }
     });
 
@@ -478,34 +534,7 @@ export function render_ui(
       $set_game_select.append($a_game);
     }
 
-    //win-lose for acey-ducey
-    const $win_a_d_button = $('<button />',
-    {
-      text: 'W',
-      id: 'win-a-d-button',
-      hidden: true,
-      title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
-    });
-    
-    const $lose_a_d_button = $('<button />',
-    {
-      text: 'L',
-      id: 'lose-a-d-button',
-      hidden: true,
-      title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
-    });
-    //    $('$win_a_d_button')
-    $win_a_d_button.click(function ()
-    {
-      //payout:
-      game.pay_acey_ducey();
-      //nextplayer:
-      game.increment_bettor_drawer();
-    });
-    $lose_a_d_button.click(function ()
-    {
-      game.increment_bettor_drawer();
-    });
+
     /*******************************************
      * ADD ALL DEALER CONTROLS HTML TO PAGE:
      *******************************************/
@@ -515,6 +544,8 @@ export function render_ui(
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($next_label);
     $dealer_controls.append($next_up_button);
+    $dealer_controls.append($win_a_d_button);
+    $dealer_controls.append($lose_a_d_button);
     $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
@@ -526,8 +557,6 @@ export function render_ui(
     $dealer_controls_bottom.append($dealer_select);
     $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
     $dealer_controls_bottom.append($set_game_select);
-    $dealer_controls_bottom.append($win_a_d_button);
-    $dealer_controls_bottom.append($lose_a_d_button);
     $dealer_controls_bottom.append($new_game_button);
     $dealer_controls_bottom.append($new_back_button);
     $dealer_controls_bottom.append($reset_game_button);
@@ -1066,7 +1095,6 @@ export function render_ui(
             });
 
           }
-
           $hand.append($up_with_down);
         });
       }

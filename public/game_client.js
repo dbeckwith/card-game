@@ -82,13 +82,16 @@ export class CardGame {
   fold() {
     this._send('fold');
   }
-
+ clear_hand(){
+   this._send('clear_hand');
+ }
   bet(amount) {
     this._send('bet', { amount });
   }
   call() {
     this._send('call');
   }
+ 
   pay_acey_ducey(){
     this._send('pay_acey_ducey');
   }
@@ -96,7 +99,7 @@ export class CardGame {
    this._send('acey_ducey_on');
  } 
   acey_ducey_off(){
-   this._send('acey_ducey_on');
+   this._send('acey_ducey_off');
  }
   payout(winners) {
     this._send('payout', { winners });

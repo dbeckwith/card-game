@@ -1,7 +1,7 @@
 __author__ = 'D. Beckwith'
 
 from player import Player, PlayerCard
-import random
+import random, cards
 
 class RPC(object):
     def __init__(self, ws, game_state):
@@ -87,6 +87,10 @@ class RPC(object):
         if player is None:
             raise ClientError('player not found')  
         self.game_state.dealer = player
+    
+
+    def clear_hand(self):
+        self.game_state.active_player.clear_hand()
         
     def new_game(self):        
         self.game_state.new_game()
@@ -140,6 +144,13 @@ class RPC(object):
         card = self.game_state.draw_card()
 
         self.game_state.active_player.give_card(PlayerCard(card, up))
+        
+        if len(self.game_state.deck) == 0 and self.game_state.acey_ducey_mode:
+            # shuffle a new deck
+            self.game_state.deck = cards.new_deck()  
+            raise ClientError('deck re-shuffled')
+            
+            
         if not self.game_state.draw_mode:
             self.game_state.next_active_player()
 
@@ -170,8 +181,11 @@ class RPC(object):
 
     def acey_ducey_off(self):
         self.game_state.acey_ducey_mode = False
+        self.game_state.draw_mode = False
+        
     def acey_ducey_on(self):
         self.game_state.acey_ducey_mode = True
+        self.game_state.draw_mode = True
         
     def fold(self):
         '''fold current player'''
