@@ -112,28 +112,34 @@ export function render_ui(
       const key = e.which;
       if (!showing_login_screen)
       {
-        //fold - f, or out - o when in man-mouse mode
-//        if (key == 102 || (key == 111 && game_state.game_name !== "Man-Mouse"))
-//          game.fold();
-        if (key == 107)
-        { //CHECK - k
-          game.bet(0);
-          $bet_input.val('');
-        }
-        //        else if(key >= 49 && key <= 54){ //1-6
-        //          game.bet(key - 48);
-        //        }
-        else if (key == 110)
-        { //next bettor - n
+      
+        if (key === 110)  //N = next bettor 
+        { 
           if (game_state.dealer === current_player.id)
             game.increment_bettor_drawer();
         }
-        else if (key == 99)
-        { //call - c
-          document.getElementById("call-button").click();
-        }
+        else if (key === 117) //U = 1 up for 1 player
+            game.one_card(true);
+        else if (key === 100) //D = 1 dn for 1 player
+            game.one_card(false);
+        
+        //        else if (key == 99)
+        //        { //call - c
+        //          document.getElementById("call-button").click();
+        //        }
         //        else if(key == 97) //ante - a
         //            game.ante();
+        //        fold - f, or out - o when in man-mouse mode
+        //        if (key == 102 || (key == 111 && game_state.game_name !== "Man-Mouse"))
+        //          game.fold();
+        //        if (key === 107)
+        //        { //CHECK - k
+        //          game.bet(0);
+        //          $bet_input.val('');
+        //        }
+        //        else if(key >= 49 && key <= 54){ //1-6
+        //          game.bet(key - 48);
+        //        }
       }
     });
 
@@ -241,7 +247,7 @@ export function render_ui(
     {
       title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
-    $next_up_button.text('UP');
+    $next_up_button.text('(U)P');
     $next_up_button.on('click', function ()
     {
       game.one_card(true);
@@ -254,7 +260,7 @@ export function render_ui(
     {
       title: 'Deals one card to the next player in line (they have an box around their hand)'
     });
-    $next_down_button.text('DN');
+    $next_down_button.text('(D)N');
     $next_down_button.on('click', function ()
     {
       game.one_card(false);
@@ -272,7 +278,7 @@ export function render_ui(
       id: 'common-button',
       title: 'Deals 1 common card to center of table',
     });
-    $common_button.text('COMMON (up)');
+    $common_button.text('COMMON UP');
     $common_button.on('click', function ()
     {
       game.deal_common();
@@ -512,7 +518,7 @@ export function render_ui(
       title: 'To pass the bet (assuming you are not light any amount)'
     });
     //    if(game_state.game_name !== "Man-Mouse")
-    $check_button.text('Chec(k)');
+    $check_button.text('Chec');
     //    else
     //      $check_button.text('In(i)');
 
@@ -535,7 +541,7 @@ export function render_ui(
       id: 'call-button',
       title: 'Call the current bet amount (your "shy" amount)'
     });
-    $call_button.text('(C)all');
+    $call_button.text('Call');
     $call_button.on('click', function ()
     {
       game.call();
