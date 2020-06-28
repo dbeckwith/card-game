@@ -298,7 +298,7 @@ export function render_ui(
       id: 'increment-active-bettor-drawer-button',
       title: 'Moves to the next player for both betting and getting a card dealt to them',
     });
-    $increment_active_bettor_drawer_button.text("Next Bettor");
+    $increment_active_bettor_drawer_button.text("To Next Player");
     $increment_active_bettor_drawer_button.on('click', function ()
     {
       game.increment_bettor_drawer();
@@ -390,8 +390,8 @@ export function render_ui(
     {
       game.new_back();
     });
-    
-        //reset game button:
+
+    //reset game button:
     const $reset_game_button = $('<button />',
     {
       id: 'reset-game-button',
@@ -860,7 +860,7 @@ export function render_ui(
     //show hand of all active players:
     if (current_player.in_hand)
     {
-      $('#player-controls').show();
+      $('#player-controls').show(1000);
     }
     else
     {
@@ -920,15 +920,15 @@ export function render_ui(
       const $player_name = $('<div />');
       $player_name.addClass('player-name');
 
-    
- 
+
+
       if (player.in_hand && player.anted)
         $player_name.append('•');
       $player_name.append(player.name);
       if (game_state.dealer === player.id)
         $player_name.append(".Dlr")
       if (game_state.active_player == player.id)
-        $player_name.append(".Bet")
+        $player_name.append("⇚")
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
@@ -1022,13 +1022,13 @@ export function render_ui(
 
 
 
-          //TODO: slide in animation
-          //          let $card_dealt = true; //change this to depend on what just happened
-          //          if(player.id === current_player.id && idx == player.hand.length - 1
-          //            && $card_dealt)
-          //            $card_img.addClass('last');
-          //          else
-          //            $card_img.removeClass('last');
+          //          TODO: slide in animation
+          let $card_dealt = true; //change this to depend on what just happened
+//          if (idx == player.hand.length - 1)
+//
+//            $card_img.addClass('last');
+//          else
+//            $card_img.removeClass('last');
 
           //allow player to click down card to make up:
           if (player.id === current_player.id)
@@ -1040,7 +1040,7 @@ export function render_ui(
               else
                 game.flip(idx);
             });
-         
+
           }
 
 
@@ -1055,6 +1055,7 @@ export function render_ui(
       $player_seat.append($chips_shy);
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
+
 
       $player_seats.append($player_seat);
     });
