@@ -54,8 +54,8 @@ export function render_ui(
     });
 
     //TO-DO: deal a hand of five random cards:
-    const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
-    const suits = ['C', 'M', 'H', 'S'];
+    const values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
+    const suits = ['C', 'D', 'H', 'S'];
     let chosen = "";
     const $five_cards = $('<div />');
     for (let i = 0; i < 5; i++)
