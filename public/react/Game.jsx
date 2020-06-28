@@ -24,6 +24,8 @@ const ChipImage = styled.img`
 `;
 
 const PlayerSeatContainer = styled(HBox)`
+  margin: 2px;
+
   background-color: ${({ isCurrent, isTurn, isDealer }) => {
     const alpha = isCurrent ? 0.50 : isTurn || isDealer ? 0.30 : 0.15;
     if (isTurn) {
