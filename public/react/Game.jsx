@@ -67,6 +67,7 @@ const PlayerSeat = ({ player, isCurrent, isTurn, isDealer }) => {
   return (
     <PlayerSeatContainer
       padding="8px"
+      minHeight="104px"
       isCurrent={isCurrent}
       isTurn={isTurn}
       isDealer={isDealer}
