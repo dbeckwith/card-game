@@ -168,6 +168,11 @@ class RPC(object):
     def toggle_draw_mode(self):
         self.game_state.draw_mode = not self.game_state.draw_mode
 
+    def acey_ducey_off(self):
+        self.game_state.acey_ducey_mode = False
+    def acey_ducey_on(self):
+        self.game_state.acey_ducey_mode = True
+        
     def fold(self):
         '''fold current player'''
         if self.player is None:
@@ -204,8 +209,8 @@ class RPC(object):
         self.game_state.last_bet   = amount
         self.player.chips_in      += amount
         self.player.chips_in_hand += amount
-        
-        self.game_state.next_active_player()
+        if not self.game_state.acey_ducey_mode:
+            self.game_state.next_active_player()
     
     def call(self):
         if self.player is None:
@@ -226,6 +231,10 @@ class RPC(object):
         self.game_state.pot += amt
         self.player.chips_in_hand += amt
         self.player.anted = True
+    def pay_acey_ducey(self):
+        # return their bet and give them how much they won:
+        self.player.chips += 2 * self.game_state.last_bet
+        self.game_state.pot -= self.player.last_bet
         
     def payout(self, winners):
         '''

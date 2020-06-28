@@ -29,7 +29,7 @@ class Player(object):
         }
 
     def new_game(self):
-        '''reset player's hand nad put them in game'''
+        '''reset player's hand and put them in game'''
         self.hand = []
         self.in_hand = True
         self.chips_in = 0

@@ -35,6 +35,7 @@ class GameState(object):
         self.game_name       = None
         self.chips_bet_in_round = 0 # reset when deal all or deal common
 
+        self.acey_ducey_mode = False
         self.card_back_num  = 1
         self.current_game  = None
         self.connections   = []
@@ -57,6 +58,7 @@ class GameState(object):
             'game_name'    : self.game_name,
             'draw_mode'    : self.draw_mode,
             'chips_bet_in_round': self.chips_bet_in_round,
+            'acey_ducey_moce': self.acey_ducey_mode,
             'card_back_num': self.card_back_num,
         }
 
@@ -123,6 +125,8 @@ class GameState(object):
             if player.id == player_id:
                 return player
 
+
+        
     def players_in_hand(self):
 
         for player in self.players:

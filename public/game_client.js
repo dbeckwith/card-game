@@ -66,9 +66,6 @@ export class CardGame {
     this._send('kick', { player_id });
   }
 
-  /**
-   * Tell the server to start a new game. All players' hands, the board, and the deck will be reset.
-   */
   new_game() {
     this._send('new_game');
   }
@@ -92,7 +89,15 @@ export class CardGame {
   call() {
     this._send('call');
   }
-
+  pay_acey_ducey(){
+    this._send('pay_acey_ducey');
+  }
+ acey_ducey_on(){
+   this._send('acey_ducey_on');
+ } 
+  acey_ducey_off(){
+   this._send('acey_ducey_on');
+ }
   payout(winners) {
     this._send('payout', { winners });
   }

@@ -120,7 +120,9 @@ export function render_ui(
             game.increment_bettor_drawer();
         }
         else if (key === 117) //U = 1 up for 1 player
+        {
           game.one_card(true);
+        }
         else if (key === 100) //D = 1 dn for 1 player
           game.one_card(false);
 
@@ -362,7 +364,7 @@ export function render_ui(
     });
     $payout_button.text('Pay-out');
 
-    $payout_button.on('click', function ()
+    $payout_button.click(function ()
     {
       //get which players were checked:
       const winners = $('#winners-select-content input:checked')
@@ -397,7 +399,7 @@ export function render_ui(
       title: 'resets game - shuffles, gives back money, but same dealer',
       text: 'RESET Game',
     });
-    
+
     $new_game_button.click(function ()
     {
       game.new_game();
@@ -438,9 +440,31 @@ export function render_ui(
       id: 'set-game-select',
     });
     $set_game_select.empty();
+
     $set_game_select.change(function ()
     {
       game.set_game_name($(this).val());
+
+      if ($(this).val() === "Acey-Ducey")
+      {
+        game.acey_ducey_on();
+        $win_a_d_button.show();
+        $lose_a_d_button.show()
+        if (!game_state.draw_mode)
+          game.toggle_draw_mode();
+
+        $draw_button.css('background-color', 'red');
+        $draw_button.text('TURN DRAW MODE OFF');
+      }
+
+      else
+      {
+        game.acey_ducey_off();
+        $win_a_d_button.hide();
+        $lose_a_d_button.hide();
+        $draw_button.css('background-color', 'darkgreen');
+        $draw_button.text('TURN DRAW MODE ON');
+      }
     });
 
     for (let i = 0; i < $games.length; i++)
@@ -449,12 +473,39 @@ export function render_ui(
       {
         value: $games[i],
         text: $games[i],
-        optSelected:game_state.game_name == $games[i],
+        optSelected: game_state.game_name == $games[i],
       });
       $set_game_select.append($a_game);
     }
 
-
+    //win-lose for acey-ducey
+    const $win_a_d_button = $('<button />',
+    {
+      text: 'W',
+      id: 'win-a-d-button',
+      hidden: true,
+      title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
+    });
+    
+    const $lose_a_d_button = $('<button />',
+    {
+      text: 'L',
+      id: 'lose-a-d-button',
+      hidden: true,
+      title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
+    });
+    //    $('$win_a_d_button')
+    $win_a_d_button.click(function ()
+    {
+      //payout:
+      game.pay_acey_ducey();
+      //nextplayer:
+      game.increment_bettor_drawer();
+    });
+    $lose_a_d_button.click(function ()
+    {
+      game.increment_bettor_drawer();
+    });
     /*******************************************
      * ADD ALL DEALER CONTROLS HTML TO PAGE:
      *******************************************/
@@ -475,6 +526,8 @@ export function render_ui(
     $dealer_controls_bottom.append($dealer_select);
     $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
     $dealer_controls_bottom.append($set_game_select);
+    $dealer_controls_bottom.append($win_a_d_button);
+    $dealer_controls_bottom.append($lose_a_d_button);
     $dealer_controls_bottom.append($new_game_button);
     $dealer_controls_bottom.append($new_back_button);
     $dealer_controls_bottom.append($reset_game_button);
@@ -505,7 +558,7 @@ export function render_ui(
       title: 'To pass the bet (assuming you are not light any amount)',
       text: 'Check',
     });
-  //CALL BUTTON
+    //CALL BUTTON
     const $call_button = $('<button />',
     {
       id: 'call-button',
@@ -573,7 +626,7 @@ export function render_ui(
     });
 
     $other_select.empty();
-    $other_select.append('<option selected disabled value="prompt">Action:</option>')
+    $other_select.append('<option selected disabled value="prompt">Action:</option>');
     $other_select.change(function ()
     {
       switch ($(this).val())
@@ -602,7 +655,7 @@ export function render_ui(
       $a_function.text(label);
       $other_select.append($a_function);
     });
-    
+
     //BUY-IN 10 CHIPS BUTTON:
     const $buy_10_button = $('<button />',
     {
@@ -661,7 +714,7 @@ export function render_ui(
     {
       id: 'bet-button',
       title: 'Bet the amount you\'ve typed in the box',
-      text:'Bet',
+      text: 'Bet',
     });
     $bet_button.click(function ()
     {
@@ -848,7 +901,7 @@ export function render_ui(
 
     //show hand of all active players:
     if (current_player.in_hand)
-      $('#player-controls').show(1000);  //animate controls 1 sec
+      $('#player-controls').show(1000); //animate controls 1 sec
     else
       $('#player-controls').hide();
 
@@ -873,7 +926,7 @@ export function render_ui(
 
     const $player_seats = $('<div />');
     $player_seats.addClass('player-seats');
-    
+
     //CREATE EACH player BASED ON players in game_state
     _.forEach(game_state.players, (player) =>
     {
@@ -884,7 +937,7 @@ export function render_ui(
         $player_seat.addClass('player-connected');
       else
         $player_seat.addClass('player-disconnected');
-      
+
       //determine if this player is the dealer:
       if (game_state.dealer === player.id)
         $player_seat.addClass('dealer');
@@ -903,7 +956,7 @@ export function render_ui(
         $player_name.append(".Dlr")
       if (game_state.active_player == player.id)
         $player_name.append("⇚")
-      
+
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
@@ -926,7 +979,7 @@ export function render_ui(
         $chips_shy.text(`shy:${$chips_in_disp}`);
       else
         $chips_shy.text(' ');
-      
+
       //button to kick if disconnected:
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
@@ -975,18 +1028,18 @@ export function render_ui(
             card_img_name = card.card;
           else
             card_img_name = '2B' + game_state.card_back_num;
-          
+
           const $card_img = $('<img />',
           {
             src: `card_images/${card_img_name}.svg`,
           });
-          
+
           $card_img.addClass('card');
-          
-          
+
+
           if (!card.up && player.id === current_player.id && game_state.draw_mode)
           {
-            $card_img.addClass('draw-ready');  //show black outline around down cards
+            $card_img.addClass('draw-ready'); //show black outline around down cards
           }
           if (!card.up && player.id === current_player.id)
           {
@@ -1000,7 +1053,7 @@ export function render_ui(
             $card_img.addClass('last');
           else
             $card_img.removeClass('last');
-          
+
           //allow player to click down card to make up:
           if (player.id === current_player.id)
           {
