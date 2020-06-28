@@ -24,8 +24,28 @@ const ChipImage = styled.img`
 `;
 
 const PlayerSeatContainer = styled(HBox)`
-  background-color: rgba(11, 219, 109, 0.25);
-  border: 1px solid rgba(11, 219, 109, 0.75);
+  background-color: ${({ isCurrent, isTurn, isDealer }) => {
+    const alpha = isCurrent ? 0.50 : isTurn || isDealer ? 0.30 : 0.15;
+    if (isTurn) {
+      return `rgba(252, 212, 0, ${alpha})`;
+    } else if (isDealer) {
+      return `rgba(0, 105, 252, ${alpha})`;
+    } else {
+      return `rgba(11, 230, 90, ${alpha})`;
+    }
+  }};
+  border-color: ${({ isCurrent, isTurn, isDealer }) => {
+    const alpha = isCurrent ? 0.70 : isTurn || isDealer ? 0.60 : 0.50;
+    if (isTurn) {
+      return `rgba(252, 212, 0, ${alpha})`;
+    } else if (isDealer) {
+      return `rgba(0, 105, 252, ${alpha})`;
+    } else {
+      return `rgba(11, 230, 90, ${alpha})`;
+    }
+  }};
+  border-width: 1px;
+  border-style: solid;
   border-radius: 4px;
 `;
 
@@ -36,16 +56,21 @@ const PlayerCard = ({ idx, owned, card, up }) => {
     <CardImage
       src={`/card_images/${owned || up ? card : '2B1'}.svg`}
       flippable={flippable}
-      onClick={flippable && (() => {
+      onClick={flippable ? (() => {
         gameClient.flip(idx);
-      })}
+      }) : undefined}
     />
   );
 };
 
-const PlayerSeat = ({ currentPlayer, player }) => {
+const PlayerSeat = ({ player, isCurrent, isTurn, isDealer }) => {
   return (
-    <PlayerSeatContainer padding="8px">
+    <PlayerSeatContainer
+      padding="8px"
+      isCurrent={isCurrent}
+      isTurn={isTurn}
+      isDealer={isDealer}
+    >
       <VBox width="120px" spacing="4px">
         <HBox>{player.name}</HBox>
         <HBox spacing="0" wrap="flex-start">
@@ -59,7 +84,7 @@ const PlayerSeat = ({ currentPlayer, player }) => {
           <PlayerCard
             key={idx}
             idx={idx}
-            owned={player.id === currentPlayer.id}
+            owned={isCurrent}
             card={card}
             up={up}
           />
@@ -81,13 +106,20 @@ export const Game = ({ gameState }) => {
         Log Out
       </button>
       <VBox width="100%" minHeight="0" wrap="stretch">
-        {_.map(gameState.players, (player, idx) => (
-          <PlayerSeat
-            key={idx}
-            currentPlayer={gameState.current_player}
-            player={player}
-          />
-        ))}
+        {_.map(gameState.players, (player, idx) => {
+          const isCurrent = player.id === gameState.current_player.id;
+          const isTurn = player.id === gameState.active_player;
+          const isDealer = player.id === gameState.dealer;
+          return (
+            <PlayerSeat
+              key={idx}
+              player={player}
+              isCurrent={isCurrent}
+              isTurn={isTurn}
+              isDealer={isDealer}
+            />
+          );
+        })}
       </VBox>
     </VBox>
   );
