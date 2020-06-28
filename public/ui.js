@@ -8,6 +8,7 @@
 // TODO: show number of remaining cards in deck
 
 let showing_login_screen = false;
+let deal_all_slide = false;
 //let $back_num = 9;
 function formatChips(chips)
 {
@@ -112,17 +113,17 @@ export function render_ui(
       const key = e.which;
       if (!showing_login_screen)
       {
-      
-        if (key === 110)  //N = next bettor 
-        { 
+
+        if (key === 110) //N = next bettor 
+        {
           if (game_state.dealer === current_player.id)
             game.increment_bettor_drawer();
         }
         else if (key === 117) //U = 1 up for 1 player
-            game.one_card(true);
+          game.one_card(true);
         else if (key === 100) //D = 1 dn for 1 player
-            game.one_card(false);
-        
+          game.one_card(false);
+
         //        else if (key == 99)
         //        { //call - c
         //          document.getElementById("call-button").click();
@@ -183,7 +184,6 @@ export function render_ui(
 
     //create buttons:
     const $deal_all_buttons = $('<span \>');
-
     const $five_down_button = $('<button />',
     {
       title: 'Deals 5 down cards to every player simultaneously',
@@ -209,10 +209,13 @@ export function render_ui(
     $five_down_button.on('click', function ()
     {
       game.deal_all(5, 0);
+      deal_all_slide = true;
     });
     $two_down_one_up_button.on('click', function ()
     {
       game.deal_all(2, 1);
+      deal_all_slide = true;
+
     });
     $one_up_button.on('click', function ()
     {
@@ -235,36 +238,39 @@ export function render_ui(
     $deal_all_buttons.append($one_up_button);
     $deal_all_buttons.append($one_down_button);
 
-    //DEAL TO NEXT PLAYER BUTTONS:
+    /*****************************
+     * DEAL ONE CARD TO NEXT PLAYER BUTTONS:
+     *****************************/
+
     const $next_label = $('<span />',
     {
       id: "next-label",
     });
     $next_label.text("NEXT:");
 
-    //NEXT UP BUTTON  - deals one card up to one player
     const $next_up_button = $('<button />',
     {
-      title: 'Deals one card to the next player in line (they have an box around their hand)'
+      text: '(U)P',
+      title: 'Deals one card to the next player in line (they have an box around their hand)',
+      id: 'first-of-group',
     });
-    $next_up_button.text('(U)P');
-    $next_up_button.on('click', function ()
+    const $next_down_button = $('<button />',
+    {
+      text: '(D)N',
+      title: 'Deals one card to the next player in line (they have an box around their hand)',
+      id: 'first-of-group',
+    });
+
+    $next_up_button.click(function ()
     {
       game.one_card(true);
     });
-    $next_up_button.addClass('one-card-buttons');
-    $next_up_button.attr('id', 'first-of-group'); //to add some left margin space
-
-    //NEXT DOWN BUTTON  - deals one card down to one player
-    const $next_down_button = $('<button />',
-    {
-      title: 'Deals one card to the next player in line (they have an box around their hand)'
-    });
-    $next_down_button.text('(D)N');
-    $next_down_button.on('click', function ()
+    $next_down_button.click(function ()
     {
       game.one_card(false);
     });
+
+    $next_up_button.addClass('one-card-buttons');
     $next_down_button.addClass('one-card-buttons');
 
     const $dealer_controls_bottom = $('<span />',
@@ -277,14 +283,8 @@ export function render_ui(
     {
       id: 'common-button',
       title: 'Deals 1 common card to center of table',
+      text: 'COMMON UP',
     });
-    $common_button.text('COMMON UP');
-    $common_button.on('click', function ()
-    {
-      game.deal_common();
-    });
-
-
     //DRAW MODE button:
     const $draw_button = $('<button />',
     {
@@ -292,20 +292,23 @@ export function render_ui(
       title: 'When draw mode is on, clicking on a card will remove it from players hand\n\n' +
         'Also, dealing a card will not increment to next player',
     });
-    $draw_button.on('click', function ()
-    {
-      //outline button to show toggle happened
-      //set draw_mode in game_state
-      game.toggle_draw_mode();
-    });
-
+    //NEXT ACTIVE PLAYER BUTTON  
     const $increment_active_bettor_drawer_button = $('<button />',
     {
       id: 'increment-active-bettor-drawer-button',
       title: 'Moves to the next player for both betting and getting a card dealt to them',
+      text: "(N)ext Active Player",
     });
-    $increment_active_bettor_drawer_button.text("(N)ext Active Player");
-    $increment_active_bettor_drawer_button.on('click', function ()
+
+    $common_button.click(function ()
+    {
+      game.deal_common();
+    });
+    $draw_button.click(function ()
+    {
+      game.toggle_draw_mode();
+    });
+    $increment_active_bettor_drawer_button.click(function ()
     {
       game.increment_bettor_drawer();
     });
@@ -378,33 +381,32 @@ export function render_ui(
       id: 'new-game-button',
       title: 'Reshuffles deck, moves dealer, ready for new game to be dealt\n\n' +
         'Pot must be zero (game not started or payout happened) to start new game',
+      text: 'New Game',
     });
-    $new_game_button.text('New Game');
-    $new_game_button.on('click', function ()
-    {
-      game.new_game();
-    });
-
     //change card backing button:
     const $new_back_button = $('<button />',
     {
       id: 'new-back-button',
       title: 'picks randomly from card backs',
+      text: 'Backs',
     });
-    $new_back_button.text('Backs');
-    $new_back_button.on('click', function ()
-    {
-      game.new_back();
-    });
-
     //reset game button:
     const $reset_game_button = $('<button />',
     {
       id: 'reset-game-button',
       title: 'resets game - shuffles, gives back money, but same dealer',
+      text: 'RESET Game',
     });
-    $reset_game_button.text('RESET Game');
-    $reset_game_button.on('click', function ()
+    
+    $new_game_button.click(function ()
+    {
+      game.new_game();
+    });
+    $new_back_button.click(function ()
+    {
+      game.new_back();
+    });
+    $reset_game_button.click(function ()
     {
       game.reset_game();
     });
@@ -435,10 +437,8 @@ export function render_ui(
     {
       id: 'set-game-select',
     });
-
     $set_game_select.empty();
-
-    $set_game_select.on('change', function ()
+    $set_game_select.change(function ()
     {
       game.set_game_name($(this).val());
     });
@@ -448,9 +448,9 @@ export function render_ui(
       const $a_game = $('<option />',
       {
         value: $games[i],
+        text: $games[i],
+        optSelected:game_state.game_name == $games[i],
       });
-      $a_game.text($games[i]);
-      $a_game.prop('selected', game_state.game_name == $games[i]);
       $set_game_select.append($a_game);
     }
 
@@ -461,25 +461,18 @@ export function render_ui(
 
     $dealer_controls.append($cards_left);
     $dealer_controls.append($all_label);
-    //deal buttons:
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($next_label);
-
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
 
-    //bettor selector:
-    //    $dealer_controls_bottom.append('<span>Set Next Bettor: </span>');
-    //    $dealer_controls_bottom.append($change_active_player_select);
+
     $dealer_controls_bottom.append($increment_active_bettor_drawer_button);
-    //payout button and selector:
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($winners_select);
     $dealer_controls_bottom.append($dealer_select);
-
-    //new game button & game selector:
     $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
     $dealer_controls_bottom.append($set_game_select);
     $dealer_controls_bottom.append($new_game_button);
@@ -488,7 +481,6 @@ export function render_ui(
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
-
 
     /*****************************
      * PLAYER CONTROLS
@@ -504,25 +496,35 @@ export function render_ui(
     const $logout_button = $('<button />',
     {
       id: "logout-btn",
+      text: 'LOGOUT',
     });
-    $logout_button.text('LOGOUT');
-    $logout_button.on('click', function ()
-    {
-      game.logout();
-    });
-
     //CHECK BUTTON:
     const $check_button = $('<button />',
     {
       id: 'check-button',
-      title: 'To pass the bet (assuming you are not light any amount)'
+      title: 'To pass the bet (assuming you are not light any amount)',
+      text: 'Check',
     });
-    //    if(game_state.game_name !== "Man-Mouse")
-    $check_button.text('Chec');
-    //    else
-    //      $check_button.text('In(i)');
+  //CALL BUTTON
+    const $call_button = $('<button />',
+    {
+      id: 'call-button',
+      title: 'Call the current bet amount (your "shy" amount)',
+      text: 'Call',
+    });
+    //ANTE BUTTON
+    const $ante_button = $('<button />',
+    {
+      id: "ante-btn",
+      title: "Ante 1 chip",
+      text: 'Ante-1',
+    });
+    $logout_button.click(function ()
+    {
+      game.logout();
+    });
 
-    $check_button.on('click', function ()
+    $check_button.click(function ()
     {
       //if not light any amount, you can check:
       if (_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0 ||
@@ -534,34 +536,17 @@ export function render_ui(
       else
         alert("You must match the amount you are shy or fold!")
     });
-
-    //CALL BUTTON
-    const $call_button = $('<button />',
-    {
-      id: 'call-button',
-      title: 'Call the current bet amount (your "shy" amount)'
-    });
-    $call_button.text('Call');
-    $call_button.on('click', function ()
+    $call_button.click(function ()
     {
       game.call();
     });
-
-    //ANTE BUTTON
-    const $ante_button = $('<button />',
-    {
-      id: "ante-btn",
-      title: "Ante 1 chip"
-    });
-    $ante_button.text('Ante-1');
-    $ante_button.on('click', function ()
+    $ante_button.click(function ()
     {
       if ($ante_input.val().length !== 0)
         game.ante($ante_input.val());
       else
         game.ante(1);
     });
-
 
     //ANTE AMOUNT INPUT FIELD:
     const $ante_input = $('<input />',
@@ -570,7 +555,7 @@ export function render_ui(
       type: 'number',
       min: 0,
     });
-    $ante_button.on('click', function ()
+    $ante_button.click(function ()
     {
       if ($bet_input.val() > 0)
       {
@@ -581,7 +566,6 @@ export function render_ui(
     });
 
     //MENU for +$10, logout, reset game
-
     //set game selector to show name of game on screen:
     const $other_select = $('<select />',
     {
@@ -590,7 +574,7 @@ export function render_ui(
 
     $other_select.empty();
     $other_select.append('<option selected disabled value="prompt">Action:</option>')
-    $other_select.on('change', function ()
+    $other_select.change(function ()
     {
       switch ($(this).val())
       {
@@ -607,7 +591,6 @@ export function render_ui(
     var other_functions = [
       ['Buy-In $10', 'buy-in'],
       ['Log Out', 'log-out'],
-      ['Reset Game (explanation)', 'reset-game'],
     ];
 
     _.forEach(other_functions, ([label, id]) =>
@@ -619,14 +602,15 @@ export function render_ui(
       $a_function.text(label);
       $other_select.append($a_function);
     });
+    
     //BUY-IN 10 CHIPS BUTTON:
     const $buy_10_button = $('<button />',
     {
       id: "buy-10-btn",
-      title: "Buy-in to the game for $10 more"
+      title: "Buy-in to the game for $10 more",
+      text: '+$10',
     });
-    $buy_10_button.text('+$10');
-    $buy_10_button.on('click', function ()
+    $buy_10_button.click(function ()
     {
       game.buy_in(40);
     });
@@ -659,7 +643,7 @@ export function render_ui(
     //    else
     //      $fold_button.text('Out(o)');
 
-    $fold_button.on('click', function ()
+    $fold_button.click(function ()
     {
       game.fold();
     });
@@ -677,9 +661,9 @@ export function render_ui(
     {
       id: 'bet-button',
       title: 'Bet the amount you\'ve typed in the box',
+      text:'Bet',
     });
-    $bet_button.text('Bet');
-    $bet_button.on('click', function ()
+    $bet_button.click(function ()
     {
       if ($bet_input.val() > 0)
       {
@@ -698,9 +682,9 @@ export function render_ui(
       {
         class: 'bet-buttons',
         title: 'Bet this many chips',
+        text: i,
       });
-      $bet_button_num.text(i);
-      $bet_button_num.on('click', function ()
+      $bet_button_num.click(function ()
       {
         const amount = +i;
         game.bet(i);
@@ -718,7 +702,6 @@ export function render_ui(
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
      *******************************************/
     $player_controls.append($player_money_display);
-
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
     $player_controls.append($call_button);
@@ -865,26 +848,18 @@ export function render_ui(
 
     //show hand of all active players:
     if (current_player.in_hand)
-    {
-      $('#player-controls').show(1000);
-    }
+      $('#player-controls').show(1000);  //animate controls 1 sec
     else
-    {
       $('#player-controls').hide();
-    }
 
     //set the max a player can bet to their chips:
     $('#bet-input').prop('max', current_player.chips);
 
     //sit-out/fold button depends on if game started:
     if (game_state.hand_started)
-    {
       $('#fold-button').text('Fold');
-    }
     else
-    {
       $('#fold-button').text('SitOut');
-    }
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
@@ -898,6 +873,7 @@ export function render_ui(
 
     const $player_seats = $('<div />');
     $player_seats.addClass('player-seats');
+    
     //CREATE EACH player BASED ON players in game_state
     _.forEach(game_state.players, (player) =>
     {
@@ -905,29 +881,21 @@ export function render_ui(
       $player_seat.addClass('player-seat');
 
       if (player.connected)
-      {
         $player_seat.addClass('player-connected');
-      }
       else
-      {
         $player_seat.addClass('player-disconnected');
-      }
+      
       //determine if this player is the dealer:
       if (game_state.dealer === player.id)
-      {
         $player_seat.addClass('dealer');
-      }
       if (game_state.active_player === player.id)
-      {
         $player_seat.addClass('active-player');
-      }
 
       //add name:
       const $player_name = $('<div />');
       $player_name.addClass('player-name');
 
-
-
+      //add ante, dealer, active player indicators:
       if (player.in_hand && player.anted)
         $player_name.append('•');
       $player_name.append(player.name);
@@ -935,6 +903,7 @@ export function render_ui(
         $player_name.append(".Dlr")
       if (game_state.active_player == player.id)
         $player_name.append("⇚")
+      
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
       $chip_stack_display.addClass('chips-display');
@@ -942,25 +911,22 @@ export function render_ui(
       let chip_count = Math.round(player.chips / 40);
       if (player.chips > 0 && chip_count === 0)
         chip_count = 1;
-
       _.forEach(new Array(chip_count), () =>
       {
         $chip_stack_display.append('<img src="chips_images/chip.png" />');
       });
 
-
       //chips shy display:
       const $chips_shy = $('<div />');
       $chips_shy.addClass('chips-shy');
-
       let $chips_in_disp = _.max(_.map(game_state.players, 'chips_in')) - player.chips_in;
-      //      $chips_in_disp = formatChips($chips_in_disp);
 
       //only show shy amount if not playing man-mouse and you are in the hand
       if (game_state.game_name !== "Man-Mouse" && player.in_hand)
         $chips_shy.text(`shy:${$chips_in_disp}`);
       else
         $chips_shy.text(' ');
+      
       //button to kick if disconnected:
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
@@ -970,7 +936,9 @@ export function render_ui(
         game.kick(player.id);
       });
 
-      //CARDS FOR EACH PLAYER (also determines up and down):
+      /*****************************************
+       * CARDS FOR EACH PLAYER (also determines up and down):
+       *****************************************/
       const $hand = $('<div />');
       $hand.addClass('hand');
 
@@ -980,16 +948,15 @@ export function render_ui(
         {
           //show card image or back of card:
           let card_img_name;
-
+          //both together:
           var $up_with_down = $('<span />',
           {
             id: 'up-with-down',
           });
 
-
-
-          //add down card - will be behind part of upcard, using z-index
+          //add down card - will be behind part of upcard
           var $card_img2;
+          //if down card show card and backing:
           if (!card.up && player.id === current_player.id)
           {
             card_img_name = '2B' + game_state.card_back_num;
@@ -999,25 +966,27 @@ export function render_ui(
               src: `card_images/${card_img_name}.svg`,
             });
             $card_img2.addClass('card');
-
             $card_img2.addClass('backing');
-
           }
           $up_with_down.append($card_img2);
 
-
+          //show backing or card image:
           if (card.up || player.id === current_player.id)
             card_img_name = card.card;
           else
             card_img_name = '2B' + game_state.card_back_num;
+          
           const $card_img = $('<img />',
           {
             src: `card_images/${card_img_name}.svg`,
           });
+          
           $card_img.addClass('card');
+          
+          
           if (!card.up && player.id === current_player.id && game_state.draw_mode)
           {
-            $card_img.addClass('draw-ready');
+            $card_img.addClass('draw-ready');  //show black outline around down cards
           }
           if (!card.up && player.id === current_player.id)
           {
@@ -1026,20 +995,16 @@ export function render_ui(
           $up_with_down.append($card_img);
 
 
-
-
-          //          TODO: slide in animation
-          let $card_dealt = true; //change this to depend on what just happened
-//          if (idx == player.hand.length - 1)
-//
-//            $card_img.addClass('last');
-//          else
-//            $card_img.removeClass('last');
-
+          //slide in animation when dealing 5 dn or 2dn/1up:
+          if (deal_all_slide)
+            $card_img.addClass('last');
+          else
+            $card_img.removeClass('last');
+          
           //allow player to click down card to make up:
           if (player.id === current_player.id)
           {
-            $card_img.on('click', function ()
+            $card_img.click(function ()
             {
               if (game_state.draw_mode)
                 game.discard(idx);
@@ -1048,7 +1013,6 @@ export function render_ui(
             });
 
           }
-
 
           $hand.append($up_with_down);
         });
@@ -1065,6 +1029,7 @@ export function render_ui(
 
       $player_seats.append($player_seat);
     });
+
 
     //COMMON CARDS:
     const $common_display = $('<div />',
@@ -1090,8 +1055,10 @@ export function render_ui(
 
     $game_board.append($common_display);
     $game_board.append($player_seats);
+    deal_all_slide = false; //reset
 
   }
+
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
   if (current_player == null)
   {
