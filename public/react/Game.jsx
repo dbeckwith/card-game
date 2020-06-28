@@ -5,6 +5,17 @@ import { Grid } from './Grid';
 const CardImage = styled.img`
   height: 100px;
   width: calc(100px * 240/336);
+
+  cursor: ${({ flippable }) => flippable ? 'pointer' : undefined};
+
+  border: 2px solid ${({ flippable }) => flippable ? 'blue' : 'transparent'};
+  border-radius: 4px;
+
+  ${({ flippable }) => flippable && styled.css`
+    &:hover {
+      border-color: red;
+    }
+  `}
 `;
 
 const ChipImage = styled.img`
@@ -18,9 +29,17 @@ const PlayerSeatContainer = styled(HBox)`
   border-radius: 4px;
 `;
 
-const PlayerCard = ({ owned, card, up }) => {
+const PlayerCard = ({ idx, owned, card, up }) => {
+  const flippable = owned && !up;
+
   return (
-    <CardImage src={`/card_images/${up || owned ? card : '2B1'}.svg`} />
+    <CardImage
+      src={`/card_images/${owned || up ? card : '2B1'}.svg`}
+      flippable={flippable}
+      onClick={flippable && (() => {
+        gameClient.flip(idx);
+      })}
+    />
   );
 };
 
@@ -39,6 +58,7 @@ const PlayerSeat = ({ currentPlayer, player }) => {
         {_.map(player.hand, ({ card, up }, idx) => (
           <PlayerCard
             key={idx}
+            idx={idx}
             owned={player.id === currentPlayer.id}
             card={card}
             up={up}

@@ -66,6 +66,10 @@ class GameClient {
   logout() {
     this.send('logout');
   }
+
+  flip(card_num) {
+    this.send('flip', { card_num });
+  }
 }
 
 export const gameClient = new GameClient();
