@@ -113,9 +113,9 @@ export function render_ui(
       if (!showing_login_screen)
       {
         //fold - f, or out - o when in man-mouse mode
-        if (key == 102 || (key == 111 && game_state.game_name !== "Man-Mouse"))
-          game.fold();
-        else if (key == 107)
+//        if (key == 102 || (key == 111 && game_state.game_name !== "Man-Mouse"))
+//          game.fold();
+        if (key == 107)
         { //CHECK - k
           game.bet(0);
           $bet_input.val('');
@@ -298,7 +298,7 @@ export function render_ui(
       id: 'increment-active-bettor-drawer-button',
       title: 'Moves to the next player for both betting and getting a card dealt to them',
     });
-    $increment_active_bettor_drawer_button.text("To Next Player");
+    $increment_active_bettor_drawer_button.text("(N)ext Active Player");
     $increment_active_bettor_drawer_button.on('click', function ()
     {
       game.increment_bettor_drawer();
@@ -824,12 +824,12 @@ export function render_ui(
     if (game_state.draw_mode)
     {
       $draw_button.css('background-color', 'red');
-      $draw_button.text('DRAW MODE IS ON');
+      $draw_button.text('TURN DRAW MODE OFF');
     }
     else
     {
       $draw_button.css('background-color', 'darkgreen');
-      $draw_button.text('DRAW MODE IS OFF');
+      $draw_button.text('TURN DRAW MODE ON');
     }
 
 
@@ -873,7 +873,7 @@ export function render_ui(
     //sit-out/fold button depends on if game started:
     if (game_state.hand_started)
     {
-      $('#fold-button').text('(F)old');
+      $('#fold-button').text('Fold');
     }
     else
     {
