@@ -1,6 +1,5 @@
 import { gameClient } from './GameClient';
 import { HBox, VBox } from './Box';
-import { Grid } from './Grid';
 
 const CardImage = styled.img`
   height: 100px;
