@@ -36,9 +36,10 @@ class GameState(object):
         self.chips_bet_in_round = 0 # reset when deal all or deal common
 
         self.acey_ducey_mode = False
-        self.card_back_num  = 1
-        self.current_game  = None
-        self.connections   = []
+        self.no_peek_mode    = False
+        self.card_back_num   = 1
+        self.current_game    = None
+        self.connections     = []
 
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
@@ -58,8 +59,9 @@ class GameState(object):
             'game_name'    : self.game_name,
             'draw_mode'    : self.draw_mode,
             'chips_bet_in_round': self.chips_bet_in_round,
-            'acey_ducey_moce': self.acey_ducey_mode,
+            'acey_ducey_mode': self.acey_ducey_mode,
             'card_back_num': self.card_back_num,
+            'no_peek_mode' : self.no_peek_mode,
         }
 
     async def connect(self, rpc):
@@ -128,7 +130,7 @@ class GameState(object):
 
         
     def players_in_hand(self):
-
+        
         for player in self.players:
             if player.in_hand:
                 yield player
@@ -193,6 +195,7 @@ class GameState(object):
             self.dealer = self.next_player_after(self.dealer)
 
     def next_active_player(self):
+        '''finds next active player and sets instance variable'''
         if self.active_player is not None:
             original = self.active_player
 
@@ -206,12 +209,14 @@ class GameState(object):
                     break
 
     def next_player_after(self, player):
+        '''returns player with next seat after current player'''
         # get the player's seat
         seat = self.players.index(player)
         # return the player with the next seat (wrapping around)
         return self.players[(seat + 1) % len(self.players)]
 
     def draw_card(self):
+        '''takes next card from deck'''
         if self.deck:
             card = self.deck.pop()
             return card

@@ -83,6 +83,7 @@ class RPC(object):
             rpc.player = None
 
     def change_dealer(self, player):
+        '''sets dealer to player argument'''
         player = self.game_state.get_player(player)
         if player is None:
             raise ClientError('player not found')  
@@ -94,6 +95,7 @@ class RPC(object):
         
     def new_game(self):        
         self.game_state.new_game()
+    
     def reset_game(self):
         self.game_state.reset_game()
 
@@ -133,12 +135,15 @@ class RPC(object):
                 card = self.game_state.draw_card()
 
                 player.give_card(PlayerCard(card, True))
+        
+        
     def one_card(self, up):
         '''
         deals one card to one player
         :param up: True if up card, False if down card
         '''
         self.game_state.hand_started = True
+        
         self.reset_antes_and_chips_in()
 
         card = self.game_state.draw_card()
@@ -179,6 +184,11 @@ class RPC(object):
     def toggle_draw_mode(self):
         self.game_state.draw_mode = not self.game_state.draw_mode
 
+    def no_peek_mode_on(self):
+        self.game_state.no_peek_mode = True
+    def no_peek_mode_off(self):
+        self.game_state.no_peek_mode = False
+        
     def acey_ducey_off(self):
         self.game_state.acey_ducey_mode = False
         self.game_state.draw_mode = False
@@ -238,6 +248,7 @@ class RPC(object):
             - self.player.chips_in)
 
     def ante(self, amt):
+        '''takes amt chips from player and puts in pot'''
         amt = int(amt)
         if self.player.chips < amt:
             raise ClientError('not enough chips')        
@@ -245,10 +256,16 @@ class RPC(object):
         self.game_state.pot += amt
         self.player.chips_in_hand += amt
         self.player.anted = True
+        
     def pay_acey_ducey(self):
-        # return their bet and give them how much they won:
+        ''' return player's bet and give them how much they won'''
         self.player.chips += 2 * self.game_state.last_bet
         self.game_state.pot -= self.player.last_bet
+        
+    def set_active_player(self, id):
+        '''called when click on name to set as active player'''
+        if self.player.id == self.game_state.dealer.id:
+            self.game_state.active_player = self.game_state.get_player(id)
         
     def payout(self, winners):
         '''
@@ -305,6 +322,7 @@ class RPC(object):
         
 
     def new_back(self):
+        '''goes to next card backing'''
         self.game_state.card_back_num += 1
         self.game_state.card_back_num %= 12
         

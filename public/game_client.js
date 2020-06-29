@@ -85,6 +85,9 @@ export class CardGame {
  clear_hand(){
    this._send('clear_hand');
  }
+  set_active_player(id){
+    this._send('set_active_player', {id});
+  }
   bet(amount) {
     this._send('bet', { amount });
   }
@@ -95,7 +98,7 @@ export class CardGame {
   pay_acey_ducey(){
     this._send('pay_acey_ducey');
   }
- acey_ducey_on(){
+ acey_ducey_mode(){
    this._send('acey_ducey_on');
  } 
   acey_ducey_off(){
@@ -126,11 +129,21 @@ export class CardGame {
   set_game_name(name) {
     this._send('set_game_name', { name });
   }
-
+  slide_on(){
+    this._send('slide_on');
+  }
+   slide_off(){
+    this._send('slide_off');
+  }
   toggle_draw_mode() {
     this._send('toggle_draw_mode');
   }
-
+  no_peek_mode_on(){
+    this._send('no_peek_mode_on');
+  }
+  no_peek_mode_off(){
+    this._send('no_peek_mode_off');
+  }
   buy_in(amount) {
     this._send('buy_in', { amount });
   }
