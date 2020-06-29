@@ -390,6 +390,14 @@ export function render_ui(
 
     $new_game_button.click(function ()
     {
+      game.acey_ducey_off();
+      if(!game.draw_mode)
+        game.toggle_draw_mode();
+      $("#set-game-select").val(" ");
+      $("#set-game-select").change();
+      game.no_peek_mode_off();
+      $draw_button.css('background-color', 'darkgreen');
+      $draw_button.text('TURN DRAW MODE ON');
       game.new_game();
     });
     $new_back_button.click(function ()
@@ -402,7 +410,7 @@ export function render_ui(
     });
 
     //GAME SELECTOR setup: shows which game is being played
-    const $games = new Array('7-Card Stud',
+    const $games = new Array('', '7-Card Stud',
       '5-Card Draw',
       'Jacks or Better',
       '5-Card Stud',
@@ -442,6 +450,7 @@ export function render_ui(
       //ACEY-DUCEY: remove buttons/add W and L buttons
       if (choice === "Acey-Ducey")
       {
+        alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click W or L (will clear cards)");
         game.acey_ducey_on();
         $win_a_d_button.show();
         $lose_a_d_button.show();
@@ -462,6 +471,8 @@ export function render_ui(
 
         if (choice === "Midnight Baseball")
         {
+          alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n"+
+               "  and players can flip their own cards")
           game.no_peek_mode_on();
         }
         else

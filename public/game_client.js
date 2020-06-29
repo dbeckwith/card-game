@@ -98,7 +98,7 @@ export class CardGame {
   pay_acey_ducey(){
     this._send('pay_acey_ducey');
   }
- acey_ducey_mode(){
+ acey_ducey_on(){
    this._send('acey_ducey_on');
  } 
   acey_ducey_off(){

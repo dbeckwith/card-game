@@ -143,11 +143,13 @@ class GameState(object):
         if self.pot != 0:
             raise ClientError('pot must be empty')
         self.last_bet = 0
+        
+        self.game_name = " "
         # reset each player
         for player in self.players:
             player.new_game()
             
-
+            
         self.common_cards = []
         # shuffle a new deck
         self.deck = cards.new_deck()
