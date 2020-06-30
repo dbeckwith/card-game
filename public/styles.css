@@ -472,10 +472,12 @@ input {
 /* BASIC CARD IMAGE */
 .card {
   width: 60px;
-  border: 4px solid transparent;
+  border: 1px solid transparent;
   border-radius: 6px;
 }
-
+.sixth_card{
+  margin-left:7px;
+}
 #up-with-down {
   position: relative;
 }
@@ -485,7 +487,7 @@ input {
   /*  border: 4px solid blue;*/
   clip-path: polygon(0 0, 0% 100%, 100% 0);
   position: absolute;
-  top: -74px;
+  top: -66px;
   left: 0px;
   /*  z-index:3;*/
 }

@@ -391,7 +391,7 @@ export function render_ui(
     $new_game_button.click(function ()
     {
       game.acey_ducey_off();
-      if(!game.draw_mode)
+      if (!game.draw_mode)
         game.toggle_draw_mode();
       $("#set-game-select").val(" ");
       $("#set-game-select").change();
@@ -471,8 +471,8 @@ export function render_ui(
 
         if (choice === "Midnight Baseball")
         {
-          alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n"+
-               "  and players can flip their own cards")
+          alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
+            "  and players can flip their own cards")
           game.no_peek_mode_on();
         }
         else
@@ -968,13 +968,13 @@ export function render_ui(
       $player_name.addClass('player-name');
 
       //add ante, dealer, active player indicators:
-//      if (player.in_hand && player.anted)
-//        $player_name.append('•');
+      //      if (player.in_hand && player.anted)
+      //        $player_name.append('•');
       $player_name.append(player.name);
       if (game_state.dealer === player.id)
         $player_name.append(" ♠")
-//      if (game_state.active_player == player.id)
-//        $player_name.append("⇚")
+      //      if (game_state.active_player == player.id)
+      //        $player_name.append("⇚")
 
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');
@@ -1047,6 +1047,10 @@ export function render_ui(
             });
             $card_img2.addClass('card');
             $card_img2.addClass('backing');
+            if (idx === 5)
+            {
+              $card_img2.addClass('sixth_card');
+            }
           }
 
           $up_with_down.append($card_img2);
@@ -1064,6 +1068,10 @@ export function render_ui(
           });
 
           $card_img.addClass('card');
+          if (idx === 5)
+          {
+            $card_img.addClass('sixth_card');
+          }
 
           //outline cards or show halfup half down
           if (!card.up && player.id === current_player.id && game_state.draw_mode)
@@ -1083,7 +1091,7 @@ export function render_ui(
               else
                 game.flip(idx);
             });
-            if (!card.up)  //add to down card
+            if (!card.up) //add to down card
               $card_img2.click(function ()
               {
                 if (game_state.draw_mode)
