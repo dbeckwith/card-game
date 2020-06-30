@@ -968,13 +968,13 @@ export function render_ui(
       $player_name.addClass('player-name');
 
       //add ante, dealer, active player indicators:
-      if (player.in_hand && player.anted)
-        $player_name.append('•');
+//      if (player.in_hand && player.anted)
+//        $player_name.append('•');
       $player_name.append(player.name);
       if (game_state.dealer === player.id)
-        $player_name.append(".Dlr")
-      if (game_state.active_player == player.id)
-        $player_name.append("⇚")
+        $player_name.append(" ♠")
+//      if (game_state.active_player == player.id)
+//        $player_name.append("⇚")
 
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');

@@ -399,7 +399,9 @@ input {
 #reset-game-button {
   margin-left: 20px;
 }
-
+.player-seat.dealer{
+  background-color: rebeccapurple;
+}
 .player-seat.active-player {
   color: yellow;
   border: 4px solid yellow;
@@ -414,9 +416,7 @@ input {
   color: #7AD1EB;
   font-family: 'Open Sans Condensed', sans-serif;
 }
-.player-seat.dealer{
-  background-color: rebeccapurple;
-}
+
 .player-seat.player-disconnected .player-name {
   opacity: 0.4;
   font-style: italic;
