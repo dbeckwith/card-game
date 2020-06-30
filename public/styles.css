@@ -403,6 +403,7 @@ input {
 .player-seat.active-player {
   color: yellow;
   border: 4px solid yellow;
+  background-color: black;
 }
 
 .player-seat.player-connected .kick-button {
@@ -411,12 +412,11 @@ input {
 
 .player-seat.dealer .player-name {
   color: #7AD1EB;
-  font-weight: italic;
   font-family: 'Open Sans Condensed', sans-serif;
-
-  /*  font-family: verdana;*/
 }
-
+.player-seat.dealer{
+  background-color: rebeccapurple;
+}
 .player-seat.player-disconnected .player-name {
   opacity: 0.4;
   font-style: italic;
