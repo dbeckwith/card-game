@@ -507,15 +507,16 @@ export function render_ui(
         show_buttons(new Array($win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button), true);
       }
-          //mode that move to next player when 5th card is dealt after draw
-    if(game_state.game_name === "5-Card Draw")
+      //mode that move to next player when 5th card is dealt after draw
+      if (game_state.game_name === "5-Card Draw")
       {
         game.five_card_on();
       }
-      else{
+      else
+      {
         game.five_card_off();
       }
-     
+
     });
 
     $set_game_select.append('<option selected disabled>Select Game</option>');
@@ -580,7 +581,7 @@ export function render_ui(
     {
       id: 'check-button',
       title: 'To pass the bet (assuming you are not light any amount)',
-      text: '(C)heck',
+      text: '(C)heck/In',
     });
     //CALL BUTTON
     const $call_button = $('<button />',
@@ -723,7 +724,7 @@ export function render_ui(
     {
       id: 'fold-button',
       title: 'Fold.  Your cards will disappear',
-      text: 'Fold(F)',
+      text: 'Fold/Out',
     });
 
 
@@ -964,9 +965,30 @@ export function render_ui(
     //set the max a player can bet to their chips:
     $('#bet-input').prop('max', current_player.chips);
 
-    //sit-out/fold button depends on if game started:
+    //Man-mouse different player controls:
     if (game_state.hand_started)
-      $('#fold-button').text('Fold');
+    {
+      if (game_state.game_name !== "Man-Mouse")
+      {
+        $('#fold-button').text('Fold');
+        $('#check-button').text('Check');
+        $('#check-button').css('margin-right', '10px')
+        $('#call-button').show();
+        $('#bet-button').show();
+        $('#bet-input').show();
+        $('.bet-buttons').show();
+      }
+      else
+      {
+        $('#fold-button').text('Out');
+        $('#check-button').text('In');
+        $('#check-button').css('margin-right', '40px');
+        $('#call-button').hide();
+        $('#bet-button').hide();
+        $('#bet-input').hide();
+        $('.bet-buttons').hide();
+      }
+    }
     else
       $('#fold-button').text('SitOut');
     //update player's money amount:
@@ -1046,7 +1068,10 @@ export function render_ui(
 
       //only show shy amount if not playing man-mouse and you are in the hand
       if (game_state.game_name !== "Man-Mouse" && player.in_hand)
+      {
         $chips_shy.text(`shy:${$chips_in_disp}`);
+
+      }
       else
         $chips_shy.text(' ');
 
