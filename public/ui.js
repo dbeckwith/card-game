@@ -498,6 +498,8 @@ export function render_ui(
           alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
             "  and players can flip their own cards")
           game.no_peek_mode_on();
+          //          if(!game_state.draw_mode)
+          //            game.toggle_draw_mode();
         }
         else
         {
@@ -507,35 +509,50 @@ export function render_ui(
         }
       }
       ////  SHOW AND HIDE BUTTONS: /////
-      if (choice === "5-Card Draw" || choice === "Midnight Baseball")
+      if (choice === "5-Card Draw")
       {
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $win_a_d_button, $lose_a_d_button, $next_up_button), false);
-        show_buttons(new Array($five_down_button, $next_down_button), true);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button), false);
+        show_buttons(new Array($five_down_button, $next_down_button, $one_down_button), true);
+        game.five_card_on();
       }
+      else if (choice === "Midnight Baseball")
+      {
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button), false);
+        show_buttons(new Array($five_down_button, $one_down_button, $next_up_button), true);
+        game.five_card_off();
 
+      }
       else if (choice === "Acey-Ducey")
       {
         show_buttons(new Array($five_down_button, $two_down_one_up_button, $one_down_button,
           $one_up_button, $next_down_button, $common_button), false);
         show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button), true);
+        game.five_card_off();
+
       }
       else if (choice === "Man-Mouse")
       {
         show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $one_up_button, $next_down_button, $common_button, $next_up_button, $win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($one_down_button), true);
+        game.five_card_off();
+
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
       {
         show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $win_a_d_button, $lose_a_d_button, $one_up_button, $next_down_button, $next_up_button), false);
         show_buttons(new Array($one_down_button, $common_button), true);
+        game.five_card_off();
+
       }
       // "7-Card Stud" "5-Card Stud" "Chicago Hi-Lo"  "Follow the Queen"  "Woolworths" "Dirty Gertie"
       else
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button), true);
+        game.five_card_off();
+
       }
       //mode that move to next player when 5th card is dealt after draw
       if (game_state.game_name === "5-Card Draw")
@@ -1167,7 +1184,7 @@ export function render_ui(
             });
             $card_img2.addClass('card');
             $card_img2.addClass('backing');
-            if (idx === 5)
+            if (idx === 5) //put a little extra space
             {
               $card_img2.addClass('sixth_card');
             }

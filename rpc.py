@@ -157,7 +157,11 @@ class RPC(object):
             
         num_cards_in_hand = len(self.game_state.active_player.hand)  
         # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
-        if not self.game_state.draw_mode or (self.game_state.five_card_draw_mode and num_cards_in_hand == 5):
+        
+        fifth_card = self.game_state.five_card_draw_mode and num_cards_in_hand == 5
+        not_draw = not self.game_state.draw_mode
+        not_midnight_four = self.game_state.game_name != "Midnight Baseball"
+        if fifth_card or (not_draw and not_midnight_four):
             self.game_state.next_active_player()
 
     def flip(self, card_num):
