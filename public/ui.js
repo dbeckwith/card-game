@@ -988,6 +988,19 @@ export function render_ui(
         $('#bet-input').hide();
         $('.bet-buttons').hide();
       }
+      //remove some buttons for acey-ducey
+      if (game_state.game_name !== "Acey-Ducey")
+      {
+        $('#fold-button').show();
+        $('#check-button').show();
+        $('#call-button').show();
+      }
+      else
+      {
+        $('#fold-button').hide();
+        $('#check-button').hide();
+        $('#call-button').hide();
+      }
     }
     else
       $('#fold-button').text('SitOut');
