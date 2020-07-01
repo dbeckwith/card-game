@@ -249,7 +249,7 @@ export function render_ui(
       //nextplayer:
       game.increment_bettor_drawer();
     });
-    
+
     $lose_a_d_button.click(function ()
     {
       game.clear_hand();
@@ -482,7 +482,7 @@ export function render_ui(
       //ACEY-DUCEY: remove buttons/add W and L buttons
       if (choice === "Acey-Ducey")
       {
-        alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click W or L (will clear cards)");
+        alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
         game.acey_ducey_on();
 
         $draw_button.css('background-color', 'red');
@@ -1000,46 +1000,49 @@ export function render_ui(
     //Man-mouse different player controls:
     if (game_state.hand_started)
     {
-      if (game_state.game_name !== "Man-Mouse")
-      {
-        $('#fold-button').text('Fold');
-        $('#check-button').text('Check');
-        $('#check-button').css('margin-right', '10px')
-        $('#call-button').show();
-        $('#bet-button').show();
-        $('#bet-input').show();
-        $('.bet-buttons').show();
-      }
-      else
-      {
-        $('#fold-button').text('Out');
-        $('#check-button').text('In');
-        $('#check-button').css('margin-right', '40px');
-        $('#call-button').hide();
-        $('#bet-button').hide();
-        $('#bet-input').hide();
-        $('.bet-buttons').hide();
-      }
-      //remove some buttons for acey-ducey
-      if (game_state.game_name !== "Acey-Ducey")
-      {
-        $('#fold-button').show();
-        $('#check-button').show();
-        $('#call-button').show();
-        $('post-button').hide();
-        $('dbl-post-button').hide();
-      }
-      else
-      {
-        $('#fold-button').hide();
-        $('#check-button').hide();
-        $('#call-button').hide();
-        $('post-button').show();
-        $('dbl-post-button').show();
-      }
+      $('#fold-button').text('Fold');
     }
     else
+    {
       $('#fold-button').text('SitOut');
+    }
+    if (game_state.game_name !== "Man-Mouse")
+    {
+      $('#fold-button').text('Fold');
+      $('#check-button').text('Check');
+      $('#check-button').css('margin-right', '10px')
+      $('#call-button').show();
+      $('#bet-button').show();
+      $('#bet-input').show();
+      $('.bet-buttons').show();
+    }
+    else
+    {
+      $('#fold-button').text('Out');
+      $('#check-button').text('In');
+      $('#check-button').css('margin-right', '40px');
+      $('#call-button').hide();
+      $('#bet-button').hide();
+      $('#bet-input').hide();
+      $('.bet-buttons').hide();
+    }
+    //remove some buttons for acey-ducey
+    if (game_state.game_name !== "Acey-Ducey")
+    {
+      $('#fold-button').show();
+      $('#check-button').show();
+      $('#call-button').show();
+      $('#post-button').hide();
+      $('#dbl-post-button').hide();
+    }
+    else
+    {
+      $('#fold-button').hide();
+      $('#check-button').hide();
+      $('#call-button').hide();
+      $('#post-button').show();
+      $('#dbl-post-button').show();
+    }
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
