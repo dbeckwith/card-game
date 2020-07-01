@@ -389,7 +389,7 @@ export function render_ui(
       id: 'new-game-button',
       title: 'Reshuffles deck, moves dealer, ready for new game to be dealt\n\n' +
         'Pot must be zero (game not started or payout happened) to start new game',
-      text: 'New Game',
+      text: 'Next Game',
     });
     //change card backing button:
     const $new_back_button = $('<button />',
@@ -514,13 +514,15 @@ export function render_ui(
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button), false);
         show_buttons(new Array($five_down_button, $next_down_button, $one_down_button), true);
         game.five_card_on();
+        $reset_game_button.text("RESET Game");
+
       }
       else if (choice === "Midnight Baseball")
       {
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button), false);
         show_buttons(new Array($five_down_button, $one_down_button, $next_up_button), true);
         game.five_card_off();
-
+        $reset_game_button.text("RESET Game");
       }
       else if (choice === "Acey-Ducey")
       {
@@ -528,7 +530,7 @@ export function render_ui(
           $one_up_button, $next_down_button, $common_button), false);
         show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button), true);
         game.five_card_off();
-
+        $reset_game_button.text("RESET Game");
       }
       else if (choice === "Man-Mouse")
       {
@@ -536,7 +538,7 @@ export function render_ui(
           $one_up_button, $next_down_button, $common_button, $next_up_button, $win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($one_down_button), true);
         game.five_card_off();
-
+        $reset_game_button.text("Next Dealer");
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
       {
@@ -544,7 +546,7 @@ export function render_ui(
           $win_a_d_button, $lose_a_d_button, $one_up_button, $next_down_button, $next_up_button), false);
         show_buttons(new Array($one_down_button, $common_button), true);
         game.five_card_off();
-
+        $reset_game_button.text("RESET Game");
       }
       // "7-Card Stud" "5-Card Stud" "Chicago Hi-Lo"  "Follow the Queen"  "Woolworths" "Dirty Gertie"
       else
@@ -552,7 +554,7 @@ export function render_ui(
         show_buttons(new Array($win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button), true);
         game.five_card_off();
-
+        $reset_game_button.text("RESET Game");
       }
       //mode that move to next player when 5th card is dealt after draw
       if (game_state.game_name === "5-Card Draw")

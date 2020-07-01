@@ -180,23 +180,24 @@ class GameState(object):
         # shuffle a new deck
         self.deck = cards.new_deck()
 
-       # self.draw_mode = False
-
         # new hand
         self.hand_started = False
 
-        self.pot = 0
-        for player in self.players:
-            player.chips += player.chips_in_hand
+        if self.game_name != "Man-Mouse":
+            self.pot = 0
+            for player in self.players:
+                player.chips += player.chips_in_hand
             
         # reset each player
         for player in self.players:
             player.new_game()  
-            
+        if self.game_name == "Man-Mouse":
+            self.next_active_player()
 
     def pay_acey_ducey(self):
         self.active_player.chips += 2 * self.last_bet
-        self.pot -= self.last_bet  
+        self.pot -= self.last_bet 
+        
     def pay_post(self, num):
         self.active_player.chips   -= num * self.last_bet
         self.pot += num * self.last_bet  

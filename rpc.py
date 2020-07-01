@@ -295,38 +295,39 @@ class RPC(object):
             if player is None:
                 raise ClientError('player not found')
             winners.append(player)
+        
+        if self.game_state.game_name != "Man-Mouse":
 
-        # get remainder chips after dividing evenly among winners
-        extra_chips = self.game_state.pot % len(winners)
-
-        # distribute chips evenly to all winners
-        for player in winners:
-            player.chips += self.game_state.pot // len(winners)
-
-        # distribute extra chips to players
-        # give to the players with the least chips first
-        for player in sorted(winners, key=lambda player: player.chips):
-            if extra_chips == 0:
-                # no more extra chips
-                break
-            # take one from the pile
-            extra_chips -= 1
-            # give it to the player
-            player.chips += 1
-
+            # get remainder chips after dividing evenly among winners
+            extra_chips = self.game_state.pot % len(winners)
+    
+            # distribute chips evenly to all winners
+            for player in winners:
+                player.chips += self.game_state.pot // len(winners)
+    
+            # distribute extra chips to players
+            # give to the players with the least chips first
+            for player in sorted(winners, key=lambda player: player.chips):
+                if extra_chips == 0:
+                    break         # no more extra chips
+                extra_chips -= 1  # take one from the pile
+                player.chips += 1 # give it to the player
+            self.game_state.pot = 0
+            
+        else: # man-mouse
+            # pay winner
+            winners[0].chips += self.game_state.pot
+            to_pay = self.game_state.pot
+            # any player that stayed in, pays the pot
+            for p in self.game_state.players:
+                if p.in_hand and p is not winners[0]:
+                    p.chips            -= to_pay
+                    self.game_state.pot += to_pay
         # empty the pot
-        self.game_state.pot = 0
         
         for player in self.game_state.players:
             player.chips_in_hand = 0
 
-    #def change_active_player(self, player):
-        #'''sets active player for betting'''
-        #player = self.game_state.get_player(player)
-        #if player is None:
-            #raise ClientError('player not found')
-
-        #self.game_state.active_player = player
         
     def increment_bettor_drawer(self):
         '''sets active player for betting'''
