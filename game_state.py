@@ -32,7 +32,7 @@ class GameState(object):
         
         self.pot             = 0
         self.last_bet        = 0
-        self.game_name       = None
+        self.game_name       = "Select Game"
         self.chips_bet_in_round = 0 # reset when deal all or deal common
 
         self.acey_ducey_mode = False
@@ -144,7 +144,7 @@ class GameState(object):
             raise ClientError('pot must be empty')
         self.last_bet = 0
         
-        self.game_name = " "
+        self.game_name = "Select Game"
         # reset each player
         for player in self.players:
             player.new_game()

@@ -130,8 +130,6 @@ export function render_ui(
     });
     $all_label.addClass('non-acey'); //won't show during acey-ducey
 
-    $all_label.text("ALL:");
-
     /*************************
      * ALL DEALER BUTTONS
      ************************/
@@ -156,9 +154,10 @@ export function render_ui(
     });
 
     $five_down_button.addClass('opening-cards non-acey');
-    $two_down_one_up_button.addClass('opening-cards non-acey');;
-    $one_up_button.addClass('one-all-buttons non-acey')
-    $one_down_button.addClass('one-all-buttons non-acey')
+    $two_down_one_up_button.addClass('opening-cards non-acey');
+    $one_up_button.addClass('one-all-buttons non-acey');
+    $one_up_button.addClass('space-on-left');
+    $one_down_button.addClass('one-all-buttons non-acey');
 
 
     //add function:
@@ -183,8 +182,8 @@ export function render_ui(
     //set text:
     $five_down_button.text('5DN');
     $two_down_one_up_button.text('2DN/1UP');
-    $one_up_button.text('1UP');
-    $one_down_button.text('1DN');
+    $one_up_button.text('All 1UP');
+    $one_down_button.text('All 1DN');
 
     //add:
     $deal_all_buttons.append($five_down_button);
@@ -200,18 +199,16 @@ export function render_ui(
     {
       id: "next-label",
     });
-    $next_label.text("NEXT:");
-
     const $next_up_button = $('<button />',
     {
-      text: '(U)P',
+      text: 'Next (U)P',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
       id: 'next-up',
     });
     //win-lose for acey-ducey
     const $win_a_d_button = $('<button />',
     {
-      text: 'W',
+      text: 'WIN',
       id: 'win-a-d-button',
       hidden: true,
       title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
@@ -219,7 +216,7 @@ export function render_ui(
 
     const $lose_a_d_button = $('<button />',
     {
-      text: 'L',
+      text: 'LOSE',
       id: 'lose-a-d-button',
       hidden: true,
       title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
@@ -227,7 +224,7 @@ export function render_ui(
 
     const $next_down_button = $('<button />',
     {
-      text: '(D)N',
+      text: 'Next (D)N',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
       id: 'next-down',
     });
@@ -257,6 +254,8 @@ export function render_ui(
     });
 
     $next_up_button.addClass('one-card-buttons');
+    $next_up_button.addClass('space-on-left');
+
     $next_down_button.addClass('one-card-buttons');
 
     const $dealer_controls_bottom = $('<span />',
@@ -393,26 +392,28 @@ export function render_ui(
       game.acey_ducey_off();
       if (!game.draw_mode)
         game.toggle_draw_mode();
-      $("#set-game-select").val(" ");
+      $("#set-game-select").val("Select Game");
       $("#set-game-select").change();
       game.no_peek_mode_off();
       $draw_button.css('background-color', 'darkgreen');
       $draw_button.text('TURN DRAW MODE ON');
       game.new_game();
     });
+        $reset_game_button.click(function ()
+    {
+      game.reset_game();
+    });
     $new_back_button.click(function ()
     {
       game.new_back();
     });
-    $reset_game_button.click(function ()
-    {
-      game.reset_game();
-    });
+
 
     //GAME SELECTOR setup: shows which game is being played
-    const $games = new Array('', '7-Card Stud',
+    const $games = new Array(
+      '7-Card Stud',
       '5-Card Draw',
-      'Jacks or Better',
+      '(Jacks or Better)',
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
@@ -441,6 +442,7 @@ export function render_ui(
     //
     //Acey-Ducey - add W, L buttons and set in acey-ducey mode
     //Midnight Baseball - put automatically in draw mode
+    //5-card draw - remove 1up/1dn buttons
     $set_game_select.change(function ()
     {
       let choice = $(this).val();
@@ -485,6 +487,8 @@ export function render_ui(
       }
     });
 
+    $set_game_select.append('<option selected disabled>Select Game</option>');
+
     for (let i = 0; i < $games.length; i++)
     {
       const $a_game = $('<option />',
@@ -517,11 +521,11 @@ export function render_ui(
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($winners_select);
     $dealer_controls_bottom.append($dealer_select);
-    $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
+    //    $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
     $dealer_controls_bottom.append($set_game_select);
     $dealer_controls_bottom.append($new_game_button);
-    $dealer_controls_bottom.append($new_back_button);
     $dealer_controls_bottom.append($reset_game_button);
+    $dealer_controls_bottom.append($new_back_button);
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');

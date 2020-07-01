@@ -176,7 +176,7 @@ class RPC(object):
     def deal_common(self):
         '''deal one common up card'''
         self.game_state.hand_started = True
-        self.reset_antes()
+        self.reset_antes_and_chips_in()
 
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)

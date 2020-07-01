@@ -37,11 +37,13 @@ button:hover {
   font-size: 20px;
 }
 
+/*
 #next-label {
   font-family: 'Verdana';
   font-size: 16px;
   margin-left: 8px;
 }
+*/
 
 #all-label {
   font-family: 'Verdana';
@@ -85,7 +87,7 @@ button:hover {
 /* next up and next down buttons */
 .one-card-buttons {
   border: solid 4px orange;
-  width: 60px;
+  width: 85px;
 }
 
 /* common up card button - is different color */
@@ -202,8 +204,9 @@ button:hover {
   color: black;
   width: 147px;
   text-align: left;
-
-
+}
+.space-on-left{
+  margin-left:20px;
 }
 
 #dealer-select-content label {
@@ -221,7 +224,7 @@ button:hover {
 
 /* new game button */
 #new-game-button {
-  margin-left: 25px;
+  margin-left: 5px;
   color: white;
   background-color: blue;
 }
@@ -229,7 +232,8 @@ button:hover {
 /* selector for which game being played */
 #set-game-select {
   width: 120px;
-  height: 30px;
+  height: 20px;
+  margin-left:100px;
 }
 
 #game-name-display {
@@ -398,6 +402,10 @@ input {
 
 #reset-game-button {
   margin-left: 20px;
+  font-size:10px;
+}
+#new-back-button{
+  font-size:10px;
 }
 .player-seat.dealer{
   background-color: rebeccapurple;
