@@ -211,6 +211,21 @@ export function render_ui(
       text: 'LOSE',
       id: 'lose-a-d-button',
       hidden: true,
+      title: 'For acey-ducey - will move to next player and keep bet in pot ',
+    });
+    const $post_button = $('<button />',
+    {
+      text: 'POST',
+      id: 'post-button',
+      hidden: true,
+      title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
+    });
+
+    const $dbl_post_button = $('<button />',
+    {
+      text: 'DBL-POST',
+      id: 'dbl-post-button',
+      hidden: true,
       title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
     });
 
@@ -234,11 +249,26 @@ export function render_ui(
       //nextplayer:
       game.increment_bettor_drawer();
     });
+    
     $lose_a_d_button.click(function ()
     {
       game.clear_hand();
       game.increment_bettor_drawer();
     });
+
+    $post_button.click(function ()
+    {
+      game.pay_post(1);
+      game.clear_hand();
+      game.increment_bettor_drawer();
+    });
+    $dbl_post_button.click(function ()
+    {
+      game.pay_post(2);
+      game.clear_hand();
+      game.increment_bettor_drawer();
+    });
+
     $next_down_button.click(function ()
     {
       game.one_card(false);
@@ -542,6 +572,8 @@ export function render_ui(
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($win_a_d_button);
     $dealer_controls.append($lose_a_d_button);
+    $dealer_controls.append($post_button);
+    $dealer_controls.append($dbl_post_button);
     $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
@@ -994,12 +1026,16 @@ export function render_ui(
         $('#fold-button').show();
         $('#check-button').show();
         $('#call-button').show();
+        $('post-button').hide();
+        $('dbl-post-button').hide();
       }
       else
       {
         $('#fold-button').hide();
         $('#check-button').hide();
         $('#call-button').hide();
+        $('post-button').show();
+        $('dbl-post-button').show();
       }
     }
     else

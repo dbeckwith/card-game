@@ -156,4 +156,7 @@ export class CardGame {
   five_card_off(){
     this._send('five_card_off');
   }
+  pay_post(num){
+    this._send('pay_post', { num });
+  }
 }

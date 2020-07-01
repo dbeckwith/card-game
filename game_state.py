@@ -180,7 +180,7 @@ class GameState(object):
         # shuffle a new deck
         self.deck = cards.new_deck()
 
-        self.draw_mode = False
+       # self.draw_mode = False
 
         # new hand
         self.hand_started = False
@@ -194,6 +194,13 @@ class GameState(object):
             player.new_game()  
             
 
+    def pay_acey_ducey(self):
+        self.active_player.chips += 2 * self.last_bet
+        self.pot -= self.last_bet  
+    def pay_post(self, num):
+        self.active_player.chips   -= num * self.last_bet
+        self.pot += num * self.last_bet  
+        
     def next_dealer(self):
         if self.dealer is not None:
             self.dealer = self.next_player_after(self.dealer)
