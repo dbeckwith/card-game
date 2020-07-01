@@ -507,7 +507,15 @@ export function render_ui(
         show_buttons(new Array($win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button), true);
       }
-
+          //mode that move to next player when 5th card is dealt after draw
+    if(game_state.game_name === "5-Card Draw")
+      {
+        game.five_card_on();
+      }
+      else{
+        game.five_card_off();
+      }
+     
     });
 
     $set_game_select.append('<option selected disabled>Select Game</option>');

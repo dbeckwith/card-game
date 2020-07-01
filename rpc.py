@@ -155,8 +155,9 @@ class RPC(object):
             self.game_state.deck = cards.new_deck()  
             raise ClientError('deck re-shuffled')
             
-            
-        if not self.game_state.draw_mode:
+        num_cards_in_hand = len(self.game_state.active_player.hand)  
+        # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
+        if not self.game_state.draw_mode or (self.game_state.five_card_draw_mode and num_cards_in_hand == 5):
             self.game_state.next_active_player()
 
     def flip(self, card_num):
@@ -188,6 +189,11 @@ class RPC(object):
         self.game_state.no_peek_mode = True
     def no_peek_mode_off(self):
         self.game_state.no_peek_mode = False
+    
+    def five_card_on(self):
+        self.game_state.five_card_draw_mode = True
+    def five_card_off(self):
+        self.game_state.five_card_draw_mode = False
         
     def acey_ducey_off(self):
         self.game_state.acey_ducey_mode = False
@@ -196,7 +202,7 @@ class RPC(object):
     def acey_ducey_on(self):
         self.game_state.acey_ducey_mode = True
         self.game_state.draw_mode = True
-        
+    
     def fold(self):
         '''fold current player'''
         if self.player is None:

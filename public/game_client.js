@@ -150,4 +150,10 @@ export class CardGame {
   reset_game(){
     this._send('reset_game');
   }
+  five_card_on(){
+    this._send('five_card_on');
+  }
+  five_card_off(){
+    this._send('five_card_off');
+  }
 }
