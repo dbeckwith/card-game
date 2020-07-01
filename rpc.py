@@ -260,7 +260,7 @@ class RPC(object):
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.player.chips += 2 * self.game_state.last_bet
-        self.game_state.pot -= self.player.last_bet
+        self.game_state.pot -= self.game_state.last_bet
         
     def set_active_player(self, id):
         '''called when click on name to set as active player'''

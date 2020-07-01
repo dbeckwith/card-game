@@ -83,6 +83,7 @@ export function render_ui(
     $app.append($login_screen);
   }
 
+
   function render_login_screen()
   {
     const $current_players = $('#current-players');
@@ -124,11 +125,7 @@ export function render_ui(
       id: "cards-left",
     });
 
-    const $all_label = $('<span />',
-    {
-      id: "all-label",
-    });
-    $all_label.addClass('non-acey'); //won't show during acey-ducey
+
 
     /*************************
      * ALL DEALER BUTTONS
@@ -153,11 +150,6 @@ export function render_ui(
       title: 'Deals 1 down card to every player simultaneously',
     });
 
-    $five_down_button.addClass('opening-cards non-acey');
-    $two_down_one_up_button.addClass('opening-cards non-acey');
-    $one_up_button.addClass('one-all-buttons non-acey');
-    $one_up_button.addClass('space-on-left');
-    $one_down_button.addClass('one-all-buttons non-acey');
 
 
     //add function:
@@ -228,7 +220,6 @@ export function render_ui(
       title: 'Deals one card to the next player in line (they have an box around their hand)',
       id: 'next-down',
     });
-    $next_down_button.addClass('non-acey');
 
     $next_up_button.click(function ()
     {
@@ -270,7 +261,6 @@ export function render_ui(
       title: 'Deals 1 common card to center of table',
       text: 'COMMON UP',
     });
-    $('#common-button').addClass('non-acey');
 
     //DRAW MODE button:
     const $draw_button = $('<button />',
@@ -279,7 +269,6 @@ export function render_ui(
       title: 'When draw mode is on, clicking on a card will remove it from players hand\n\n' +
         'Also, dealing a card will not increment to next player',
     });
-    $draw_button.addClass('non-acey');
 
     //NEXT ACTIVE PLAYER BUTTON  
     const $increment_active_bettor_drawer_button = $('<button />',
@@ -399,7 +388,7 @@ export function render_ui(
       $draw_button.text('TURN DRAW MODE ON');
       game.new_game();
     });
-        $reset_game_button.click(function ()
+    $reset_game_button.click(function ()
     {
       game.reset_game();
     });
@@ -438,6 +427,17 @@ export function render_ui(
     });
     $set_game_select.empty();
 
+
+
+
+    function show_buttons(shows, will_show)
+    {
+      for (let i = 0; i < shows.length; i++)
+      {
+        if (will_show) shows[i].show();
+        else shows[i].hide();
+      }
+    }
     //WHEN GAME IS SELECTED, show game name and if...
     //
     //Acey-Ducey - add W, L buttons and set in acey-ducey mode
@@ -454,10 +454,6 @@ export function render_ui(
       {
         alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click W or L (will clear cards)");
         game.acey_ducey_on();
-        $win_a_d_button.show();
-        $lose_a_d_button.show();
-        $(".non-acey").hide();
-        $common_button.hide();
 
         $draw_button.css('background-color', 'red');
         $draw_button.text('TURN DRAW MODE OFF');
@@ -466,10 +462,6 @@ export function render_ui(
       {
         //put buttons back
         game.acey_ducey_off();
-        $win_a_d_button.hide();
-        $lose_a_d_button.hide();
-        $(".non-acey").show();
-        $common_button.show();
 
         if (choice === "Midnight Baseball")
         {
@@ -483,8 +475,39 @@ export function render_ui(
           $draw_button.css('background-color', 'darkgreen');
           $draw_button.text('TURN DRAW MODE ON');
         }
-
       }
+      ////  SHOW AND HIDE BUTTONS: /////
+      if (choice === "5-Card Draw" || choice === "Midnight Baseball")
+      {
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $win_a_d_button, $lose_a_d_button, $next_up_button), false);
+        show_buttons(new Array($five_down_button, $next_down_button), true);
+      }
+
+      else if (choice === "Acey-Ducey")
+      {
+        show_buttons(new Array($five_down_button, $two_down_one_up_button, $one_down_button,
+          $one_up_button, $next_down_button, $common_button), false);
+        show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button), true);
+      }
+      else if (choice === "Man-Mouse")
+      {
+        show_buttons(new Array($five_down_button, $two_down_one_up_button,
+          $one_up_button, $next_down_button, $common_button, $next_up_button, $win_a_d_button, $lose_a_d_button), false);
+        show_buttons(new Array($one_down_button), true);
+      }
+      else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
+      {
+        show_buttons(new Array($five_down_button, $two_down_one_up_button,
+          $win_a_d_button, $lose_a_d_button, $one_up_button, $next_down_button, $next_up_button), false);
+        show_buttons(new Array($one_down_button, $common_button), true);
+      }
+      // "7-Card Stud" "5-Card Stud" "Chicago Hi-Lo"  "Follow the Queen"  "Woolworths" "Dirty Gertie"
+      else
+      {
+        show_buttons(new Array($win_a_d_button, $lose_a_d_button), false);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button), true);
+      }
+
     });
 
     $set_game_select.append('<option selected disabled>Select Game</option>');
@@ -506,9 +529,7 @@ export function render_ui(
      *******************************************/
 
     $dealer_controls.append($cards_left);
-    $dealer_controls.append($all_label);
     $dealer_controls.append($deal_all_buttons);
-    $dealer_controls.append($next_label);
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($win_a_d_button);
     $dealer_controls.append($lose_a_d_button);
@@ -565,7 +586,7 @@ export function render_ui(
     {
       id: "ante-btn",
       title: "Ante 1 chip",
-      text: 'Ante-1',
+      text: 'Ante',
     });
     $logout_button.click(function ()
     {
@@ -588,13 +609,6 @@ export function render_ui(
     {
       game.call();
     });
-    $ante_button.click(function ()
-    {
-      if ($ante_input.val().length !== 0)
-        game.ante($ante_input.val());
-      else
-        game.ante(1);
-    });
 
     //ANTE AMOUNT INPUT FIELD:
     const $ante_input = $('<input />',
@@ -603,15 +617,31 @@ export function render_ui(
       type: 'number',
       min: 0,
     });
+
     $ante_button.click(function ()
     {
-      if ($bet_input.val() > 0)
+      if ($ante_input.val().length === 0)
+        game.ante(1);
+      else if ($ante_input.val() > 0)
       {
-        const amount = +$bet_input.val();
-        game.bet(amount);
-        $bet_input.val('');
+        game.ante($ante_input.val());
+        $ante_input.val('');
       }
     });
+
+
+
+    //    $ante_button.click(function ()
+    //    {
+    //      if ($ante_input.val() > 0)
+    //      {
+    //        const amount = +$bet_input.val();
+    //        game.bet(amount);
+    //        $ante_input.val('');
+    //
+    //      }
+    //      
+    //    });
 
     //MENU for +$10, logout, reset game
     //set game selector to show name of game on screen:
@@ -813,6 +843,7 @@ export function render_ui(
       }
     });
 
+
     //if no players in game, call setup:
     if ($('#game-board').length === 0)
     {
@@ -972,8 +1003,8 @@ export function render_ui(
       $player_name.addClass('player-name');
 
       //add ante, dealer, active player indicators:
-      //      if (player.in_hand && player.anted)
-      //        $player_name.append('•');
+      if (player.in_hand && player.anted)
+        $player_name.append('•');
       $player_name.append(player.name);
       if (game_state.dealer === player.id)
         $player_name.append(" ♠")
