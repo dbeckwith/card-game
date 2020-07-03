@@ -872,7 +872,14 @@ input {
   top: 30%;
   left: 30%;
   animation: bounceIn 10s;
-
+}
+#credits{
+   color: white;
+  font-size: 12px;
+  font-family: 'PT Mono', monospace;
+  position: absolute;
+  top: 80%;
+  left: 30%;
 }
 
 @keyframes bounceIn {

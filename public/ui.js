@@ -25,10 +25,10 @@ export function render_ui(
   function setup_login_screen()
   {
     $app.empty();
-      $(".before").hide();
-      $(".after").hide();
-
-      $("#text").hide();
+    $(".before").hide();
+    $(".after").hide();
+    $("#credits").hide();
+    $("#text").hide();
     const $login_screen = $('<center />');
 
     const $name_input = $('<input />');
@@ -112,6 +112,8 @@ export function render_ui(
         "background-color": "black"
       });
       $("#text").show();
+      $("#credits").show();
+
       works = true;
     }
     else
@@ -124,6 +126,8 @@ export function render_ui(
         "background-image": "linear-gradient(to bottom, #007712, #2AcF15)"
       });
       $("#text").hide();
+      $("#credits").hide();
+
       $("#app").css("opacity", "1.0");
 
 
