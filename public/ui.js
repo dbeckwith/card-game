@@ -25,10 +25,12 @@ export function render_ui(
   function setup_login_screen()
   {
     $app.empty();
+    //fireworks and text when click CP:
     $(".before").hide();
     $(".after").hide();
     $("#credits").hide();
     $("#text").hide();
+    
     const $login_screen = $('<center />');
 
     const $name_input = $('<input />');

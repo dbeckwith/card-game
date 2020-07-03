@@ -372,7 +372,7 @@ input {
 */
 .login-cards {
   margin-top: 100px;
-  width: 400px;
+  width: 200px;
   border: 4px solid transparent;
   border-radius: 6px;
 }
@@ -878,7 +878,7 @@ input {
   font-size: 12px;
   font-family: 'PT Mono', monospace;
   position: absolute;
-  top: 80%;
+  bottom: 10%;
   left: 30%;
 }
 
