@@ -30,7 +30,7 @@ export function render_ui(
     $(".after").hide();
     $("#credits").hide();
     $("#text").hide();
-    
+
     const $login_screen = $('<center />');
 
     const $name_input = $('<input />');
@@ -107,7 +107,7 @@ export function render_ui(
     {
       $(".before").show();
       $(".after").show();
-      $("#app").not("#logo").css("opacity", "0.3");
+      $("#app").css("opacity", "0.3");
       $("body").css(
       {
         "background-image": "none",
@@ -950,33 +950,46 @@ export function render_ui(
    ********************************/
   function render_game()
   {
+    //fireworks
     Mousetrap.bind('1', function ()
     {
       var win = window.open("fireworks.html", '_blank');
       win.focus();
     });
 
+    //next active player
     Mousetrap.bind('n', function ()
     {
       if (game_state.dealer === current_player.id && !showing_login_screen)
         game.increment_bettor_drawer();
     });
+    //1 up
     Mousetrap.bind('u', function ()
     {
       if (!showing_login_screen)
         game.one_card(true);
     });
+    //1 down
     Mousetrap.bind('d', function ()
     {
       if (!showing_login_screen)
         game.one_card(false);
     });
+    //check
     Mousetrap.bind('c', function ()
     {
       if (!showing_login_screen)
       {
         game.bet(0);
         $bet_input.val('');
+      }
+    });
+    //show chip totals
+    Mousetrap.bind('q', function ()
+    {
+      if (!showing_login_screen)
+      {
+        show_chip_totals();
       }
     });
 
@@ -1360,6 +1373,22 @@ export function render_ui(
     $game_board.append($player_seats);
   }
 
+  function show_chip_totals()
+  {
+    var disp = "";
+    var disp2 = "";
+    for (var i = 0; i < game_state.players.length; i++)
+    {
+      let p = game_state.players[i];
+      //update player's money amount:
+      disp += `${p.name} totals: $${formatChips(p.chips)}/$${formatChips(p.buy_in)}` + '\n';
+      if (p.chips < p.buy_in)
+        disp2 += `${p.name} owes $${formatChips(p.buy_in) - formatChips(p.chips)}` + '\n';
+      else
+        disp2 += `${p.name} is owed $${formatChips(p.chips) - formatChips(p.buy_in)}` + '\n';
+    }
+    alert(disp + "\n" + disp2);
+  }
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
   if (current_player == null)
   {
