@@ -142,6 +142,8 @@ class RPC(object):
         deals one card to one player
         :param up: True if up card, False if down card
         '''
+        
+            
         self.game_state.hand_started = True
         
         self.reset_antes_and_chips_in()
@@ -198,6 +200,11 @@ class RPC(object):
         self.game_state.five_card_draw_mode = True
     def five_card_off(self):
         self.game_state.five_card_draw_mode = False
+
+    def man_mouse_on(self):
+        self.game_state.man_mouse_mode = True
+    def man_mouse_off(self):
+        self.game_state.man_mouse_mode = False
         
     def acey_ducey_off(self):
         self.game_state.acey_ducey_mode = False

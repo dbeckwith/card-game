@@ -104,6 +104,12 @@ export class CardGame {
   acey_ducey_off(){
    this._send('acey_ducey_off');
  }
+  man_mouse_on(){
+   this._send('man_mouse_on');
+ } 
+  man_mouse_off(){
+   this._send('man_mouse_off');
+ }
   payout(winners) {
     this._send('payout', { winners });
   }

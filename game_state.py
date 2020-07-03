@@ -36,6 +36,7 @@ class GameState(object):
         self.chips_bet_in_round = 0 # reset when deal all or deal common
 
         self.acey_ducey_mode = False
+        self.man_mouse_mode  = False
         self.no_peek_mode    = False
         self.five_card_draw_mode = False
         self.card_back_num   = 1
@@ -64,6 +65,7 @@ class GameState(object):
             'card_back_num': self.card_back_num,
             'no_peek_mode' : self.no_peek_mode,
             'five_card_draw_mode': self.five_card_draw_mode,
+            'man_mouse_mode': self.man_mouse_mode,
         }
 
     async def connect(self, rpc):
