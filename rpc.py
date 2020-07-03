@@ -344,7 +344,7 @@ class RPC(object):
     def new_back(self):
         '''goes to next card backing'''
         self.game_state.card_back_num += 1
-        self.game_state.card_back_num %= 12
+        self.game_state.card_back_num %= 11
         
     def set_game_name(self, name):
         '''set name of current game'''

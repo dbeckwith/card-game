@@ -25,7 +25,10 @@ export function render_ui(
   function setup_login_screen()
   {
     $app.empty();
+      $(".before").hide();
+      $(".after").hide();
 
+      $("#text").hide();
     const $login_screen = $('<center />');
 
     const $name_input = $('<input />');
@@ -95,9 +98,9 @@ export function render_ui(
 
   function toggle_fireworks()
   {
+
     $(".before").toggleClass('paused');
     $(".after").toggleClass('paused');
-
     if (!works)
     {
       $(".before").show();
@@ -437,7 +440,7 @@ export function render_ui(
       id: 'new-game-button',
       title: 'Reshuffles deck, moves dealer, ready for new game to be dealt\n\n' +
         'Pot must be zero (game not started or payout happened) to start new game',
-      text: 'Next Game',
+      text: 'New Game',
     });
     //change card backing button:
     const $new_back_button = $('<button />',
