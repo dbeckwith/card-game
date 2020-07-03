@@ -91,6 +91,44 @@ export function render_ui(
     $current_players.text(`CURRENT PLAYERS: ${_.join(current_players, ', ')}`);
   }
 
+  let works = false;
+
+  function toggle_fireworks()
+  {
+    $(".before").toggleClass('paused');
+    $(".after").toggleClass('paused');
+
+    if (!works)
+    {
+      $(".before").show();
+      $(".after").show();
+      $("#app").not("#logo").css("opacity", "0.3");
+      $("body").css(
+      {
+        "background-image": "none",
+        "background-color": "black"
+      });
+      $("#text").show();
+      works = true;
+    }
+    else
+    {
+      $(".before").hide();
+      $(".after").hide();
+
+      $("body").css(
+      {
+        "background-image": "linear-gradient(to bottom, #007712, #2AcF15)"
+      });
+      $("#text").hide();
+      $("#app").css("opacity", "1.0");
+
+
+      //      $("#app").not("#logo").css("background-image:","linear-gradient(to bottom, #007712, #2AcF15)");
+
+      works = false;
+    }
+  }
   /*********************************
    * INITIAL SETUP of game screen
    * called by render_game
@@ -101,15 +139,22 @@ export function render_ui(
 
     const $header = $('<center />');
 
+    //don't show fireworks at first:
+    $(".before").hide();
+    $(".after").hide();
+    $("#text").hide();
+
     //LOGO: shakes on hover and when clicked shows credits
-    const $logo_link = $('<a />',
+    const $logo_link = $('<span />',
     {
       href: '#',
       id: 'logo',
+
     });
     $logo_link.on('click', function ()
     {
-      alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
+      //      alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
+      toggle_fireworks();
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
 
