@@ -199,30 +199,18 @@ class RPC(object):
     def toggle_draw_mode(self):
         self.game_state.draw_mode = not self.game_state.draw_mode
 
-    def no_peek_mode_on(self):
-        self.game_state.no_peek_mode = True
-    def no_peek_mode_off(self):
-        self.game_state.no_peek_mode = False
-    
-    def five_card_on(self):
-        self.game_state.five_card_draw_mode = True
-    def five_card_off(self):
-        self.game_state.five_card_draw_mode = False
+    def set_no_peek_mode(self, on):
+        self.game_state.no_peek_mode = on
 
-    def man_mouse_on(self):
-        print("Mouse on")
-        self.game_state.man_mouse_mode = True
-    def man_mouse_off(self):
-        print("Mouse off")
-        self.game_state.man_mouse_mode = False
+    def set_draw_mode(self, on):
+        self.game_state.five_card_draw_mode = on
+
+    def set_man_mouse_mode(self, on):
+        self.game_state.man_mouse_mode = on
         
-    def acey_ducey_off(self):
-        self.game_state.acey_ducey_mode = False
-        self.game_state.draw_mode = False
-        
-    def acey_ducey_on(self):
-        self.game_state.acey_ducey_mode = True
-        self.game_state.draw_mode = True
+    def set_acey_ducey_mode(self, on):
+        self.game_state.acey_ducey_mode = on
+        self.game_state.draw_mode = on     
     
     def fold(self):
         '''fold current player'''

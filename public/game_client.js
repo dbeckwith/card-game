@@ -98,18 +98,24 @@ export class CardGame {
   pay_acey_ducey(){
     this._send('pay_acey_ducey');
   }
- acey_ducey_on(){
-   this._send('acey_ducey_on');
- } 
-  acey_ducey_off(){
-   this._send('acey_ducey_off');
- }
-  man_mouse_on(){
-   this._send('man_mouse_on');
- } 
-  man_mouse_off(){
-   this._send('man_mouse_off');
- }
+// acey_ducey_on(){
+//   this._send('acey_ducey_on');
+// } 
+//  acey_ducey_off(){
+//   this._send('acey_ducey_off');
+// }
+    set_acey_ducey_mode(on){
+    this._send('set_acey_ducey_mode', {on});
+  }
+  set_man_mouse_mode(on){
+    this._send('set_man_mouse_mode', {on});
+  }
+//  man_mouse_on(){
+//   this._send('man_mouse_on');
+// } 
+//  man_mouse_off(){
+//   this._send('man_mouse_off');
+// }
   payout(winners) {
     this._send('payout', { winners });
   }
@@ -144,24 +150,30 @@ export class CardGame {
   toggle_draw_mode() {
     this._send('toggle_draw_mode');
   }
-  no_peek_mode_on(){
-    this._send('no_peek_mode_on');
+  set_no_peek_mode(on){
+    this._send('set_no_peek_mode', { on });
   }
-  no_peek_mode_off(){
-    this._send('no_peek_mode_off');
-  }
+//  no_peek_mode_on(){
+//    this._send('no_peek_mode_on');
+//  }
+//  no_peek_mode_off(){
+//    this._send('no_peek_mode_off');
+//  }
   buy_in(amount) {
     this._send('buy_in', { amount });
   }
   reset_game(){
     this._send('reset_game');
   }
-  five_card_on(){
-    this._send('five_card_on');
-  }
-  five_card_off(){
-    this._send('five_card_off');
-  }
+ set_draw_mode(on){
+   this._send('set_draw_mode', { on });
+ }
+//  five_card_on(){
+//    this._send('five_card_on');
+//  }
+//  five_card_off(){
+//    this._send('five_card_off');
+//  }
   pay_post(num){
     this._send('pay_post', { num });
   }

@@ -232,7 +232,7 @@ export function render_ui(
     });
 
     //set text:
-    $five_down_button.text('5DN');
+    $five_down_button.text('All 5DN');
     $two_down_one_up_button.text('2DN/1UP');
     $one_up_button.text('All 1UP');
     $one_down_button.text('All 1DN');
@@ -366,14 +366,6 @@ export function render_ui(
         'Also, dealing a card will not increment to next player',
     });
 
-    //NEXT ACTIVE PLAYER BUTTON
-    const $increment_active_bettor_drawer_button = $('<button />',
-    {
-      id: 'increment-active-bettor-drawer-button',
-      title: 'Moves to the next player for both betting and getting a card dealt to them',
-      text: "(N)ext Active Player",
-    });
-
     $common_button.click(function ()
     {
       game.deal_common();
@@ -382,10 +374,7 @@ export function render_ui(
     {
       game.toggle_draw_mode();
     });
-    $increment_active_bettor_drawer_button.click(function ()
-    {
-      game.increment_bettor_drawer();
-    });
+
 
     //SELECTOR FOR WINNERS/Payout:
     const $winners_select = $(`
@@ -479,8 +468,10 @@ export function render_ui(
         game.toggle_draw_mode();
       $("#set-game-select").val("Select Game");
       $("#set-game-select").change();
-      game.no_peek_mode_off();
-      game.man_mouse_off();
+      game.set_no_peek_mode(false);
+//      game.no_peek_mode_off();
+//      game.man_mouse_off();
+      game.set_man_mouse_mode(false);
       $draw_button.css('background-color', 'darkgreen');
       $draw_button.text('TURN DRAW MODE ON');
       game.new_game(false);
@@ -551,27 +542,23 @@ export function render_ui(
       if (choice === "Acey-Ducey")
       {
         alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
-        game.acey_ducey_on();
-
+        game.set_acey_ducey_mode(true);
         $draw_button.css('background-color', 'red');
         $draw_button.text('TURN DRAW MODE OFF');
       }
       else
       {
         //put buttons back
-        game.acey_ducey_off();
-
+        game.set_acey_ducey_mode(false);
         if (choice === "Midnight Baseball")
         {
           alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
             "  and players can flip their own cards")
-          game.no_peek_mode_on();
-          //          if(!game_state.draw_mode)
-          //            game.toggle_draw_mode();
+          game.set_no_peek_mode(true);
         }
         else
         {
-          game.no_peek_mode_off();
+                    game.set_no_peek_mode(false);
           $draw_button.css('background-color', 'darkgreen');
           $draw_button.text('TURN DRAW MODE ON');
         }
@@ -581,8 +568,8 @@ export function render_ui(
       {
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button), false);
         show_buttons(new Array($five_down_button, $next_down_button), true);
-        game.five_card_on();
-        game.man_mouse_off();
+        game.set_draw_mode(true);
+        game.set_man_mouse_mode(false);
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
@@ -590,8 +577,8 @@ export function render_ui(
       {
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button), false);
         show_buttons(new Array($five_down_button, $one_down_button, $next_up_button), true);
-        game.five_card_off();
-        game.man_mouse_off();
+                game.set_draw_mode(false);
+        game.set_man_mouse_mode(false);
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
@@ -600,8 +587,8 @@ export function render_ui(
         show_buttons(new Array($five_down_button, $two_down_one_up_button, $one_down_button,
           $one_up_button, $next_down_button, $common_button), false);
         show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button), true);
-        game.five_card_off();
-        game.man_mouse_off();
+                        game.set_draw_mode(false);
+        game.set_mand_mouse_mode(false);
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
@@ -611,11 +598,11 @@ export function render_ui(
         show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $one_up_button, $next_down_button, $common_button, $next_up_button, $win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($one_down_button), true);
-        game.five_card_off();
-        game.man_mouse_on();
+                        game.set_draw_mode(false);
+                game.set_man_mouse_mode(true);
+
       console.log("game selected, man-mouse mode: " + game_state.man_mouse_mode)
 
-//        $reset_game_button.text("Next Dealer");
         $one_down_button.text("All 3DN");
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
@@ -623,8 +610,8 @@ export function render_ui(
         show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $win_a_d_button, $lose_a_d_button, $one_up_button, $next_down_button, $next_up_button), false);
         show_buttons(new Array($one_down_button, $common_button), true);
-        game.five_card_off();
-        game.man_mouse_off();
+                        game.set_draw_mode(false);
+        game.set_mand_mouse_mode(false);
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
@@ -632,8 +619,8 @@ export function render_ui(
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button), false);
         show_buttons(new Array( $one_down_button, $next_up_button, $next_down_button), true);
-        game.five_card_off();
-        game.man_mouse_off();
+                        game.set_draw_mode(false);
+        game.set_mand_mouse_mode(false);
 
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
@@ -643,8 +630,8 @@ export function render_ui(
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button), true);
-        game.five_card_off();
-        game.man_mouse_off();
+        game.set_draw_mode(false);
+        game.set_man_mouse_mode(false);
 
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
@@ -680,8 +667,6 @@ export function render_ui(
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
 
-
-//    $dealer_controls_bottom.append($increment_active_bettor_drawer_button);
         $dealer_controls_bottom.append($set_game_select);
 
     $dealer_controls_bottom.append($winners_select);
@@ -774,20 +759,6 @@ export function render_ui(
         $ante_input.val('');
       }
     });
-
-
-
-    //    $ante_button.click(function ()
-    //    {
-    //      if ($ante_input.val() > 0)
-    //      {
-    //        const amount = +$bet_input.val();
-    //        game.bet(amount);
-    //        $ante_input.val('');
-    //
-    //      }
-    //
-    //    });
 
     //MENU for +$10, logout, reset game
     //set game selector to show name of game on screen:
@@ -950,8 +921,6 @@ export function render_ui(
     $header.append($common_info);
 
     $header.append($other_select);
-    //    $header.append($buy_10_button);
-    //    $header.append($logout_button);
     $header.append($game_name_display);
 
     $header.append('<hr />');
