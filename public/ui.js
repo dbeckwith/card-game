@@ -146,7 +146,8 @@ export function render_ui(
   {
     $app.empty(); //get rid of login screen HTML
 
-    const $header = $('<div />', {
+    const $header = $('<div />',
+    {
       id: 'header',
     });
 
@@ -300,7 +301,8 @@ export function render_ui(
     {
       game.one_card(true);
       console.log(game_state.gertied);
-      if(game_state.gertied){
+      if (game_state.gertied)
+      {
         alert("Dirty Gertie!!!  All cards in, reshuffle.  Time to re-ante!");
         game.reset_gertie();
         console.log(game_state.gertied + " after reset");
@@ -463,14 +465,14 @@ export function render_ui(
 
     $new_game_button.click(function ()
     {
-//      game.acey_ducey_off();
+      //      game.acey_ducey_off();
       if (!game.draw_mode)
         game.toggle_draw_mode();
       $("#set-game-select").val("Select Game");
       $("#set-game-select").change();
       game.set_no_peek_mode(false);
-//      game.no_peek_mode_off();
-//      game.man_mouse_off();
+      //      game.no_peek_mode_off();
+      //      game.man_mouse_off();
       game.set_man_mouse_mode(false);
       $draw_button.css('background-color', 'darkgreen');
       $draw_button.text('TURN DRAW MODE ON');
@@ -490,7 +492,7 @@ export function render_ui(
     const $games = new Array(
       '7-Card Stud',
       '5-Card Draw',
-//      'Jacks or Better',
+      //      'Jacks or Better',
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
@@ -498,7 +500,7 @@ export function render_ui(
       'Midnight Baseball',
       'Follow the Queen',
       'Dirty Gertie',
-//      'Gay Bar',
+      //      'Gay Bar',
       'Raise the Flag',
       '',
       'Texas Hold-Em',
@@ -558,7 +560,7 @@ export function render_ui(
         }
         else
         {
-                    game.set_no_peek_mode(false);
+          game.set_no_peek_mode(false);
           $draw_button.css('background-color', 'darkgreen');
           $draw_button.text('TURN DRAW MODE ON');
         }
@@ -577,7 +579,7 @@ export function render_ui(
       {
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button), false);
         show_buttons(new Array($five_down_button, $one_down_button, $next_up_button), true);
-                game.set_draw_mode(false);
+        game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
@@ -587,7 +589,7 @@ export function render_ui(
         show_buttons(new Array($five_down_button, $two_down_one_up_button, $one_down_button,
           $one_up_button, $next_down_button, $common_button), false);
         show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button), true);
-                        game.set_draw_mode(false);
+        game.set_draw_mode(false);
         game.set_mand_mouse_mode(false);
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
@@ -598,10 +600,10 @@ export function render_ui(
         show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $one_up_button, $next_down_button, $common_button, $next_up_button, $win_a_d_button, $lose_a_d_button), false);
         show_buttons(new Array($one_down_button), true);
-                        game.set_draw_mode(false);
-                game.set_man_mouse_mode(true);
+        game.set_draw_mode(false);
+        game.set_man_mouse_mode(true);
 
-      console.log("game selected, man-mouse mode: " + game_state.man_mouse_mode)
+        console.log("game selected, man-mouse mode: " + game_state.man_mouse_mode)
 
         $one_down_button.text("All 3DN");
       }
@@ -610,16 +612,16 @@ export function render_ui(
         show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $win_a_d_button, $lose_a_d_button, $one_up_button, $next_down_button, $next_up_button), false);
         show_buttons(new Array($one_down_button, $common_button), true);
-                        game.set_draw_mode(false);
+        game.set_draw_mode(false);
         game.set_mand_mouse_mode(false);
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
-      else if(choice === "Follow the Queen" || choice === "Dirty Gertie" || choice === "Woolworths")
+      else if (choice === "Follow the Queen" || choice === "Dirty Gertie" || choice === "Woolworths")
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button), false);
-        show_buttons(new Array( $one_down_button, $next_up_button, $next_down_button), true);
-                        game.set_draw_mode(false);
+        show_buttons(new Array($one_down_button, $next_up_button, $next_down_button), true);
+        game.set_draw_mode(false);
         game.set_mand_mouse_mode(false);
 
         $reset_game_button.text("RESET Game");
@@ -667,11 +669,11 @@ export function render_ui(
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
 
-        $dealer_controls_bottom.append($set_game_select);
+    $dealer_controls_bottom.append($set_game_select);
 
     $dealer_controls_bottom.append($winners_select);
     $dealer_controls_bottom.append($payout_button);
-        $dealer_controls_bottom.append($new_game_button);
+    $dealer_controls_bottom.append($new_game_button);
 
     $dealer_controls_bottom.append($dealer_select);
     $dealer_controls_bottom.append($reset_game_button);
@@ -935,33 +937,33 @@ export function render_ui(
   function render_game()
   {
 
-//    //next active player
-//    Mousetrap.bind('n', function ()
-//    {
-//      if (game_state.dealer === current_player.id && !showing_login_screen)
-//        game.increment_bettor_drawer();
-//    });
-//    //1 up
-//    Mousetrap.bind('u', function ()
-//    {
-//      if (!showing_login_screen)
-//        game.one_card(true);
-//    });
-//    //1 down
-//    Mousetrap.bind('d', function ()
-//    {
-//      if (!showing_login_screen)
-//        game.one_card(false);
-//    });
-//    //check
-//    Mousetrap.bind('c', function ()
-//    {
-//      if (!showing_login_screen)
-//      {
-//        game.bet(0);
-//        $bet_input.val('');
-//      }
-//    });
+    //    //next active player
+    //    Mousetrap.bind('n', function ()
+    //    {
+    //      if (game_state.dealer === current_player.id && !showing_login_screen)
+    //        game.increment_bettor_drawer();
+    //    });
+    //    //1 up
+    //    Mousetrap.bind('u', function ()
+    //    {
+    //      if (!showing_login_screen)
+    //        game.one_card(true);
+    //    });
+    //    //1 down
+    //    Mousetrap.bind('d', function ()
+    //    {
+    //      if (!showing_login_screen)
+    //        game.one_card(false);
+    //    });
+    //    //check
+    //    Mousetrap.bind('c', function ()
+    //    {
+    //      if (!showing_login_screen)
+    //      {
+    //        game.bet(0);
+    //        $bet_input.val('');
+    //      }
+    //    });
     //show chip totals
     Mousetrap.bind('q', function ()
     {
@@ -996,24 +998,37 @@ export function render_ui(
     $winners_select_content.empty();
     _.forEach(game_state.players, player =>
     {
-      if (player.in_hand)
+      //      if (player.in_hand)
+      //      {
+      const $player_row = $('<label />',
       {
-        const $player_row = $('<label />',
-        {
-          for: `winners-select-player-${player.id}`,
-        });
+        for: `winners-select-player-${player.id}`,
+      });
 
-        const $player_input = $('<input />',
-        {
-          type: 'checkbox',
-          id: `winners-select-player-${player.id}`,
-        });
+      const $player_input = $('<input />',
+      {
+        type: 'checkbox',
+        id: `winners-select-player-${player.id}`,
+      });
 
-        $player_row.append($player_input);
+
+      $player_row.append($player_input);
+
+      if (player.in_hand)
         $player_row.append(player.name);
-
-        $winners_select_content.append($player_row);
+      else
+      {
+        const $player_name = $('<span />',
+        {
+          id: "p-n",
+        });
+        $player_name.css("font-size", "10px");
+        $player_name.append(`${player.name} - out`);
+        $player_row.append($player_name);
       }
+
+      $winners_select_content.append($player_row);
+      //      }
     });
 
     //show all active players in the dealer select menu
