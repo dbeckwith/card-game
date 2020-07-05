@@ -43,6 +43,7 @@ class GameState(object):
         self.current_game    = None
         self.connections     = []
 
+        self.gertied         = False
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -66,6 +67,7 @@ class GameState(object):
             'no_peek_mode' : self.no_peek_mode,
             'five_card_draw_mode': self.five_card_draw_mode,
             'man_mouse_mode': self.man_mouse_mode,
+            'gertied'      : self.gertied,
         }
 
     async def connect(self, rpc):
@@ -138,7 +140,14 @@ class GameState(object):
         for player in self.players:
             if player.in_hand:
                 yield player
-            
+         
+    def gertie(self):
+        for player in self.players:
+            player.clear_hand()
+        # shuffle a new deck
+        self.deck = cards.new_deck() 
+        self.gertied = True
+        
     def new_game(self):
         '''
         creates new game: 0 pot, set players, new deck, clear common cards,
@@ -159,7 +168,7 @@ class GameState(object):
         self.deck = cards.new_deck()
 
         self.draw_mode = False
-
+        self.gertied = False
         # new hand
         self.hand_started = False
 

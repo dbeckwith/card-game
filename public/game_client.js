@@ -165,4 +165,7 @@ export class CardGame {
   pay_post(num){
     this._send('pay_post', { num });
   }
+  reset_gertie(){
+    this._send('reset_gertie');
+  }
 }

@@ -138,6 +138,8 @@ class RPC(object):
 
                 player.give_card(PlayerCard(card, True))
         
+    def reset_gertie(self):
+        self.game_state.gertied = False
         
     def one_card(self, up):
         '''
@@ -157,7 +159,6 @@ class RPC(object):
         if len(self.game_state.deck) == 0 and self.game_state.acey_ducey_mode:
             # shuffle a new deck
             self.game_state.deck = cards.new_deck()  
-            raise ClientError('deck re-shuffled')
             
         num_cards_in_hand = len(self.game_state.active_player.hand)  
         # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
@@ -169,6 +170,9 @@ class RPC(object):
         
         if fifth_card or (not_draw and not_midnight_four):
             self.game_state.next_active_player()
+        
+        if self.game_state.game_name == "Dirty Gertie" and card == "QS":
+            self.game_state.gertie() # clears hands/shuffles deck
 
     def flip(self, card_num):
         '''
@@ -286,6 +290,8 @@ class RPC(object):
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()
+    
+
         
     def pay_post(self, num):
         self.game_state.pay_post(num)

@@ -297,6 +297,12 @@ export function render_ui(
     $next_up_button.click(function ()
     {
       game.one_card(true);
+      console.log(game_state.gertied);
+      if(game_state.gertied){
+        alert("Dirty Gertie!!!  All cards in, reshuffle.  Time to re-ante!");
+        game.reset_gertie();
+        console.log(game_state.gertied + " after reset");
+      }
     });
     //  
     $win_a_d_button.click(function ()
@@ -491,13 +497,15 @@ export function render_ui(
     const $games = new Array(
       '7-Card Stud',
       '5-Card Draw',
+//      'Jacks or Better',
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
       'Woolworths',
       'Midnight Baseball',
       'Follow the Queen',
-      'Gay Bar',
+      'Dirty Gertie',
+//      'Gay Bar',
       'Raise the Flag',
       '',
       'Texas Hold-Em',
