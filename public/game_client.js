@@ -66,8 +66,8 @@ export class CardGame {
     this._send('kick', { player_id });
   }
 
-  new_game() {
-    this._send('new_game');
+  new_game(from_menu) {
+    this._send('new_game', { from_menu });
   }
 
   deal_all(down, up) {

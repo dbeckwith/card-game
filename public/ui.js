@@ -481,7 +481,7 @@ export function render_ui(
       game.man_mouse_off();
       $draw_button.css('background-color', 'darkgreen');
       $draw_button.text('TURN DRAW MODE ON');
-      game.new_game();
+      game.new_game(false);
     });
     $reset_game_button.click(function ()
     {
@@ -544,7 +544,7 @@ export function render_ui(
       let choice = $(this).val();
 
       game.set_game_name(choice);
-
+      game.new_game(true);
       //ACEY-DUCEY: remove buttons/add W and L buttons
       if (choice === "Acey-Ducey")
       {
