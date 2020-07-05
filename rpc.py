@@ -212,6 +212,17 @@ class RPC(object):
         self.game_state.acey_ducey_mode = on
         self.game_state.draw_mode = on     
     
+    def undo(self):
+        # if they've made a bet or ante and are the active player, can undo
+        if self.player.ante_is_last_bet is not None and self.game_state.active_player is self.player:
+            if self.player.ante_is_last_bet:
+                self.player.chips   += self.player.last_ante
+                self.game_state.pot -= self.player.last_ante
+            else:
+                self.player.chips   += self.player.last_bet
+                self.game_state.pot -= self.player.last_bet
+            
+        self.player.ante_is_last_bet = None
     def fold(self):
         '''fold current player'''
         if self.player is None:
@@ -249,6 +260,10 @@ class RPC(object):
         self.player.chips_in      += amount
         self.player.chips_in_hand += amount
         
+        self.player.last_bet = amount
+        self.player.ante_is_last_bet = False
+        
+        
         self.reset_antes_and_chips_in(False)
         
         if not self.game_state.acey_ducey_mode:
@@ -274,7 +289,8 @@ class RPC(object):
         self.game_state.pot += amt
         self.player.chips_in_hand += amt
         self.player.anted = True
-        
+        self.player.last_ante = amt
+        self.player.ante_is_last_bet = True
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()

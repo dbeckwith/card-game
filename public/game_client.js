@@ -61,7 +61,9 @@ export class CardGame {
   logout(name) {
     this._send('logout');
   }
-
+undo(){
+  this._send('undo');
+}
   kick(player_id) {
     this._send('kick', { player_id });
   }

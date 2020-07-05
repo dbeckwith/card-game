@@ -627,7 +627,16 @@ export function render_ui(
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
-      // "7-Card Stud" "5-Card Stud" "Chicago Hi-Lo"  "Follow the Queen"  "Woolworths" "Dirty Gertie"
+      else if (choice === "5-Card Stud")
+      {
+        show_buttons(new Array($two_down_one_up_button,  $five_down_button, $win_a_d_button, $lose_a_d_button), false);
+        show_buttons(new Array($one_up_button, $next_down_button, $next_up_button, $one_down_button), true);
+        game.set_draw_mode(true);
+        game.set_man_mouse_mode(false);
+        $reset_game_button.text("RESET Game");
+        $one_down_button.text("All 1DN");
+      }
+      // "7-Card Stud" 
       else
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button), false);
@@ -767,6 +776,7 @@ export function render_ui(
     const $other_select = $('<select />',
     {
       id: 'other-select',
+      title: "Undo: will only undo your last ante or bet if you are the active player",
     });
 
     $other_select.empty();
@@ -781,6 +791,9 @@ export function render_ui(
         case 'log-out':
           game.logout();
           break;
+        case 'undo':
+          game.undo();
+          break;
       }
       $(this).val('prompt');
     });
@@ -788,6 +801,7 @@ export function render_ui(
     var other_functions = [
       ['Buy-In $10', 'buy-in'],
       ['Log Out', 'log-out'],
+      ['Undo Last Ante/Bet', 'undo'],
     ];
 
     _.forEach(other_functions, ([label, id]) =>
