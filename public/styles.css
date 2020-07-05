@@ -470,7 +470,7 @@ input {
 .chips-shy {
   grid-column: 2;
   grid-row: 1;
-  font-size: 17px;
+  font-size: 15px;
   font-family: 'PT Mono', monospace;
 
 }

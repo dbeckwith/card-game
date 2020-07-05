@@ -1231,11 +1231,16 @@ export function render_ui(
       });
       $chips_shy.addClass('chips-shy');
       let $chips_in_disp = _.max(_.map(game_state.players, 'chips_in')) - player.chips_in;
-
+      let $last_chips = "";
+      
+      if(player.ante_is_last_bet) 
+        $last_chips = player.last_ante;
+      else
+        $last_chips = player.last_bet;
       //only show shy amount if not playing man-mouse and you are in the hand
       if (game_state.game_name !== "Man-Mouse" && player.in_hand)
       {
-        $chips_shy.text(`shy:${$chips_in_disp}`);
+        $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
 
       }
       else
