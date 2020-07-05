@@ -387,21 +387,21 @@ input {
 **************************/
 .player-seats {
   display: flex;
-  flex-wrap: wrap;
+/*  HANGED FOR 1 COLUMN: flex-wrap: wrap;*/
   flex-direction: column;
-  height: calc(115px * 5);
+/*  CHANGED FOR 1 COLUMN: height: calc(115px * 5);*/
 
 }
 
 .player-seat {
   display: grid;
   grid-gap: 2px;
-  grid-template-columns: 115px 70px 1fr;
+  grid-template-columns: 240px 70px 1fr;
   grid-template-rows: auto 1fr;
   font-family: 'Open Sans Condensed', sans-serif;
-
+  font-size: 26px;
   /*  font-family: 'PT Mono', monospace;*/
-  height: 104px;
+  height: 90px; /* CHANGED FOR 1 COLUMN: was 104 */
   padding: 0px;
   border: 1px solid transparent;
   border-radius: 4px;
@@ -448,7 +448,7 @@ input {
 .chips-shy {
   grid-column: 2;
   grid-row: 1;
-  font-size: 16px;
+  font-size: 17px;
   font-family: 'PT Mono', monospace;
 
 }
@@ -492,10 +492,12 @@ input {
   width: 60px;
   border: 1px solid transparent;
   border-radius: 6px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .sixth_card {
-  margin-left: 7px;
+  margin-left: 9px;
 }
 
 #up-with-down {
@@ -507,7 +509,7 @@ input {
   /*  border: 4px solid blue;*/
   clip-path: polygon(0 0, 0% 100%, 100% 0);
   position: absolute;
-  top: -66px;
+  top: -55px;
   left: 0px;
   /*  z-index:3;*/
 }

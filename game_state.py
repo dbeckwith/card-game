@@ -195,10 +195,9 @@ class GameState(object):
         # new hand
         self.hand_started = False
 
-        if self.game_name != "Man-Mouse":
-            self.pot = 0
-            for player in self.players:
-                player.chips += player.chips_in_hand
+        self.pot = 0
+        for player in self.players:
+            player.chips += player.chips_in_hand
             
         # reset each player
         for player in self.players:
