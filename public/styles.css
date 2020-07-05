@@ -417,7 +417,7 @@ input {
 .player-seat {
   display: grid;
   grid-gap: 2px;
-  grid-template-columns: 260px 70px 1fr;
+  grid-template-columns: 270px 130px 1fr;
   grid-template-rows: auto 1fr;
   font-family: 'Open Sans Condensed', sans-serif;
   font-size: 26px;

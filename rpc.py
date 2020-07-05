@@ -138,8 +138,9 @@ class RPC(object):
 
                 player.give_card(PlayerCard(card, True))
         
-    def reset_gertie(self):
-        self.game_state.gertied = False
+        
+    def gertie(self):
+        self.game_state.gertie()
         
     def one_card(self, up):
         '''
@@ -171,8 +172,8 @@ class RPC(object):
         if fifth_card or (not_draw and not_midnight_four):
             self.game_state.next_active_player()
         
-        if self.game_state.game_name == "Dirty Gertie" and card == "QS":
-            self.game_state.gertie() # clears hands/shuffles deck
+        #if self.game_state.game_name == "Dirty Gertie" and card == "QS":
+            #self.game_state.gertie() # clears hands/shuffles deck
 
     def flip(self, card_num):
         '''
