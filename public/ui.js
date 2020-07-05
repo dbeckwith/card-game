@@ -146,7 +146,9 @@ export function render_ui(
   {
     $app.empty(); //get rid of login screen HTML
 
-    const $header = $('<center />');
+    const $header = $('<div />', {
+      id: 'header',
+    });
 
     //don't show fireworks at first:
     $(".before").hide();
@@ -304,7 +306,7 @@ export function render_ui(
         console.log(game_state.gertied + " after reset");
       }
     });
-    //  
+    //
     $win_a_d_button.click(function ()
     {
       game.clear_hand();
@@ -364,7 +366,7 @@ export function render_ui(
         'Also, dealing a card will not increment to next player',
     });
 
-    //NEXT ACTIVE PLAYER BUTTON  
+    //NEXT ACTIVE PLAYER BUTTON
     const $increment_active_bettor_drawer_button = $('<button />',
     {
       id: 'increment-active-bettor-drawer-button',
@@ -730,8 +732,8 @@ export function render_ui(
       title: "Ante or pay to the pot 1 chip/doesn't affect \"shy\" displays",
       text: 'Ante/Pay',
     });
-    
-    
+
+
     $logout_button.click(function ()
     {
       game.logout();
@@ -784,7 +786,7 @@ export function render_ui(
     //        $ante_input.val('');
     //
     //      }
-    //      
+    //
     //    });
 
     //MENU for +$10, logout, reset game

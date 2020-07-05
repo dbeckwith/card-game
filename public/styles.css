@@ -3,9 +3,28 @@ body {
   font-size: 20px;
   background-image: linear-gradient(to bottom, #007712, #2AcF15);
   color: white;
-  min-height: 100vh;
+
+  height: 100vh;
   margin: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+#app {
+  height: 0;
+  flex-grow: 1;
   padding: 5px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#header {
+  text-align: center;
+}
+
+#game-board {
+  overflow-y: scroll;
 }
 
 /** BASIC BUTTON SETUP **/
