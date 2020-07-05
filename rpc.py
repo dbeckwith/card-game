@@ -99,12 +99,14 @@ class RPC(object):
     def reset_game(self):
         self.game_state.reset_game()
 
-    def reset_antes_and_chips_in(self):
+    def reset_antes_and_chips_in(self, chips):
+        '''called after card dealt, to reset antes and chips in for this round'''
         players = list(self.game_state.players_in_hand())
         
         for player in players:
             player.anted = False 
-            player.chips_in = 0
+            if chips:
+                player.chips_in = 0
             
     def deal_all(self, down, up):
         '''
@@ -114,7 +116,7 @@ class RPC(object):
         '''
         # dealing cards starts the hand
         self.game_state.hand_started = True
-        self.reset_antes_and_chips_in()
+        self.reset_antes_and_chips_in(True)
 
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
@@ -146,7 +148,7 @@ class RPC(object):
             
         self.game_state.hand_started = True
         
-        self.reset_antes_and_chips_in()
+        self.reset_antes_and_chips_in(True)
 
         card = self.game_state.draw_card()
 
@@ -161,8 +163,10 @@ class RPC(object):
         # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
         
         fifth_card = self.game_state.five_card_draw_mode and num_cards_in_hand == 5
+        
         not_draw = not self.game_state.draw_mode
         not_midnight_four = self.game_state.game_name != "Midnight Baseball"
+        
         if fifth_card or (not_draw and not_midnight_four):
             self.game_state.next_active_player()
 
@@ -183,7 +187,7 @@ class RPC(object):
     def deal_common(self):
         '''deal one common up card'''
         self.game_state.hand_started = True
-        self.reset_antes_and_chips_in()
+        self.reset_antes_and_chips_in(True)
 
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
@@ -250,6 +254,9 @@ class RPC(object):
         self.game_state.last_bet   = amount
         self.player.chips_in      += amount
         self.player.chips_in_hand += amount
+        
+        self.reset_antes_and_chips_in(False)
+        
         if not self.game_state.acey_ducey_mode:
             self.game_state.next_active_player()
     
@@ -334,6 +341,8 @@ class RPC(object):
         
         for player in self.game_state.players:
             player.chips_in_hand = 0
+        
+        self.game_state.last_bet = 0
 
         
     def increment_bettor_drawer(self):

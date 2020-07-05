@@ -149,7 +149,7 @@ async def run_server(*, host, port, game_state):
     # serve static webpage files
     app.router.add_static('/', Path(__file__).parent / 'public')
 
-    app.freeze()
+    app.freeze()  # creates static files
 
     await app.startup()
 

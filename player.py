@@ -7,8 +7,8 @@ class Player(object):
         self.connected  = False
         self.hand       = []
         self.in_hand    = False
-        self.chips      = 0
-        self.buy_in     = 0
+        self.chips      = 0 # how much they currently have, total
+        self.buy_in     = 0 # how many chips they have bought over the course of the night
         self.chips_in   = 0 # how much bet in round for this player
         self.anted      = False
         self.chips_in_hand = 0

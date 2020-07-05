@@ -465,7 +465,7 @@ export function render_ui(
 
     $new_game_button.click(function ()
     {
-      game.acey_ducey_off();
+//      game.acey_ducey_off();
       if (!game.draw_mode)
         game.toggle_draw_mode();
       $("#set-game-select").val("Select Game");
@@ -617,6 +617,16 @@ export function render_ui(
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
+      else if(choice === "Follow the Queen" || choice === "Dirty Gertie" || choice === "Woolworths")
+      {
+        show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button), false);
+        show_buttons(new Array( $one_down_button, $next_up_button, $next_down_button), true);
+        game.five_card_off();
+        game.man_mouse_off();
+
+        $reset_game_button.text("RESET Game");
+        $one_down_button.text("All 1DN");
+      }
       // "7-Card Stud" "5-Card Stud" "Chicago Hi-Lo"  "Follow the Queen"  "Woolworths" "Dirty Gertie"
       else
       {
@@ -670,13 +680,14 @@ export function render_ui(
     $dealer_controls.append($draw_button);
 
 
-    $dealer_controls_bottom.append($increment_active_bettor_drawer_button);
-    $dealer_controls_bottom.append($payout_button);
+//    $dealer_controls_bottom.append($increment_active_bettor_drawer_button);
+        $dealer_controls_bottom.append($set_game_select);
+
     $dealer_controls_bottom.append($winners_select);
+    $dealer_controls_bottom.append($payout_button);
+        $dealer_controls_bottom.append($new_game_button);
+
     $dealer_controls_bottom.append($dealer_select);
-    //    $dealer_controls_bottom.append('<span style="margin-left:15px;">Game: </span>');
-    $dealer_controls_bottom.append($set_game_select);
-    $dealer_controls_bottom.append($new_game_button);
     $dealer_controls_bottom.append($reset_game_button);
     $dealer_controls_bottom.append($new_back_button);
 
@@ -1193,14 +1204,12 @@ export function render_ui(
       });
       $player_name.addClass('player-name');
 
-      //add ante, dealer, active player indicators:
+      //add ante, dealer indicators:
       if (player.in_hand && player.anted)
         $player_name.append('•');
       $player_name.append(player.name);
       if (game_state.dealer === player.id)
         $player_name.append(" ♠")
-      //      if (game_state.active_player == player.id)
-      //        $player_name.append("⇚")
 
       //add row of chips (40 = $10 each chip)
       const $chip_stack_display = $('<div />');

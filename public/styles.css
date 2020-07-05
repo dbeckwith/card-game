@@ -93,13 +93,13 @@ button:hover {
 /* common up card button - is different color */
 #common-button {
   border: solid 4px blue;
-  margin-left: 20px;
+  margin-left: 40px;
 }
 
 /* draw-mode toggle button */
 #draw-btn {
   border-radius: 4px;
-  margin-left: 45px;
+  margin-left: 15px;
   color: yellow;
   background-color: darkgreen;
   border-color: aqua;
@@ -176,7 +176,7 @@ button:hover {
 #dealer-select {
   width: 120px;
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 80px;
 }
 
 #dealer-select-box {
@@ -234,7 +234,7 @@ button:hover {
 #set-game-select {
   width: 120px;
   height: 20px;
-  margin-left: 100px;
+  margin-right: 20px;
 }
 
 #game-name-display {
@@ -404,7 +404,7 @@ input {
 }
 
 #reset-game-button {
-  margin-left: 20px;
+  margin-left: 15px;
   font-size: 10px;
 }
 
