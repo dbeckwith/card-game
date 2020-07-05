@@ -251,7 +251,7 @@ export function render_ui(
     });
     const $next_up_button = $('<button />',
     {
-      text: 'Next (U)P',
+      text: 'Next UP',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
       id: 'next-up',
     });
@@ -289,7 +289,7 @@ export function render_ui(
 
     const $next_down_button = $('<button />',
     {
-      text: 'Next (D)N',
+      text: 'Next DN',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
       id: 'next-down',
     });
@@ -963,40 +963,34 @@ export function render_ui(
    ********************************/
   function render_game()
   {
-    //fireworks
-    Mousetrap.bind('1', function ()
-    {
-      var win = window.open("fireworks.html", '_blank');
-      win.focus();
-    });
 
-    //next active player
-    Mousetrap.bind('n', function ()
-    {
-      if (game_state.dealer === current_player.id && !showing_login_screen)
-        game.increment_bettor_drawer();
-    });
-    //1 up
-    Mousetrap.bind('u', function ()
-    {
-      if (!showing_login_screen)
-        game.one_card(true);
-    });
-    //1 down
-    Mousetrap.bind('d', function ()
-    {
-      if (!showing_login_screen)
-        game.one_card(false);
-    });
-    //check
-    Mousetrap.bind('c', function ()
-    {
-      if (!showing_login_screen)
-      {
-        game.bet(0);
-        $bet_input.val('');
-      }
-    });
+//    //next active player
+//    Mousetrap.bind('n', function ()
+//    {
+//      if (game_state.dealer === current_player.id && !showing_login_screen)
+//        game.increment_bettor_drawer();
+//    });
+//    //1 up
+//    Mousetrap.bind('u', function ()
+//    {
+//      if (!showing_login_screen)
+//        game.one_card(true);
+//    });
+//    //1 down
+//    Mousetrap.bind('d', function ()
+//    {
+//      if (!showing_login_screen)
+//        game.one_card(false);
+//    });
+//    //check
+//    Mousetrap.bind('c', function ()
+//    {
+//      if (!showing_login_screen)
+//      {
+//        game.bet(0);
+//        $bet_input.val('');
+//      }
+//    });
     //show chip totals
     Mousetrap.bind('q', function ()
     {
