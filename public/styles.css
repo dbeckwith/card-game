@@ -99,7 +99,7 @@ button:hover {
 /* draw-mode toggle button */
 #draw-btn {
   border-radius: 4px;
-  margin-left: 15px;
+  margin-left: 55px;
   color: yellow;
   background-color: darkgreen;
   border-color: aqua;
@@ -123,7 +123,7 @@ button:hover {
 
 #payout-button {
   background-color: red;
-  margin-left: 10px;
+  margin-left: 6px;
   color: yellow;
 }
 
@@ -131,6 +131,7 @@ button:hover {
 /* selector for players to receive payout */
 #winners-select {
   width: 120px;
+  margin-left:20px;
   display: inline-block;
 }
 
@@ -225,7 +226,7 @@ button:hover {
 
 /* new game button */
 #new-game-button {
-  margin-left: 5px;
+  margin-left: 15px;
   color: white;
   background-color: blue;
 }
@@ -287,6 +288,9 @@ button:hover {
   font-size: 15px;
 }
 
+#ante-btn{
+  margin-left: 20px;
+}
 .bet-buttons {
   margin: 0px;
   border-radius: 1px;

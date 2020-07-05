@@ -16,7 +16,7 @@ export class CardGame {
       switch (message.type) {
         case 'game_state': {
           const { game_state, current_player } = message;
-//          console.log('Game state update:', { game_state, current_player });
+          console.log('Game state update:', { game_state, current_player });
           this.on_update?.({ game_state, current_player });
           break;
         }

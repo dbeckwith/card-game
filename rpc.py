@@ -163,7 +163,7 @@ class RPC(object):
         # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
         
         fifth_card = self.game_state.five_card_draw_mode and num_cards_in_hand == 5
-        
+
         not_draw = not self.game_state.draw_mode
         not_midnight_four = self.game_state.game_name != "Midnight Baseball"
         
@@ -206,8 +206,10 @@ class RPC(object):
         self.game_state.five_card_draw_mode = False
 
     def man_mouse_on(self):
+        print("Mouse on")
         self.game_state.man_mouse_mode = True
     def man_mouse_off(self):
+        print("Mouse off")
         self.game_state.man_mouse_mode = False
         
     def acey_ducey_off(self):
@@ -331,8 +333,12 @@ class RPC(object):
         else: # man-mouse
             # pay winner
             winners[0].chips += self.game_state.pot
+            
+            # save pot amount, then clear pot:
             to_pay = self.game_state.pot
-            # any player that stayed in, pays the pot
+            self.game_state.pot = 0
+            
+            # any player that stayed in pays the pot
             for p in self.game_state.players:
                 if p.in_hand and p is not winners[0]:
                     p.chips            -= to_pay

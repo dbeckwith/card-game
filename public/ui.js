@@ -222,6 +222,7 @@ export function render_ui(
     });
     $one_down_button.on('click', function ()
     {
+      console.log(game_state.man_mouse_mode)
       if (game_state.man_mouse_mode)
         game.deal_all(3, 0);
       else
@@ -490,7 +491,6 @@ export function render_ui(
     const $games = new Array(
       '7-Card Stud',
       '5-Card Draw',
-      '(Jacks or Better)',
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
@@ -498,7 +498,7 @@ export function render_ui(
       'Midnight Baseball',
       'Follow the Queen',
       'Gay Bar',
-      'Dirty Gertie',
+      'Raise the Flag',
       '',
       'Texas Hold-Em',
       'Criss-Cross',
@@ -569,8 +569,8 @@ export function render_ui(
       ////  SHOW AND HIDE BUTTONS: /////
       if (choice === "5-Card Draw")
       {
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button), false);
-        show_buttons(new Array($five_down_button, $next_down_button, $one_down_button), true);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button), false);
+        show_buttons(new Array($five_down_button, $next_down_button), true);
         game.five_card_on();
         game.man_mouse_off();
         $reset_game_button.text("RESET Game");
@@ -603,8 +603,9 @@ export function render_ui(
         show_buttons(new Array($one_down_button), true);
         game.five_card_off();
         game.man_mouse_on();
+      console.log("game selected, man-mouse mode: " + game_state.man_mouse_mode)
 
-        $reset_game_button.text("Next Dealer");
+//        $reset_game_button.text("Next Dealer");
         $one_down_button.text("All 3DN");
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
@@ -638,16 +639,6 @@ export function render_ui(
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
       }
-      //mode that move to next player when 5th card is dealt after draw
-      if (game_state.game_name === "5-Card Draw")
-      {
-        game.five_card_on();
-      }
-      else
-      {
-        game.five_card_off();
-      }
-
     });
 
     $set_game_select.append('<option selected disabled>Select Game</option>');
@@ -728,9 +719,11 @@ export function render_ui(
     const $ante_button = $('<button />',
     {
       id: "ante-btn",
-      title: "Ante 1 chip",
-      text: 'Ante',
+      title: "Ante or pay to the pot 1 chip/doesn't affect \"shy\" displays",
+      text: 'Ante/Pay',
     });
+    
+    
     $logout_button.click(function ()
     {
       game.logout();
@@ -910,6 +903,7 @@ export function render_ui(
       });
       $bet_buttons.append($bet_button_num);
     }
+
 
     //DISPLAY AMOUNT EACH PLAYER HAS:
     const $player_money_display = $('<span />',

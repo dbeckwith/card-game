@@ -198,7 +198,7 @@ class GameState(object):
 
     def pay_acey_ducey(self):
         self.active_player.chips += 2 * self.last_bet
-        self.pot -= self.last_bet 
+        self.pot                 -= 2 * self.last_bet 
         
     def pay_post(self, num):
         self.active_player.chips   -= num * self.last_bet
