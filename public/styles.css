@@ -172,6 +172,8 @@ button:hover {
 }
 
 #winners-select-content {
+    z-index: 10000;
+
   display: none;
   border: 1px #dadada solid;
   position: absolute;

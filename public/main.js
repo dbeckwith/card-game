@@ -6,12 +6,20 @@ $(() => {
   const game = new CardGame();
 
   game.on_connect = () => {
-    const storage = window.sessionStorage;
+    
+    //testing:
+    const storage = window.sessionStorage; //a session is a single tab (or dupe)
+    
+    //real game:
+//    const storage = window.localStorage; //a session is for the browser (so log back in same name)
+  
     let player_id = storage.getItem('player_id');
+    
     if (!player_id) {
       player_id = generate_random_id();
       storage.setItem('player_id', player_id);
     }
+    
     game.connect(player_id);
     $('#connection-banner').hide();
   };
