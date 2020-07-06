@@ -185,4 +185,7 @@ undo(){
   gertie(){
     this._send('gertie');
   }
+  ace_called(){
+    this._send('ace_called');
+  }
 }

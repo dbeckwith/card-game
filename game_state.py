@@ -42,7 +42,7 @@ class GameState(object):
         self.card_back_num   = 1
         self.current_game    = None
         self.connections     = []
-
+        self.wait_for_ace    = False
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -66,6 +66,7 @@ class GameState(object):
             'no_peek_mode' : self.no_peek_mode,
             'five_card_draw_mode': self.five_card_draw_mode,
             'man_mouse_mode': self.man_mouse_mode,
+            'wait_for_ace'  : self.wait_for_ace,
         }
 
     async def connect(self, rpc):
@@ -233,7 +234,8 @@ class GameState(object):
         seat = self.players.index(player)
         # return the player with the next seat (wrapping around)
         return self.players[(seat + 1) % len(self.players)]
-
+    def not_waiting_for_ace(self):
+        self.wait_for_ace = False
     def draw_card(self):
         '''takes next card from deck'''
         if self.deck:

@@ -517,7 +517,15 @@ input {
   margin-left: 2px;
   margin-right: 2px;
 }
-
+#post-button{
+  border: 2px solid purple;
+}
+#dbl-post-button{
+    border: 2px solid purple;
+}
+#ace-called-button{
+  margin-left:30px;
+}
 .sixth_card {
   margin-left: 9px;
 }
@@ -546,6 +554,38 @@ input {
 .draw-ready {
   border: 4px solid black;
 }
+#chips-summary{
+  font-size:20px;
+  color:white;
+}
+
+#summary th{
+  color:lightblue;
+  width:150px;
+  text-align: right;
+  font-size:30px;
+}
+#summary th:first-child{
+  text-align: left;
+  width: 250px;
+}
+
+#summary td{
+  width:150px;
+  text-align: right;
+  font-size:30px;
+}
+#summary td:first-child{
+  text-align: left;
+  width: 250px;
+}
+#up{
+  color:green;
+}
+#down{
+  color:red;
+}
+
 
 /***** ANIMATIONS ******/
 /* shake card on hover */

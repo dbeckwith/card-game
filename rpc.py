@@ -148,33 +148,45 @@ class RPC(object):
         :param up: True if up card, False if down card
         '''
         
+        if not self.game_state.wait_for_ace:
+        
+            self.game_state.hand_started = True
             
-        self.game_state.hand_started = True
-        
-        self.reset_antes_and_chips_in(True)
-
-        card = self.game_state.draw_card()
-
-        self.game_state.active_player.give_card(PlayerCard(card, up))
-        
-        if len(self.game_state.deck) == 0 and self.game_state.acey_ducey_mode:
-            # shuffle a new deck
-            self.game_state.deck = cards.new_deck()  
+            self.reset_antes_and_chips_in(True)
+            # don't deal card if acey ducey first card is ace and btn not yet pressed
+            card = self.game_state.draw_card()
+    
+            self.game_state.active_player.give_card(PlayerCard(card, up))
             
-        num_cards_in_hand = len(self.game_state.active_player.hand)  
-        # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
-        
-        fifth_card = self.game_state.five_card_draw_mode and num_cards_in_hand == 5
+            if len(self.game_state.deck) == 0 and self.game_state.acey_ducey_mode:
+                # shuffle a new deck
+                self.game_state.deck = cards.new_deck()  
+                
+            num_cards_in_hand = len(self.game_state.active_player.hand) 
+            
+            # acedy-ducey - stop if first ace:
+            is_first_card = num_cards_in_hand == 1
+            is_ace = card[0] == "1"
+            if is_first_card and is_ace and self.game_state.acey_ducey_mode:    
+                self.game_state.wait_for_ace = True
+            else:
+                self.game_state.wait_for_ace = False
+            
+            # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
+            fifth_card = self.game_state.five_card_draw_mode and num_cards_in_hand == 5
+    
+            not_draw = not self.game_state.draw_mode
+            not_midnight_four = self.game_state.game_name != "Midnight Baseball"
+            
+            if fifth_card or (not_draw and not_midnight_four):
+                self.game_state.next_active_player()
+            
+            #if self.game_state.game_name == "Dirty Gertie" and card == "QS":
+                #self.game_state.gertie() # clears hands/shuffles deck
 
-        not_draw = not self.game_state.draw_mode
-        not_midnight_four = self.game_state.game_name != "Midnight Baseball"
+    def ace_called(self):
+        self.game_state.not_waiting_for_ace()
         
-        if fifth_card or (not_draw and not_midnight_four):
-            self.game_state.next_active_player()
-        
-        #if self.game_state.game_name == "Dirty Gertie" and card == "QS":
-            #self.game_state.gertie() # clears hands/shuffles deck
-
     def flip(self, card_num):
         '''
         flip down card to up
@@ -292,6 +304,7 @@ class RPC(object):
         self.player.anted = True
         self.player.last_ante = amt
         self.player.ante_is_last_bet = True
+        
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()
