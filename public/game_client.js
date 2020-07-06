@@ -194,5 +194,8 @@ undo(){
     bet_pot(){
     this._send('bet_pot');
   }
+  lost_acey_ducey(){
+    this._send('lost_acey_ducey');
+  }
 }
 

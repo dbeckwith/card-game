@@ -321,6 +321,7 @@ export function render_ui(
 
     $lose_a_d_button.click(function ()
     {
+      game.lost_acey_ducey();
       game.clear_hand();
       game.increment_bettor_drawer();
     });
@@ -1327,8 +1328,8 @@ export function render_ui(
       {
         if (game_state.game_name != "Acey-Ducey")
           $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
-        else
-          $chips_shy.text(`last:${$last_chips}`);
+        else if(player.id === current_player.id)
+          $chips_shy.text(`BET:${$last_chips}`);
       }
       else
         $chips_shy.text(' ');

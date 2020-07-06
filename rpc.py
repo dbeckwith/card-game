@@ -272,9 +272,9 @@ class RPC(object):
             - self.player.chips_in
         if amount < bet_minimum and not self.game_state.acey_ducey_mode:
             raise ClientError(f'you must bet at least {bet_minimum} chips')
-
-        self.player.chips         -= amount
-        self.game_state.pot       += amount
+        if not self.game_state.acey_ducey_mode:
+            self.player.chips         -= amount
+            self.game_state.pot       += amount
         self.game_state.last_bet   = amount
         self.player.chips_in      += amount
         self.player.chips_in_hand += amount
@@ -314,7 +314,8 @@ class RPC(object):
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()
-    
+    def lost_acey_ducey(self):
+        self.game_state.lost_acey_ducey()
 
         
     def pay_post(self, num):

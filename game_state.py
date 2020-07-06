@@ -203,12 +203,16 @@ class GameState(object):
             self.next_active_player()
 
     def pay_acey_ducey(self):
-        self.active_player.chips += 2 * self.last_bet
-        self.pot                 -= 2 * self.last_bet 
-        
+        self.active_player.chips += self.last_bet
+        self.pot                 -= self.last_bet 
+    
+    def lost_acey_ducey(self):
+        self.active_player.chips -= self.last_bet
+        self.pot                 += self.last_bet 
+    
     def pay_post(self, num):
-        self.active_player.chips   -= num * self.last_bet
-        self.pot += num * self.last_bet  
+        self.active_player.chips -= num * self.last_bet
+        self.pot                 += num * self.last_bet  
         
     def next_dealer(self):
         if self.dealer is not None:
