@@ -265,6 +265,7 @@ export function render_ui(
       hidden: true,
       title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
     });
+    $win_a_d_button.hide();
 
     const $lose_a_d_button = $('<button />',
     {
@@ -273,6 +274,7 @@ export function render_ui(
       hidden: true,
       title: 'For acey-ducey - will move to next player and keep bet in pot ',
     });
+    $lose_a_d_button.hide();
     const $post_button = $('<button />',
     {
       text: 'POST',
@@ -280,7 +282,7 @@ export function render_ui(
       hidden: true,
       title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
     });
-
+    $post_button.hide();
     const $dbl_post_button = $('<button />',
     {
       text: 'DBL-POST',
@@ -295,7 +297,7 @@ export function render_ui(
       hidden: true,
       title: 'For acey-ducey - click to confirm low or hi ace has been called ',
     });
-
+    $ace_called_button.hide();
     const $next_down_button = $('<button />',
     {
       text: 'Next DN',
@@ -573,7 +575,7 @@ export function render_ui(
       if (choice === "5-Card Draw")
       {
         show_buttons(new Array($two_down_one_up_button, $gertied_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button), false);
-        show_buttons(new Array($five_down_button, $next_down_button), true);
+        show_buttons(new Array($five_down_button, $next_down_button, $common_button), true);
         game.set_draw_mode(true);
         game.set_man_mouse_mode(false);
         $reset_game_button.text("RESET Game");
@@ -582,7 +584,7 @@ export function render_ui(
       else if (choice === "Midnight Baseball")
       {
         show_buttons(new Array($two_down_one_up_button, $gertied_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button, $ace_called_button), false);
-        show_buttons(new Array($five_down_button, $one_down_button, $next_up_button), true);
+        show_buttons(new Array($five_down_button, $one_down_button, $next_up_button, $common_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
         $reset_game_button.text("RESET Game");
@@ -621,7 +623,7 @@ export function render_ui(
       else if (choice === "Follow the Queen" || choice === "Woolworths")
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button, $ace_called_button), false);
-        show_buttons(new Array($one_down_button, $next_up_button, $next_down_button), true);
+        show_buttons(new Array($one_down_button, $next_up_button, $next_down_button, $common_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
 
@@ -632,7 +634,7 @@ export function render_ui(
       else if (choice === "Dirty Gertie")
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button, $ace_called_button), false);
-        show_buttons(new Array($one_down_button, $gertied_button, $next_up_button, $next_down_button), true);
+        show_buttons(new Array($one_down_button, $gertied_button, $next_up_button, $next_down_button, $common_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
 
@@ -643,7 +645,7 @@ export function render_ui(
       else if (choice === "5-Card Stud")
       {
         show_buttons(new Array($two_down_one_up_button, $gertied_button, $five_down_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
-        show_buttons(new Array($one_up_button, $next_down_button, $next_up_button, $one_down_button), true);
+        show_buttons(new Array($one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
         game.set_draw_mode(true);
         game.set_man_mouse_mode(false);
         $reset_game_button.text("RESET Game");
@@ -652,7 +654,7 @@ export function render_ui(
       else if (choice === "7-Card Stud" || choice === "Chicago Hi-Lo")
       {
         show_buttons(new Array($five_down_button, $gertied_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $next_down_button, $next_up_button, $one_down_button), true);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
         game.set_draw_mode(true);
         game.set_man_mouse_mode(false);
         $reset_game_button.text("RESET Game");
@@ -662,7 +664,7 @@ export function render_ui(
       else
       {
         show_buttons(new Array($win_a_d_button, $gertied_button, $lose_a_d_button, $ace_called_button), false);
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button), true);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button, $common_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
 
@@ -691,7 +693,7 @@ export function render_ui(
       title: 'collects all cards/leaves pot alone',
       text: 'GERTIED!!!!',
     });
-
+    $gertied_button.hide();
     $gertied_button.click(function ()
     {
       game.gertie();
@@ -921,20 +923,54 @@ export function render_ui(
     //BET BUTTONS 1-6:
     const $bet_buttons = $('<span />');
 
-    for (let i = 1; i <= 6; i++)
+    for (let i = 1; i <= 8; i++)
     {
-      const $bet_button_num = $('<button />',
+      if (i < 7)
       {
-        class: 'bet-buttons',
-        title: 'Bet this many chips',
-        text: i,
-      });
-      $bet_button_num.click(function ()
+        const $bet_button_num = $('<button />',
+        {
+          class: 'bet-buttons',
+          title: 'Bet this many chips',
+          text: i,
+        });
+        $bet_button_num.click(function ()
+        {
+          const amount = +i;
+          game.bet(i);
+        });
+        $bet_buttons.append($bet_button_num);
+
+      }
+      else if (i == 7)
       {
-        const amount = +i;
-        game.bet(i);
-      });
-      $bet_buttons.append($bet_button_num);
+        const $bet_button_half_pot = $('<button />',
+        {
+          class: 'bet-buttons',
+          title: 'Bet half pot',
+          text: "1/2 Pot",
+        });
+        $bet_button_half_pot.click(function ()
+        {
+          game.bet_half_pot();
+        });
+        $bet_buttons.append($bet_button_half_pot);
+
+      }
+      else
+      {
+        const $bet_button_pot = $('<button />',
+        {
+          class: 'bet-buttons',
+          title: 'Bet  pot',
+          text: "Pot!",
+        });
+        $bet_button_pot.click(function ()
+        {
+          game.bet_pot();
+        });
+        $bet_buttons.append($bet_button_pot);
+
+      }
     }
 
 
@@ -958,11 +994,15 @@ export function render_ui(
     $player_controls.append($check_button);
     $player_controls.append($call_button);
     $player_controls.append($bet_button);
+
     $player_controls.append($bet_input);
     $player_controls.append($bet_buttons);
-    $player_controls.append($ante_button);
-    $player_controls.append($ante_input);
 
+    if (!game_state.acey_ducey_mode)
+    {
+      $player_controls.append($ante_button);
+      $player_controls.append($ante_input);
+    }
 
     /*******************************************
      * BUILD ENTIRE PAGE:
@@ -1022,13 +1062,13 @@ export function render_ui(
     //      }
     //    });
     //show chip totals
-//    Mousetrap.bind('q', function ()
-//    {
-//      if (!showing_login_screen)
-//      {
-//        show_chip_totals();
-//      }
-//    });
+    //    Mousetrap.bind('q', function ()
+    //    {
+    //      if (!showing_login_screen)
+    //      {
+    //        show_chip_totals();
+    //      }
+    //    });
 
 
     //if no players in game, call setup:
@@ -1107,7 +1147,7 @@ export function render_ui(
 
     const $set_game_select = $('#set-game-select');
     $set_game_select.val(game_state.game_name);
-    
+
     const $game_name_display = $('#game-name-display');
     $game_name_display.text(game_state.game_name);
 
@@ -1285,8 +1325,10 @@ export function render_ui(
       //only show shy amount if not playing man-mouse and you are in the hand
       if (game_state.game_name !== "Man-Mouse" && player.in_hand)
       {
-        $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
-
+        if (game_state.game_name != "Acey-Ducey")
+          $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
+        else
+          $chips_shy.text(`last:${$last_chips}`);
       }
       else
         $chips_shy.text(' ');

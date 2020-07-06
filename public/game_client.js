@@ -188,4 +188,11 @@ undo(){
   ace_called(){
     this._send('ace_called');
   }
+  bet_half_pot(){
+    this._send('bet_half_pot');
+  }
+    bet_pot(){
+    this._send('bet_pot');
+  }
 }
+

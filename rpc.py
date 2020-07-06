@@ -1,7 +1,7 @@
 __author__ = 'D. Beckwith'
 
 from player import Player, PlayerCard
-import random, cards
+import random, cards, math
 
 class RPC(object):
     def __init__(self, ws, game_state):
@@ -249,7 +249,13 @@ class RPC(object):
         self.player.chips_in = 0
 
         self.game_state.next_active_player()
-
+    
+    def bet_half_pot(self):
+        self.bet(math.ceil(self.game_state.pot / 2))
+    
+    def bet_pot(self):
+        self.bet(self.game_state.pot)
+        
     def bet(self, amount):
         '''player bet - subtract from chips, add to pot, move to next player'''
         if self.player is None:
@@ -264,7 +270,7 @@ class RPC(object):
         
         bet_minimum = max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in
-        if amount < bet_minimum:
+        if amount < bet_minimum and not self.game_state.acey_ducey_mode:
             raise ClientError(f'you must bet at least {bet_minimum} chips')
 
         self.player.chips         -= amount
