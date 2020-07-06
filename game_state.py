@@ -170,12 +170,12 @@ class GameState(object):
         # new hand
         self.hand_started = False
 
-        if self.dealer is not None and not from_menu:
+        if self.dealer is not None and not from_menu: # vs. from new game btn
             # pick a new dealer
             self.next_dealer()
 
-            # pick the first active player
-            self.active_player = self.next_player_after(self.dealer)
+        # pick the first active player
+        self.active_player = self.next_player_after(self.dealer)
 
     def reset_game(self):
         '''
