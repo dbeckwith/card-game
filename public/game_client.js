@@ -68,8 +68,8 @@ undo(){
     this._send('kick', { player_id });
   }
 
-  new_game(from_menu) {
-    this._send('new_game', { from_menu });
+  new_game(game_name) {
+    this._send('new_game', { game_name });
   }
 
   deal_all(down, up) {

@@ -471,18 +471,7 @@ export function render_ui(
 
     $new_game_button.click(function ()
     {
-      //      game.acey_ducey_off();
-      if (!game.draw_mode)
-        game.toggle_draw_mode();
-      $("#set-game-select").val("Select Game");
-      $("#set-game-select").change();
-      game.set_no_peek_mode(false);
-      //      game.no_peek_mode_off();
-      //      game.man_mouse_off();
-      game.set_man_mouse_mode(false);
-      $draw_button.css('background-color', 'darkgreen');
-      $draw_button.text('TURN DRAW MODE ON');
-      game.new_game(false);
+        game.new_game("Select Game"); //will show popup and set pot_cleared to False when appropriate
     });
     $reset_game_button.click(function ()
     {
@@ -545,9 +534,8 @@ export function render_ui(
     $set_game_select.change(function ()
     {
       let choice = $(this).val();
+      game.new_game(choice);
 
-      game.set_game_name(choice);
-      game.new_game(true);
       //ACEY-DUCEY: remove buttons/add W and L buttons
       if (choice === "Acey-Ducey")
       {
@@ -672,6 +660,7 @@ export function render_ui(
 
         $reset_game_button.text("RESET Game");
         $one_down_button.text("All 1DN");
+
       }
     });
 
@@ -695,7 +684,7 @@ export function render_ui(
       title: 'collects all cards/leaves pot alone',
       text: 'Collect/Shuffle',
     });
-//    $collect_shuffle_button.hide();
+    //    $collect_shuffle_button.hide();
     $collect_shuffle_button.click(function ()
     {
       game.collect_shuffle();
@@ -981,14 +970,7 @@ export function render_ui(
     {
       id: 'player-money-display',
     });
-    $player_money_display.click(function ()
-    {
-      console.log(game_state.show_chip_totals)
-      if (!showing_login_screen && game_state.show_chip_totals)
-      {
-        show_chip_totals();
-      }
-    });
+
 
     /*******************************************
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
@@ -1072,13 +1054,15 @@ export function render_ui(
     //        show_chip_totals();
     //      }
     //    });
-            Mousetrap.bind('q', function ()
-            {
-              if (!showing_login_screen)
-              {
-                game.toggle_allow_show_chip_totals();
-              }
-            });
+    //    Mousetrap.bind('q', function ()
+    //    {
+    //      if (!showing_login_screen)
+    //      {
+    //        game.toggle_allow_show_chip_totals();
+    //      }
+    //    });
+    $("#new-game-button").prop("disabled", game_state.pot != 0);
+    $("#set-game-select").prop("disabled", game_state.pot != 0);
 
     //if no players in game, call setup:
     if ($('#game-board').length === 0)
@@ -1098,7 +1082,12 @@ export function render_ui(
       $('#dealer-controls').hide();
       $('#dealer-controls-bottom').hide();
     }
+    $("#player-money-display").click(function ()
+    {
 
+      show_chip_totals();
+
+    });
     //show all active players in the winners select menu
     const $winners_select_content = $('#winners-select-content');
     $winners_select_content.empty();

@@ -93,8 +93,8 @@ class RPC(object):
     def clear_hand(self):
         self.game_state.active_player.clear_hand()
         
-    def new_game(self, from_menu):        
-        self.game_state.new_game(from_menu)
+    def new_game(self, game_name):        
+        self.game_state.new_game(game_name)
     
     def reset_game(self):
         self.game_state.reset_game()

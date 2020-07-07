@@ -29,7 +29,6 @@ class GameState(object):
         self.dealer        = None
         self.active_player = None
         self.common_cards  = []
-        
         self.pot             = 0
         self.last_bet        = 0
         self.game_name       = "Select Game"
@@ -159,17 +158,16 @@ class GameState(object):
         # shuffle a new deck
         self.deck = cards.new_deck() 
         
-    def new_game(self, from_menu):
+    def new_game(self, game_name):
         '''
         creates new game: 0 pot, set players, new deck, clear common cards,
         new dealer
         '''
         if self.pot != 0:
             raise ClientError('pot must be empty')
-        self.last_bet = 0
         
-        if not from_menu:
-            self.game_name = "Select Game"
+        self.last_bet = 0
+        self.game_name = game_name
         # reset each player
         for player in self.players:
             player.new_game()
@@ -180,10 +178,12 @@ class GameState(object):
         self.deck = cards.new_deck()
 
         self.draw_mode = False
+        self.man_mouse_mode = False
+        self.no_peek_mode = False
         # new hand
         self.hand_started = False
 
-        if self.dealer is not None and not from_menu: # vs. from new game btn
+        if self.dealer is not None and self.game_name == "Select Game": # vs. from new game btn
             # pick a new dealer
             self.next_dealer()
 
