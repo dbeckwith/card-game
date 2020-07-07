@@ -448,7 +448,7 @@ export function render_ui(
     {
       id: 'new-game-button',
       title: 'Reshuffles deck, moves dealer, ready for new game to be dealt\n\n' +
-        'Pot must be zero (game not started or payout happened) to start new game',
+        'Pot must be zero (game not started or payout happened or Reset Game chosen) to start new game',
       text: 'New Game',
     });
     //change card backing button:
@@ -463,7 +463,7 @@ export function render_ui(
     {
       id: 'reset-game-button',
       title: 'resets game - shuffles, gives back money, but same dealer',
-      text: 'RESET Game',
+      text: '☠ RESET Game ☠',
     });
 
     $new_game_button.click(function ()
@@ -509,6 +509,7 @@ export function render_ui(
     const $set_game_select = $('<select />',
     {
       id: 'set-game-select',
+      title: 'Chooses game.  Disabled if pot is not zero (Reset Game to zero the pot)'
     });
     $set_game_select.empty();
 

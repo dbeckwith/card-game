@@ -437,8 +437,15 @@ input {
 #reset-game-button {
   margin-left: 15px;
   font-size: 10px;
+  background-color:black;
+  color:white;
 }
-
+#collect-shuffle-button{
+    margin-left: 15px;
+  font-size: 10px;
+  background-color:black;
+  color:white;
+}
 #new-back-button {
   font-size: 10px;
 }
