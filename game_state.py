@@ -36,6 +36,7 @@ class GameState(object):
         self.chips_bet_in_round = 0 # reset when deal all or deal common
 
         self.show_chip_totals = False
+        
         self.acey_ducey_mode = False
         self.man_mouse_mode  = False
         self.no_peek_mode    = False
@@ -89,6 +90,13 @@ class GameState(object):
             if rpc.player is not None and not self.player_id_connections[rpc.player_id]:
                 rpc.player.connected = False
 
+    def all_anted(self):
+        
+        for p in self.players:
+            if not p.anted and p.in_hand:
+                return False
+        return True
+    
     def add_player(self, player):
         '''
         adds player when they login
@@ -145,7 +153,7 @@ class GameState(object):
             if player.in_hand:
                 yield player
          
-    def gertie(self):
+    def collect_shuffle(self):
         for player in self.players:
             player.clear_hand()
         # shuffle a new deck

@@ -576,7 +576,7 @@ export function render_ui(
       ////  SHOW AND HIDE BUTTONS: /////
       if (choice === "5-Card Draw")
       {
-        show_buttons(new Array($two_down_one_up_button, $gertied_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button), false);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button), false);
         show_buttons(new Array($five_down_button, $next_down_button, $common_button), true);
         game.set_draw_mode(true);
         game.set_man_mouse_mode(false);
@@ -585,7 +585,7 @@ export function render_ui(
       }
       else if (choice === "Midnight Baseball")
       {
-        show_buttons(new Array($two_down_one_up_button, $gertied_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button, $ace_called_button), false);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button, $ace_called_button), false);
         show_buttons(new Array($five_down_button, $one_down_button, $next_up_button, $common_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
@@ -594,7 +594,7 @@ export function render_ui(
       }
       else if (choice === "Acey-Ducey")
       {
-        show_buttons(new Array($five_down_button, $gertied_button, $two_down_one_up_button, $one_down_button, $one_up_button, $next_down_button, $common_button), false);
+        show_buttons(new Array($five_down_button, $two_down_one_up_button, $one_down_button, $one_up_button, $next_down_button, $common_button), false);
         show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
@@ -604,7 +604,7 @@ export function render_ui(
       else if (choice === "Man-Mouse")
       {
         alert("FYI: when you click \"Payout\" the code will automatically subtract from all those that stayed in and lost");
-        show_buttons(new Array($five_down_button, $gertied_button, $two_down_one_up_button,
+        show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $one_up_button, $next_down_button, $common_button, $next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
         show_buttons(new Array($one_down_button), true);
         game.set_draw_mode(false);
@@ -614,7 +614,7 @@ export function render_ui(
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
       {
-        show_buttons(new Array($five_down_button, $gertied_button, $two_down_one_up_button,
+        show_buttons(new Array($five_down_button, $two_down_one_up_button,
           $win_a_d_button, $lose_a_d_button, $one_up_button, $next_down_button, $next_up_button, $ace_called_button), false);
         show_buttons(new Array($one_down_button, $common_button), true);
         game.set_draw_mode(false);
@@ -636,7 +636,7 @@ export function render_ui(
       else if (choice === "Dirty Gertie")
       {
         show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button, $ace_called_button), false);
-        show_buttons(new Array($one_down_button, $gertied_button, $next_up_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button, $next_up_button, $next_down_button, $common_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
 
@@ -646,7 +646,7 @@ export function render_ui(
       }
       else if (choice === "5-Card Stud")
       {
-        show_buttons(new Array($two_down_one_up_button, $gertied_button, $five_down_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
+        show_buttons(new Array($two_down_one_up_button, $five_down_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
         show_buttons(new Array($one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
         game.set_draw_mode(true);
         game.set_man_mouse_mode(false);
@@ -655,7 +655,7 @@ export function render_ui(
       }
       else if (choice === "7-Card Stud" || choice === "Chicago Hi-Lo")
       {
-        show_buttons(new Array($five_down_button, $gertied_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
+        show_buttons(new Array($five_down_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
         game.set_draw_mode(true);
         game.set_man_mouse_mode(false);
@@ -665,7 +665,7 @@ export function render_ui(
       // "7-Card Stud" 
       else
       {
-        show_buttons(new Array($win_a_d_button, $gertied_button, $lose_a_d_button, $ace_called_button), false);
+        show_buttons(new Array($win_a_d_button, $lose_a_d_button, $ace_called_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button, $common_button), true);
         game.set_draw_mode(false);
         game.set_man_mouse_mode(false);
@@ -689,16 +689,16 @@ export function render_ui(
     }
 
     //self.game_state.gertie()
-    const $gertied_button = $('<button />',
+    const $collect_shuffle_button = $('<button />',
     {
-      id: 'gertied-button',
+      id: 'collect-shuffle-button',
       title: 'collects all cards/leaves pot alone',
-      text: 'GERTIED!!!!',
+      text: 'Collect/Shuffle',
     });
-    $gertied_button.hide();
-    $gertied_button.click(function ()
+//    $collect_shuffle_button.hide();
+    $collect_shuffle_button.click(function ()
     {
-      game.gertie();
+      game.collect_shuffle();
     });
 
     /*******************************************
@@ -716,7 +716,7 @@ export function render_ui(
     $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
-    $dealer_controls.append($gertied_button);
+    $dealer_controls.append($collect_shuffle_button);
 
     $dealer_controls_bottom.append($set_game_select);
 

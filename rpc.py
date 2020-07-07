@@ -142,8 +142,8 @@ class RPC(object):
                 player.give_card(PlayerCard(card, True))
         
         
-    def gertie(self):
-        self.game_state.gertie()
+    def collect_shuffle(self):
+        self.game_state.collect_shuffle()
         
     def one_card(self, up):
         '''
@@ -313,7 +313,10 @@ class RPC(object):
         self.player.anted = True
         self.player.last_ante = amt
         self.player.ante_is_last_bet = True
-        
+    
+    def all_anted(self):
+        return self.game_state.all_anted()
+    
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()

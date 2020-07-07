@@ -182,8 +182,8 @@ undo(){
 //  reset_gertie(){
 //    this._send('reset_gertie');
 //  }
-  gertie(){
-    this._send('gertie');
+  collect_shuffle(){
+    this._send('collect_shuffle');
   }
   ace_called(){
     this._send('ace_called');
@@ -199,6 +199,9 @@ undo(){
   }
   toggle_allow_show_chip_totals(){
     this._send('toggle_allow_show_chip_totals');
+  }
+  all_anted(){
+    this._send('all_anted');
   }
 }
 
