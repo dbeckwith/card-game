@@ -197,5 +197,8 @@ undo(){
   lost_acey_ducey(){
     this._send('lost_acey_ducey');
   }
+  toggle_allow_show_chip_totals(){
+    this._send('toggle_allow_show_chip_totals');
+  }
 }
 

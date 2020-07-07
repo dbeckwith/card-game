@@ -107,7 +107,10 @@ class RPC(object):
             player.anted = False 
             if chips:
                 player.chips_in = 0
-            
+           
+    def toggle_allow_show_chip_totals(self):
+        self.game_state.toggle_allow_show_chip_totals()
+        
     def deal_all(self, down, up):
         '''
         Deal cards to every active player

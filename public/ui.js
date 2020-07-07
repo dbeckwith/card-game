@@ -503,11 +503,12 @@ export function render_ui(
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
+      'Low Spade in the Hole',
       'Woolworths',
       'Midnight Baseball',
       'Follow the Queen',
       'Dirty Gertie',
-      //      'Gay Bar',
+      'Gay Bar',
       'Raise the Flag',
       '',
       'Texas Hold-Em',
@@ -982,7 +983,8 @@ export function render_ui(
     });
     $player_money_display.click(function ()
     {
-      if (!showing_login_screen)
+      console.log(game_state.show_chip_totals)
+      if (!showing_login_screen && game_state.show_chip_totals)
       {
         show_chip_totals();
       }
@@ -1070,7 +1072,13 @@ export function render_ui(
     //        show_chip_totals();
     //      }
     //    });
-
+            Mousetrap.bind('q', function ()
+            {
+              if (!showing_login_screen)
+              {
+                game.toggle_allow_show_chip_totals();
+              }
+            });
 
     //if no players in game, call setup:
     if ($('#game-board').length === 0)
@@ -1328,7 +1336,7 @@ export function render_ui(
       {
         if (game_state.game_name != "Acey-Ducey")
           $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
-        else if(player.id === current_player.id)
+        else if (player.id === current_player.id)
           $chips_shy.text(`BET:${$last_chips}`);
       }
       else
@@ -1502,8 +1510,10 @@ export function render_ui(
 
       if (p.chips < p.buy_in)
         t += "<td>DOWN:</td><td id='down'> $" + format_$_for_table(formatChips(p.buy_in - p.chips)) + "</td></tr>";
-      else
+      else if (p.chips > p.buy_in)
         t += "<td>UP:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
+      else
+        t += "<td>EVEN:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
     }
 
     $("#chips-summary").css("color", "white");

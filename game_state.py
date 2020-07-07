@@ -35,6 +35,7 @@ class GameState(object):
         self.game_name       = "Select Game"
         self.chips_bet_in_round = 0 # reset when deal all or deal common
 
+        self.show_chip_totals = False
         self.acey_ducey_mode = False
         self.man_mouse_mode  = False
         self.no_peek_mode    = False
@@ -67,6 +68,7 @@ class GameState(object):
             'five_card_draw_mode': self.five_card_draw_mode,
             'man_mouse_mode': self.man_mouse_mode,
             'wait_for_ace'  : self.wait_for_ace,
+            'show_chip_totals': self.show_chip_totals,
         }
 
     async def connect(self, rpc):
@@ -122,6 +124,9 @@ class GameState(object):
 
         self.players.remove(player)
 
+    def toggle_allow_show_chip_totals(self):
+        self.show_chip_totals = not self.show_chip_totals
+        
     def get_player(self, player_id):
         '''
         finds playern object based on id
