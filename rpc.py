@@ -124,6 +124,8 @@ class RPC(object):
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
         
+        if down == 1 and up == 0 and self.game_state.game_name == "Man-Mouse":
+            down = 3
       
         # check that deck has enough cards to give to each player
         if len(self.game_state.deck) < (down + up) * len(players):
@@ -161,7 +163,7 @@ class RPC(object):
     
             self.game_state.active_player.give_card(PlayerCard(card, up))
             
-            if len(self.game_state.deck) == 0 and self.game_state.acey_ducey_mode:
+            if len(self.game_state.deck) == 0 and self.game_state.game_name == "Acey-Ducey":
                 # shuffle a new deck
                 self.game_state.deck = cards.new_deck()  
                 
@@ -170,13 +172,13 @@ class RPC(object):
             # acedy-ducey - stop if first ace:
             is_first_card = num_cards_in_hand == 1
             is_ace = card[0] == "1"
-            if is_first_card and is_ace and self.game_state.acey_ducey_mode:    
+            if is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey":    
                 self.game_state.wait_for_ace = True
             else:
                 self.game_state.wait_for_ace = False
             
             # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
-            fifth_card = self.game_state.five_card_draw_mode and num_cards_in_hand == 5
+            fifth_card = self.game_state.game_name == "5-Card Draw" and num_cards_in_hand == 5
     
             not_draw = not self.game_state.draw_mode
             not_midnight_four = self.game_state.game_name != "Midnight Baseball"
@@ -214,19 +216,7 @@ class RPC(object):
 
     def toggle_draw_mode(self):
         self.game_state.draw_mode = not self.game_state.draw_mode
-
-    def set_no_peek_mode(self, on):
-        self.game_state.no_peek_mode = on
-
-    def set_draw_mode(self, on):
-        self.game_state.five_card_draw_mode = on
-
-    def set_man_mouse_mode(self, on):
-        self.game_state.man_mouse_mode = on
-        
-    def set_acey_ducey_mode(self, on):
-        self.game_state.acey_ducey_mode = on
-        self.game_state.draw_mode = on     
+          
     
     def undo(self):
         # if they've made a bet or ante and are the active player, can undo
@@ -273,9 +263,9 @@ class RPC(object):
         
         bet_minimum = max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in
-        if amount < bet_minimum and not self.game_state.acey_ducey_mode:
+        if amount < bet_minimum and self.game_state.game_name != "Acey-Ducey":
             raise ClientError(f'you must bet at least {bet_minimum} chips')
-        if not self.game_state.acey_ducey_mode:
+        if self.game_state.game_name != "Acey-Ducey":
             self.player.chips         -= amount
             self.game_state.pot       += amount
         self.game_state.last_bet   = amount
@@ -288,7 +278,7 @@ class RPC(object):
         
         self.reset_antes_and_chips_in(False)
         
-        if not self.game_state.acey_ducey_mode:
+        if self.game_state.game_name != "Acey-Ducey":
             self.game_state.next_active_player()
     
     def call(self):

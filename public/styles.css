@@ -254,6 +254,9 @@ button:hover {
 #new-game-button:disabled {
   background-color: gray;
 }
+#ante-btn:disabled{
+  background-color:gray;
+}
 
 /* selector for which game being played */
 #set-game-select {

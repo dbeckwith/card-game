@@ -36,10 +36,6 @@ class GameState(object):
 
         self.show_chip_totals = False
         
-        self.acey_ducey_mode = False
-        self.man_mouse_mode  = False
-        self.no_peek_mode    = False
-        self.five_card_draw_mode = False
         self.card_back_num   = 1
         self.current_game    = None
         self.connections     = []
@@ -62,11 +58,7 @@ class GameState(object):
             'game_name'    : self.game_name,
             'draw_mode'    : self.draw_mode,
             'chips_bet_in_round': self.chips_bet_in_round,
-            'acey_ducey_mode': self.acey_ducey_mode,
             'card_back_num': self.card_back_num,
-            'no_peek_mode' : self.no_peek_mode,
-            'five_card_draw_mode': self.five_card_draw_mode,
-            'man_mouse_mode': self.man_mouse_mode,
             'wait_for_ace'  : self.wait_for_ace,
             'show_chip_totals': self.show_chip_totals,
         }
@@ -178,8 +170,6 @@ class GameState(object):
         self.deck = cards.new_deck()
 
         self.draw_mode = False
-        self.man_mouse_mode = False
-        self.no_peek_mode = False
         # new hand
         self.hand_started = False
 

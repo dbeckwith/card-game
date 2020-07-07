@@ -109,9 +109,9 @@ undo(){
     set_acey_ducey_mode(on){
     this._send('set_acey_ducey_mode', {on});
   }
-  set_man_mouse_mode(on){
-    this._send('set_man_mouse_mode', {on});
-  }
+//  set_man_mouse_mode(on){
+//    this._send('set_man_mouse_mode', {on});
+//  }
 //  man_mouse_on(){
 //   this._send('man_mouse_on');
 // } 
@@ -152,15 +152,6 @@ undo(){
   toggle_draw_mode() {
     this._send('toggle_draw_mode');
   }
-  set_no_peek_mode(on){
-    this._send('set_no_peek_mode', { on });
-  }
-//  no_peek_mode_on(){
-//    this._send('no_peek_mode_on');
-//  }
-//  no_peek_mode_off(){
-//    this._send('no_peek_mode_off');
-//  }
   buy_in(amount) {
     this._send('buy_in', { amount });
   }
@@ -170,18 +161,9 @@ undo(){
  set_draw_mode(on){
    this._send('set_draw_mode', { on });
  }
-//  five_card_on(){
-//    this._send('five_card_on');
-//  }
-//  five_card_off(){
-//    this._send('five_card_off');
-//  }
   pay_post(num){
     this._send('pay_post', { num });
   }
-//  reset_gertie(){
-//    this._send('reset_gertie');
-//  }
   collect_shuffle(){
     this._send('collect_shuffle');
   }
