@@ -176,7 +176,10 @@ class GameState(object):
         if self.dealer is not None and self.game_name == "Select Game": # vs. from new game btn
             # pick a new dealer
             self.next_dealer()
-
+        if self.game_name == "Acey-Ducey":
+            self.draw_mode = True
+        else:
+            self.draw_mode = False
         # pick the first active player
         self.active_player = self.next_player_after(self.dealer)
 

@@ -225,7 +225,7 @@ export function render_ui(
     });
     $one_down_button.on('click', function ()
     {
-        game.deal_all(1, 0);
+      game.deal_all(1, 0);
     });
 
     //set text:
@@ -468,7 +468,7 @@ export function render_ui(
 
     $new_game_button.click(function ()
     {
-        game.new_game("Select Game"); //will show popup and set pot_cleared to False when appropriate
+      game.new_game("Select Game"); //will show popup and set pot_cleared to False when appropriate
     });
     $reset_game_button.click(function ()
     {
@@ -534,104 +534,50 @@ export function render_ui(
       let choice = $(this).val();
       game.new_game(choice);
 
-      //ACEY-DUCEY: remove buttons/add W and L buttons
-      if (choice === "Acey-Ducey")
+      ////  SHOW AND HIDE BUTTONS: /////
+
+      //firsts, hide all:
+      show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button, $five_down_button, $next_down_button, $common_button), false);
+
+      //reset in case changed for man-mouse:
+      $one_down_button.text("All 1DN");
+
+      //now, show only those needed
+      if (choice === "5-Card Draw")
+        show_buttons(new Array($five_down_button, $next_down_button, $common_button), true);
+      else if (choice === "Midnight Baseball")
+      {
+        alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
+          "  and players can flip their own cards")
+        show_buttons(new Array($five_down_button, $one_down_button, $next_up_button, $common_button), true);
+      }
+      else if (choice === "Acey-Ducey")
       {
         alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
         $draw_button.css('background-color', 'red');
         $draw_button.text('TURN DRAW MODE OFF');
-      }
-      else
-      {
-        //put buttons back
-        if (choice === "Midnight Baseball")
-        {
-          alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
-            "  and players can flip their own cards")
-        }
-        else
-        {
-          $draw_button.css('background-color', 'darkgreen');
-          $draw_button.text('TURN DRAW MODE ON');
-        }
-      }
-      ////  SHOW AND HIDE BUTTONS: /////
-      if (choice === "5-Card Draw")
-      {
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button), false);
-        show_buttons(new Array($five_down_button, $next_down_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-      }
-      else if (choice === "Midnight Baseball")
-      {
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_down_button, $ace_called_button), false);
-        show_buttons(new Array($five_down_button, $one_down_button, $next_up_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-      }
-      else if (choice === "Acey-Ducey")
-      {
-        show_buttons(new Array($five_down_button, $two_down_one_up_button, $one_down_button, $one_up_button, $next_down_button, $common_button), false);
         show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
       }
       else if (choice === "Man-Mouse")
       {
         alert("FYI: when you click \"Payout\" the code will automatically subtract from all those that stayed in and lost");
-        show_buttons(new Array($five_down_button, $two_down_one_up_button,
-          $one_up_button, $next_down_button, $common_button, $next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
         show_buttons(new Array($one_down_button), true);
 
         $one_down_button.text("All 3DN");
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
-      {
-        show_buttons(new Array($five_down_button, $two_down_one_up_button,
-          $win_a_d_button, $lose_a_d_button, $one_up_button, $next_down_button, $next_up_button, $ace_called_button), false);
         show_buttons(new Array($one_down_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-      }
       else if (choice === "Follow the Queen" || choice === "Woolworths")
-      {
-        show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button, $ace_called_button), false);
         show_buttons(new Array($one_down_button, $next_up_button, $next_down_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-
-      }
       else if (choice === "Dirty Gertie")
-      {
-        show_buttons(new Array($win_a_d_button, $lose_a_d_button, $one_up_button, $two_down_one_up_button, $five_down_button, $ace_called_button), false);
         show_buttons(new Array($one_down_button, $next_up_button, $next_down_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-
-      }
       else if (choice === "5-Card Stud")
-      {
-        show_buttons(new Array($two_down_one_up_button, $five_down_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
         show_buttons(new Array($one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-      }
-      else if (choice === "7-Card Stud" || choice === "Chicago Hi-Lo")
-      {
-        show_buttons(new Array($five_down_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), false);
+      else if ("7-Card Stud Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-      }
-      // "7-Card Stud" 
       else
       {
-        show_buttons(new Array($win_a_d_button, $lose_a_d_button, $ace_called_button), false);
         show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button, $common_button), true);
-        $reset_game_button.text("RESET Game");
-        $one_down_button.text("All 1DN");
-
       }
     });
 
@@ -726,7 +672,7 @@ export function render_ui(
     {
       id: "ante-btn",
       title: "Ante or pay to the pot 1 chip/doesn't affect \"shy\" displays",
-      text: 'Ante/Pay',
+      text: 'Ante/Put In',
     });
 
 
@@ -794,6 +740,10 @@ export function render_ui(
         case 'undo':
           game.undo();
           break;
+        case 'ante':
+          game.ante(1);
+          break;
+          break;
       }
       $(this).val('prompt');
     });
@@ -802,6 +752,7 @@ export function render_ui(
       ['Buy-In $10', 'buy-in'],
       ['Log Out', 'log-out'],
       ['Undo Last Ante/Bet', 'undo'],
+      ['Ante 1 chip', 'ante'],
     ];
 
     _.forEach(other_functions, ([label, id]) =>
@@ -954,10 +905,8 @@ export function render_ui(
     $player_controls.append($bet_input);
     $player_controls.append($bet_buttons);
 
-  
-      $player_controls.append($ante_button);
-      $player_controls.append($ante_input);
-    
+    $player_controls.append($ante_button);
+    $player_controls.append($ante_input);
 
     /*******************************************
      * BUILD ENTIRE PAGE:
@@ -1033,8 +982,8 @@ export function render_ui(
     //    });
     $("#new-game-button").prop("disabled", game_state.pot != 0);
     $("#set-game-select").prop("disabled", game_state.pot != 0);
-//  $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey")
-//  $("#ante-input").prop("disabled", game_state.game_name == "Acey-Ducey")
+    $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey")
+    $("#ante-input").prop("disabled", game_state.game_name == "Acey-Ducey")
     //if no players in game, call setup:
     if ($('#game-board').length === 0)
     {

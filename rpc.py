@@ -260,6 +260,8 @@ class RPC(object):
         
         if self.player.chips < amount:
             raise ClientError('not enough chips')
+        if self.game_state.game_name == "Acey-Ducey" and amount > self.game_state.pot:
+            raise ClientError('you can\'t bet more than the pot')
         
         bet_minimum = max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in
