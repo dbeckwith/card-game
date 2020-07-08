@@ -152,13 +152,12 @@ class RPC(object):
         deals one card to one player
         :param up: True if up card, False if down card
         '''
+        # don't deal card if acey ducey first card is ace and btn not yet pressed
         
-        if not self.game_state.wait_for_ace:
-        
+        if not self.game_state.wait_for_ace and self.player.id == self.game_state.dealer.id:
             self.game_state.hand_started = True
             
             self.reset_antes_and_chips_in(True)
-            # don't deal card if acey ducey first card is ace and btn not yet pressed
             card = self.game_state.draw_card()
     
             self.game_state.active_player.give_card(PlayerCard(card, up))
@@ -186,8 +185,6 @@ class RPC(object):
             if fifth_card or (not_draw and not_midnight_four):
                 self.game_state.next_active_player()
             
-            #if self.game_state.game_name == "Dirty Gertie" and card == "QS":
-                #self.game_state.gertie() # clears hands/shuffles deck
 
     def ace_called(self):
         self.game_state.not_waiting_for_ace()
