@@ -1,10 +1,10 @@
 TODO each game: 
 • In main.js -//TESTING VS. DEPLOY  const storage = ...change
 • set allow_show... to false
-• pull and run on iMac (Daniel - same sourcetree)
+• pull and run on iMac (*********Daniel - same sourcetree?)
 
 ISSUES LEFT:
-• tried moving code, didn't work
+• ***********tried moving code, didn't work
 Acey-Ducey:
 error: deck is empty - reshuffle/have reshuffle button - get rid of line 159 in rpc.py
 
@@ -31,63 +31,9 @@ TO RUN PYTHON SIMPLE SERVER:
 cd /Users/abeckwith/Google Drive/COURSES/4.WebDev:JS/CODE/Check.It/main/checkit
 python3 -m http.server
 
-
-1. everyone must have Venmo
-
-2. someone is "The House" for the night
-
-3. when a player buys in, they send the money to the House's Venmo account AND click the Buy-In button in the game
-(NOTES: 
-a. the House won't have to buy-in - you'll see - but does need to click the Buy-In button in the game.
-b. Yes, it would be cool to have the buy-in button connect directly to Venmo, but...)
-
-4. It's the end of the night and it's time to cash out:
-This shouldn't be a lot of work for the House: in Venmo, you can "request payment" from someone.  At the end of the night, each person just requests whatever their total end-of-night chip value is from the  House - the House just needs to approve each, which should be just a few clicks
-
-If the House is up for the night, there will be buy-in left over and they just keep it.  
-If the House is down for the night, they would have paid out more than they started with - see examples below
-
-Example1:
-A is the house and all everyone buys in for $20 (but A doesn't pay $20 to himself in Venmo)
-
-At the end of the game:
-1. A (house): up $15 (has $35)
-2. B: down $17 (so they only have $3 left)
-3. C: up $2 (so they have $22)
-
-House received $40 in Venmo
-Time to pay out:
-House pays B $3
-House pays C $22 
-House keeps the $17 that remain, which is exactly how much they were up
-
-Example2:
-A is the house
-A buys in for $40
-B buys in for $20
-C buys in for $20 (total buy-in $80)
-
-At the end of the game:
-1. A (house): down $35 (has $5 left - poor sap)
-2. B: up $47 (so now has $67)
-3. C: down $12 (so now has $8 left)
-
-Time to pay out:
-House pays B $67 that he's got coming to him
-
-House pays C $8 that he can buy a burrito with later
-
-So the house paid out 67 + 8 = $75 which is $35 more than he was actually paid on Venmo, meaning he has lost $35 and paid his $35 to others.
-
-Simple!
-If impossible, a regular might offer to  buy in/cash out for the two of them - then its between them to sort it out after the game.
-
-...you would still buy in using my interface, but just need your partner to do a parallel buy-in with Venmo for you.
-
 TODO:
 • players who leave should perma-sit-out, not logout, so they can be included in the settle-up in the end
 • Game select Other: write something in?
-• Undo button?
 • links to rules for all of our games
 
 Reminder:
