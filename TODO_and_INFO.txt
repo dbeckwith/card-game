@@ -1,0 +1,182 @@
+TODO each game: 
+• In main.js -//TESTING VS. DEPLOY  const storage = ...change
+• set allow_show... to false
+• pull and run on iMac (Daniel - same sourcetree)
+
+ISSUES LEFT:
+• tried moving code, didn't work
+Acey-Ducey:
+error: deck is empty - reshuffle/have reshuffle button - get rid of line 159 in rpc.py
+
+Previous requests/ideas:
+• Implement BlackJack
+• Menu with removed buttons
+
+============================
+Features/Explain:
+• acey-ducey: ante disabled to not confuse, but you can use menu
+• click on your amt/amt to see everyone's totals/buy-ins (set boolean and refresh to enable)
+• undo last bet in menu
+• new game and menu not available when pot > 0
+• special buttons: ace_confirmed (acey ducey)
+• hover over a button to learn what it does
+• reset game: gives everyone back their money and takes cards
+• make sure you log out
+• Might need a non-CC Zoom account: $15/month
+
+venmo: L@brea64!ebuy   @Anthony-Beckwith-3
+
+
+TO RUN PYTHON SIMPLE SERVER:
+cd /Users/abeckwith/Google Drive/COURSES/4.WebDev:JS/CODE/Check.It/main/checkit
+python3 -m http.server
+
+
+1. everyone must have Venmo
+
+2. someone is "The House" for the night
+
+3. when a player buys in, they send the money to the House's Venmo account AND click the Buy-In button in the game
+(NOTES: 
+a. the House won't have to buy-in - you'll see - but does need to click the Buy-In button in the game.
+b. Yes, it would be cool to have the buy-in button connect directly to Venmo, but...)
+
+4. It's the end of the night and it's time to cash out:
+This shouldn't be a lot of work for the House: in Venmo, you can "request payment" from someone.  At the end of the night, each person just requests whatever their total end-of-night chip value is from the  House - the House just needs to approve each, which should be just a few clicks
+
+If the House is up for the night, there will be buy-in left over and they just keep it.  
+If the House is down for the night, they would have paid out more than they started with - see examples below
+
+Example1:
+A is the house and all everyone buys in for $20 (but A doesn't pay $20 to himself in Venmo)
+
+At the end of the game:
+1. A (house): up $15 (has $35)
+2. B: down $17 (so they only have $3 left)
+3. C: up $2 (so they have $22)
+
+House received $40 in Venmo
+Time to pay out:
+House pays B $3
+House pays C $22 
+House keeps the $17 that remain, which is exactly how much they were up
+
+Example2:
+A is the house
+A buys in for $40
+B buys in for $20
+C buys in for $20 (total buy-in $80)
+
+At the end of the game:
+1. A (house): down $35 (has $5 left - poor sap)
+2. B: up $47 (so now has $67)
+3. C: down $12 (so now has $8 left)
+
+Time to pay out:
+House pays B $67 that he's got coming to him
+
+House pays C $8 that he can buy a burrito with later
+
+So the house paid out 67 + 8 = $75 which is $35 more than he was actually paid on Venmo, meaning he has lost $35 and paid his $35 to others.
+
+Simple!
+If impossible, a regular might offer to  buy in/cash out for the two of them - then its between them to sort it out after the game.
+
+...you would still buy in using my interface, but just need your partner to do a parallel buy-in with Venmo for you.
+
+TODO:
+• players who leave should perma-sit-out, not logout, so they can be included in the settle-up in the end
+• Game select Other: write something in?
+• Undo button?
+• links to rules for all of our games
+
+Reminder:
+comment out: LINE 19 game_client is console of game state
+
+OTHER:
+• Doesn't work on safari on laptop (SyntaxError: Unexpected token '.' - promiseReactionJob) 
+cards.abeckwith.net
+
+
+main.py: 
+creates a GameState object and runs run_server from server.py
+
+game_state.py:
+GameState object tracks all variables for game and players: 
+players list, dealer, pot, etc.
+provides game control methods like add_player, new_game, get_player, next_dealer, draw_card, etc.
+also: every time client needs update, uses websockets to send JSON (serialized form of all data so can be handled by server)
+
+server.py:
+makes an RPC object
+one of these async tasks, with  rpc, running for every player
+- they all have a ref. to the same game_state
+
+rpc.py:
+each players had their own RPC object
+actions a player can take to modify game state - dealer affects all player affects one
+game. - to call a function written in rpc
+
+has the game_state object, player, and player id 
+remote procedure call (RPC) is when code causes a procedure to execute in a different address space (commonly on another computer on a shared network)
+methods: newgame, reset game, deal_all, deal_one, flip, discard, deal_common, fold
+
+player.py:
+Player object has name, hand, chips, etc.
+"to_json"
+methods: new_game - called when new_game is called in rpc - to reset this player's chips and hand
+give_card - appends card to hand
+
+main.js:
+sets port to 31455
+line 150 sets name of folder with code (public)
+makes a CardGame object called game, from game_client.js
+game.on_update - game_state, current_player -> render_UI (gs,cp)?
+
+game_client.js:
+has all the method names: every time it gets a websocket message is a game state update, will call onupdate, which calls renderui
+
+ui.js:
+creates the entire UI
+
+player in rpc is the person calling the function (could be dealer if pressed)
+game. - to call a function I've written in rpc
+(often those functions are altering game_state)
+
+
+CHANGE HOSTING:
+1. Browser:  http://192.168.1.1/  (Verizon)
+2. Proceed, Login wifi password
+3. Left menu: Port Forwarding
+4. delete current forwarding to 31455
+5. Create new port forwarding - select the computer
+6. Application to Forward - Custom Ports - TCP / 31455 - Add +
+
+Explanation:
+Every router will host 
+192.168.x.x
+private IP address 	 - whatismyip.com gives 108.7.186.33
+I want the host/server to have a static IP address
+(When your computer or device sends a request, like a search on Google, it tags the request with your IP address. That way Google knows where to send the response.)	
+- can't be reached through public internet 
+- used for your LAN -
+- because only used in your LAN, same address can be used elsewhere 
+
+192.168.1.1 
+- home routers use this as the default gateway
+- used in browser, goes to router configuration page
+	port forwarding
+	custom ports
+tcp = 31455 - anything coming into house from outside will route to this
+socket cconnection to a port, router forwards to the computer selected
+http://108.7.186.33:31455/
+
+System Preferences >> Network >> Status on right tells IP adress
+
+System Preferences >> Network >> Advanced >> TCP/IP
+
+Your Mac is assigned an IP address when it connects to a network. Other devices that are connected to the same network can use this unique identifier to transfer information to and from your Mac.
+
+
+There are two different types of IP addresses. Static IP addresses are permanent or semi-permanent addresses that can be accessed from virtually anywhere. These types of addresses are usually reserved for computers that need to be frequently accessed by other people. Most web servers, VPN servers, groupware servers, and network routing equipment like AirPort base stations have static IP addresses assigned.
+Dynamic IP addresses are temporary addresses that are unique only to your internal network, which is commonly referred to as an intranet. These addresses commonly start with 192.168 and 10.0.1. Since these addresses are dynamically and randomly assigned by the router every time a device connects to a network, you can't expect your Mac to have the same dynamic IP address every time you connect.
