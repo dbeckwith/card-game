@@ -2,11 +2,10 @@ TODO each game:
 • In main.js -//TESTING VS. DEPLOY  const storage = ...change
 • set allow_show... to false
 • pull and run on iMac (*********Daniel - same sourcetree?)
+• comment out: LINE 19 game_client is console of game state
 
 ISSUES LEFT:
 • ***********tried moving code, didn't work
-Acey-Ducey:
-error: deck is empty - reshuffle/have reshuffle button - get rid of line 159 in rpc.py
 
 Previous requests/ideas:
 • Implement BlackJack
@@ -14,12 +13,13 @@ Previous requests/ideas:
 
 ============================
 Features/Explain:
-• acey-ducey: ante disabled to not confuse, but you can use menu
+• hover over a button to learn what it does
+• acey-ducey: ante disabled to not confuse, but you can use menu, when cards run out, automatically reshuffled
+• collect/shuffle button
 • click on your amt/amt to see everyone's totals/buy-ins (set boolean and refresh to enable)
 • undo last bet in menu
 • new game and menu not available when pot > 0
 • special buttons: ace_confirmed (acey ducey)
-• hover over a button to learn what it does
 • reset game: gives everyone back their money and takes cards
 • make sure you log out
 • Might need a non-CC Zoom account: $15/month
@@ -34,14 +34,11 @@ TODO:
 • Game select Other: write something in?
 • links to rules for all of our games
 
-Reminder:
-comment out: LINE 19 game_client is console of game state
-
 OTHER:
 • Doesn't work on safari on laptop (SyntaxError: Unexpected token '.' - promiseReactionJob) 
 cards.abeckwith.net
 
-
+====SUMMARY===
 main.py: 
 creates a GameState object and runs run_server from server.py
 
@@ -88,7 +85,7 @@ game. - to call a function I've written in rpc
 (often those functions are altering game_state)
 
 
-CHANGE HOSTING:
+====CHANGE HOSTING====:
 1. Browser:  http://192.168.1.1/  (Verizon)
 2. Proceed, Login wifi password
 3. Left menu: Port Forwarding
