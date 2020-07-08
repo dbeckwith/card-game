@@ -156,7 +156,7 @@ class GameState(object):
         new dealer
         '''
         if self.pot != 0:
-            raise ClientError('pot must be empty')
+            raise ClientError('WARNING: pot must be empty')
         
         self.last_bet = 0
         self.game_name = game_name

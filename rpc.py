@@ -233,7 +233,7 @@ class RPC(object):
         if not self.player.in_hand:
             raise ClientError('not in hand')
         if self.game_state.active_player is not self.player:
-            raise ClientError('not your turn')
+            raise ClientError('\nWARNING:  not your turn')
 
         self.player.in_hand = False
         self.player.chips_in = 0
@@ -253,17 +253,17 @@ class RPC(object):
         if not self.player.in_hand:
             raise ClientError('not in hand')
         if self.game_state.active_player is not self.player:
-            raise ClientError('not your turn')
+            raise ClientError('\nWARNING:  not your turn')
         
         if self.player.chips < amount:
-            raise ClientError('not enough chips')
+            raise ClientError('\nWARNING:  not enough chips')
         if self.game_state.game_name == "Acey-Ducey" and amount > self.game_state.pot:
-            raise ClientError('you can\'t bet more than the pot')
+            raise ClientError('\nWARNING:  you can\'t bet more than the pot')
         
         bet_minimum = max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in
         if amount < bet_minimum and self.game_state.game_name != "Acey-Ducey":
-            raise ClientError(f'you must bet at least {bet_minimum} chips')
+            raise ClientError(f'\nWARNING:  you must bet at least {bet_minimum} chips')
         if self.game_state.game_name != "Acey-Ducey":
             self.player.chips         -= amount
             self.game_state.pot       += amount
@@ -286,7 +286,7 @@ class RPC(object):
         if not self.player.in_hand:
             raise ClientError('not in hand')
         if self.game_state.active_player is not self.player:
-            raise ClientError('not your turn')
+            raise ClientError('\nWARNING:  not your turn')
         
         self.bet(max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in)
@@ -295,7 +295,7 @@ class RPC(object):
         '''takes amt chips from player and puts in pot'''
         amt = int(amt)
         if self.player.chips < amt:
-            raise ClientError('not enough chips')        
+            raise ClientError('\nWARNING:  not enough chips')        
         self.player.chips -= amt
         self.game_state.pot += amt
         self.player.chips_in_hand += amt
@@ -327,7 +327,7 @@ class RPC(object):
         :param winners: list of winner ids
         '''
         if len(winners) < 1:
-            raise ClientError('winners list must not be empty')
+            raise ClientError('\nWARNING: winners list must not be empty')
 
         # convert list of ids to list of player objects
         winner_ids = winners
