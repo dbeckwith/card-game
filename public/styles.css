@@ -40,7 +40,6 @@ button {
   cursor: pointer;
   border-radius: 10px;
   font-family: 'Verdana';
-  /*'PT Mono', monospace;*/
   background-color: white;
   color: black;
   border: 2px solid #008CBA;
@@ -56,19 +55,10 @@ button:hover {
   font-size: 20px;
 }
 
-/*
-#next-label {
-  font-family: 'Verdana';
-  font-size: 16px;
-  margin-left: 8px;
-}
-*/
-
 #all-label {
   font-family: 'Verdana';
   font-size: 16px;
   margin-left: 8px;
-
 }
 
 #dealer-controls {
@@ -116,7 +106,7 @@ button:hover {
 }
 
 /* draw-mode toggle button */
-.not-draw-mode {
+.not-draw-mode, .not-draw_mode:hover {
   border-radius: 4px;
   font-size: 10px;
   margin-left: 55px;
@@ -126,16 +116,7 @@ button:hover {
   border-width: 0px;
 }
 
-.not-draw-mode:hover {
-  border-radius: 4px;
-  font-size: 10px;
-  margin-left: 55px;
-  color: white;
-  background-color: gray;
-  border-color: black;
-}
-
-.draw-mode {
+.draw-mode, .draw-mode:hover {
   border-radius: 4px;
   font-size: 11px;
   margin-left: 55px;
@@ -145,20 +126,6 @@ button:hover {
   font-weight: bolder;
   border-width: 3px;
   animation: shadow-pulse 1s infinite;
-}
-
-.draw-mode:hover {
-  border-radius: 4px;
-  font-size: 11px;
-  margin-left: 55px;
-  color: yellow;
-  background-color: red;
-  border-color: lightgreen;
-  font-weight: bolder;
-  border-width: 3px;
-  animation: shadow-pulse 1s infinite;
-
-
 }
 
 /****************
@@ -221,7 +188,10 @@ button:hover {
 
 
 }
-
+#next-up, #next-down{
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
 #winners-select-content label {
   display: block;
   padding: 4px;
@@ -304,14 +274,7 @@ button:hover {
   margin-right: 20px;
 }
 
-#up-button {
-  float: right;
-  height: 50px;
-  width: 50px;
-  font-size: 15px;
-}
-
-#down-button {
+#up-button, #down-button {
   float: right;
   height: 50px;
   width: 50px;
@@ -381,7 +344,6 @@ button:hover {
 /* POT DISPLAY */
 #pot-display {
   color: black;
-  /*  lightgreen;*/
   font-size: 24px;
   margin-left: 10px;
   margin-right: 10px;
@@ -411,12 +373,9 @@ button:hover {
   background-color: black;
 }
 
-
 #player-chips {
   float: left;
 }
-
-
 
 /* number of cards remaining display */
 #numcards {
@@ -448,13 +407,6 @@ input {
   color: #ff7777;
 }
 
-/*
-#current-game{
-  margin-left: 100px;
-  font-style:italic;
-  float:right;
-}
-*/
 .login-cards {
   margin-top: 100px;
   width: 200px;
@@ -489,14 +441,7 @@ input {
   border-radius: 4px;
 }
 
-#reset-game-button {
-  margin-left: 15px;
-  font-size: 10px;
-  background-color: black;
-  color: white;
-}
-
-#collect-shuffle-button {
+#reset-game-button, #collect-shuffle-button {
   margin-left: 15px;
   font-size: 10px;
   background-color: black;
@@ -572,7 +517,6 @@ input {
   width: 65px;
   border: 5px solid gold;
   margin-left: 5px;
-
 }
 
 .hand {
@@ -666,14 +610,11 @@ input {
   color: red;
 }
 
-
 /***** ANIMATIONS ******/
 @keyframes shadow-pulse {
   0% {
     box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.4);
   }
-
-
   100% {
     box-shadow: 0 0 0 30px rgba(0, 0, 0, 0.0);
   }
@@ -683,7 +624,6 @@ input {
   0% {
     box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.8);
   }
-
   100% {
     box-shadow: 0 0 0 70px rgba(0, 0, 0, 0.0);
   }

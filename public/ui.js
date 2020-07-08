@@ -1379,11 +1379,11 @@ export function render_ui(
         game.set_active_player(player.id);
         game.one_card(false);
       });
-
-      $hand.append($up_button);
-      $hand.append($down_button);
-      $("#up_button").prop("disabled", !player.in_hand);
-      $("#down_button").prop("disabled", !player.in_hand);
+      if (player.in_hand)
+      {
+        $hand.append($up_button);
+        $hand.append($down_button);
+      }
 
       $player_name.append($kick_button);
 
