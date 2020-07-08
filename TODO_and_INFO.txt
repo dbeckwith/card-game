@@ -1,8 +1,9 @@
-TODO each game: 
+TODO WHEN PLAYING REAL GAMES: 
 • In main.js -//TESTING VS. DEPLOY  const storage = ...change
-• set allow_show... to false
-• pull and run on iMac (*********Daniel - same sourcetree?)
+• set allow_show... to false (change and refresh at end of game)
+• pull code, then run server on iMac (*********Daniel - same sourcetree to be able to pull?)
 • comment out: LINE 19 game_client is console of game state
+• possible different fireworks text in index.html
 
 ISSUES LEFT:
 • ***********tried moving code, didn't work
