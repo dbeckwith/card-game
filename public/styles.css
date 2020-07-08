@@ -303,20 +303,21 @@ button:hover {
   height: 20px;
   margin-right: 20px;
 }
-#up-button{
-  padding:1px;
-  float:right;
-  height:50px;
-  width: 50px;
-  font-size:15px;
-}
-#down-button{
-    padding:1px;
 
-  float:right;
-    height:50px;  width: 50px;
-  font-size:15px;
+#up-button {
+  float: right;
+  height: 50px;
+  width: 50px;
+  font-size: 15px;
 }
+
+#down-button {
+  float: right;
+  height: 50px;
+  width: 50px;
+  font-size: 15px;
+}
+
 #game-name-display {
   margin-right: 10px;
   font-size: 13x;
@@ -570,7 +571,7 @@ input {
 .common-card {
   width: 65px;
   border: 5px solid gold;
-  margin-left:5px;
+  margin-left: 5px;
 
 }
 

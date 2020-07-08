@@ -1,7 +1,7 @@
 /* authors: A. Bckwith & D. Beckwith, summer 2020 */
 
 let showing_login_screen = false;
-
+let allow_access_to_totals = true;
 /**
  * show chips as $d.cc
  */
@@ -401,7 +401,7 @@ export function render_ui(
       $('#winners-select-content').toggle();
     });
     $winners_select.prop("title", "Choose winner or winners of Pot, then click PayOut");
-  
+
     $(document).on('click', function (event)
     {
       const $target = $(event.target);
@@ -1050,9 +1050,9 @@ export function render_ui(
     });
 
     //show all active players in the dealer select menu
-    const $dealer_select = $('#dealer-select');//,{
-//      title: 
-//    });
+    const $dealer_select = $('#dealer-select'); //,{
+    //      title: 
+    //    });
     $dealer_select.prop("title", "Changes dealer to any other player; leaves cards and pot alone");
     $dealer_select.empty();
     $dealer_select.append('<option selected disabled>Select Dealer</option>');
@@ -1386,13 +1386,13 @@ export function render_ui(
       $("#down_button").prop("disabled", !player.in_hand);
 
       $player_name.append($kick_button);
-   
+
       //ADD ALL STUFF TO PLAYER SEAT
       $player_seat.append($player_name);
       $player_seat.append($chips_shy);
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
-      
+
       //allow to click anywhere to set as active player
       $player_seat.click(function ()
       {
@@ -1447,53 +1447,56 @@ export function render_ui(
 
   function show_chip_totals()
   {
-    works = false;
-    let t = "<table id='summary'>";
-    t += "<tr><th>NAME</th><th>HAS:</th><th>BUY-IN:</th><th>Result:</th></tr>";
-
-
-    for (var i = 0; i < game_state.players.length; i++)
+    if (allow_access_to_totals)
     {
-      let p = game_state.players[i];
+      works = false;
+      let t = "<table id='summary'>";
+      t += "<tr><th>NAME</th><th>HAS:</th><th>BUY-IN:</th><th>Result:</th></tr>";
 
-      //update player's money amount:
-      t += "<tr><td>" + p.name + "</td>" +
-        "<td>$" + format_$_for_table(formatChips(p.chips)) + "</td><td>$" + format_$_for_table(formatChips(p.buy_in)) + "</td>";
 
-      if (p.chips < p.buy_in)
-        t += "<td>DOWN:</td><td id='down'> $" + format_$_for_table(formatChips(p.buy_in - p.chips)) + "</td></tr>";
-      else if (p.chips > p.buy_in)
-        t += "<td>UP:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
+      for (var i = 0; i < game_state.players.length; i++)
+      {
+        let p = game_state.players[i];
+
+        //update player's money amount:
+        t += "<tr><td>" + p.name + "</td>" +
+          "<td>$" + format_$_for_table(formatChips(p.chips)) + "</td><td>$" + format_$_for_table(formatChips(p.buy_in)) + "</td>";
+
+        if (p.chips < p.buy_in)
+          t += "<td>DOWN:</td><td id='down'> $" + format_$_for_table(formatChips(p.buy_in - p.chips)) + "</td></tr>";
+        else if (p.chips > p.buy_in)
+          t += "<td>UP:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
+        else
+          t += "<td>EVEN:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
+      }
+
+      $("#chips-summary").css("color", "white");
+      $("#chips-summary").html(t);
+
+      if (!show_summary)
+      {
+        $("#app").css("opacity", "0.3");
+        $("body").css(
+        {
+          "background-image": "none",
+          "background-color": "black",
+        });
+        $("#chips-summary").show();
+
+        show_summary = true;
+      }
       else
-        t += "<td>EVEN:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
-    }
-
-    $("#chips-summary").css("color", "white");
-    $("#chips-summary").html(t);
-
-    if (!show_summary)
-    {
-      $("#app").css("opacity", "0.3");
-      $("body").css(
       {
-        "background-image": "none",
-        "background-color": "black",
-      });
-      $("#chips-summary").show();
+        $("body").css(
+        {
+          "background-image": "linear-gradient(to bottom, #007712, #2AcF15)"
+        });
+        $("#chips-summary").hide();
 
-      show_summary = true;
-    }
-    else
-    {
-      $("body").css(
-      {
-        "background-image": "linear-gradient(to bottom, #007712, #2AcF15)"
-      });
-      $("#chips-summary").hide();
+        $("#app").css("opacity", "1.0");
 
-      $("#app").css("opacity", "1.0");
-
-      show_summary = false;
+        show_summary = false;
+      }
     }
   }
 
