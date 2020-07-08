@@ -24,12 +24,13 @@ export function render_ui(
 
   function setup_login_screen()
   {
-        $(".before").hide();
+        //fireworks and text when click CP:
+    $(".before").hide();
     $(".after").hide();
     $("#credits").hide();
     $("#text").hide();
+    
     $app.empty();
-    //fireworks and text when click CP:
 
 
     const $login_screen = $('<center />');
@@ -126,7 +127,7 @@ export function render_ui(
 
       $("body").css(
       {
-        "background-image": "linear-gradient(to bottom, #007712, #2AcF15)"
+          "background-color": "#2f7532",
       });
       $("#text").hide();
       $("#credits").hide();
