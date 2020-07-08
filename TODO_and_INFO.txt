@@ -24,8 +24,6 @@ Features/Explain:
 • make sure you log out
 • Might need a non-CC Zoom account: $15/month
 
-venmo: L@brea64!ebuy   @Anthony-Beckwith-3
-
 
 TO RUN PYTHON SIMPLE SERVER:
 cd /Users/abeckwith/Google Drive/COURSES/4.WebDev:JS/CODE/Check.It/main/checkit
