@@ -1382,7 +1382,9 @@ export function render_ui(
         game.set_active_player(player.id);
         game.one_card(false);
       });
-      if (player.in_hand)
+      
+
+      if (player.in_hand && game_state.dealer === current_player.id)
       {
         $hand.append($up_button);
         $hand.append($down_button);
