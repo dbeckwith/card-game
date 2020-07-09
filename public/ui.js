@@ -620,13 +620,13 @@ export function render_ui(
 
     $dealer_controls.append($cards_left);
     $dealer_controls.append($deal_all_buttons);
-    $dealer_controls.append($next_up_button);
+//    $dealer_controls.append($next_up_button);
     $dealer_controls.append($win_a_d_button);
     $dealer_controls.append($lose_a_d_button);
     $dealer_controls.append($post_button);
     $dealer_controls.append($dbl_post_button);
     $dealer_controls.append($ace_called_button);
-    $dealer_controls.append($next_down_button);
+//    $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
     $dealer_controls.append($collect_shuffle_button);
@@ -635,9 +635,9 @@ export function render_ui(
     $dealer_controls_bottom.append($winners_select);
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($new_game_button);
-    $dealer_controls_bottom.append($dealer_select);
     $dealer_controls_bottom.append($reset_game_button);
     $dealer_controls_bottom.append($new_back_button);
+    $dealer_controls_bottom.append($dealer_select);
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
@@ -1058,7 +1058,7 @@ export function render_ui(
     //    });
     $dealer_select.prop("title", "Changes dealer to any other player; leaves cards and pot alone");
     $dealer_select.empty();
-    $dealer_select.append('<option selected disabled>Select Dealer</option>');
+    $dealer_select.append('<option selected disabled>Dealer</option>');
     _.forEach(game_state.players, player =>
     {
       if (player.id !== current_player.id)

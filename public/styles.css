@@ -203,7 +203,7 @@ button:hover {
 
 /* same for dealer select */
 #dealer-select {
-  width: 120px;
+  width: 80px;
   display: inline-block;
   margin-left: 80px;
 }
