@@ -125,7 +125,7 @@ button:hover {
   border-color: lightgreen;
   font-weight: bolder;
   border-width: 3px;
-  animation: shadow-pulse 1s infinite;
+/*  animation: shadow-pulse 1s infinite;*/
 }
 
 /****************

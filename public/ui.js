@@ -24,12 +24,12 @@ export function render_ui(
 
   function setup_login_screen()
   {
-        //fireworks and text when click CP:
+    //fireworks and text when click CP:
     $(".before").hide();
     $(".after").hide();
     $("#credits").hide();
     $("#text").hide();
-    
+
     $app.empty();
 
 
@@ -127,7 +127,7 @@ export function render_ui(
 
       $("body").css(
       {
-          "background-color": "#2f7532",
+        "background-color": "#2f7532",
       });
       $("#text").hide();
       $("#credits").hide();
@@ -237,8 +237,8 @@ export function render_ui(
     $one_down_button.text('all 1DN');
 
     //add:
-    $deal_all_buttons.append($five_down_button);
-    $deal_all_buttons.append($two_down_one_up_button);
+//    $deal_all_buttons.append($five_down_button);
+//    $deal_all_buttons.append($two_down_one_up_button);
     $deal_all_buttons.append($one_up_button);
     $deal_all_buttons.append($one_down_button);
 
@@ -369,7 +369,7 @@ export function render_ui(
     const $draw_button = $('<button />',
     {
       id: 'draw-btn',
-      text: 'DRAW MODE',
+      text: 'DISCARD MODE',
       title: 'Allows TWO things: \n\n1. PLAYERS can click their cards to discard them\n2. NEXT DN deals cards one-by-one to same player',
     });
 
@@ -546,7 +546,7 @@ export function render_ui(
       show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button, $five_down_button, $next_down_button, $common_button), false);
 
       //reset in case changed for man-mouse:
-      $one_down_button.text("All 1DN");
+      $one_down_button.text("all 1DN");
 
       //now, show only those needed
       if (choice === "5-Card Draw")
@@ -919,11 +919,12 @@ export function render_ui(
      * BUILD ENTIRE PAGE:
      *******************************************/
 
-    $header.append('<hr \>');
     $header.append($logo_link);
 
-    $header.append($dealer_controls);
     $header.append($dealer_controls_bottom);
+    $header.append($dealer_controls);
+        $header.append('<hr \>');
+
 
     $header.append($player_money_display);
 
@@ -1125,7 +1126,6 @@ export function render_ui(
     //set the max a player can bet to their chips:
     $('#bet-input').prop('max', current_player.chips);
 
-    //Man-mouse different player controls:
     if (game_state.hand_started)
     {
       $('#fold-button').text('Fold');
@@ -1134,17 +1134,24 @@ export function render_ui(
     {
       $('#fold-button').text('SitOut');
     }
-    if (game_state.game_name !== "Man-Mouse")
-    {
-      $('#fold-button').text('Fold');
-      $('#check-button').text('Check');
-      $('#check-button').css('margin-right', '10px')
-      $('#call-button').show();
-      $('#bet-button').show();
-      $('#bet-input').show();
-      $('.bet-buttons').show();
-    }
-    else
+    //reset all buttons/hide acey-ducey buttons:
+    $('#check-button').text('Check'); //re-set if last game was man-mouse ("in")
+    //acey-ducey buttons
+    $('#post-button').hide();         
+    $('#dbl-post-button').hide();
+    $('win-a-d-button').hide();
+    $('lose-a-d-button').hide();
+    
+    //make sure all other buttons are back:
+    $('#check-button').css('margin-right', '10px')
+    $('#check-button').show();
+    $('#call-button').show();
+    $('#bet-button').show();
+    $('#bet-input').show();
+    $('.bet-buttons').show();
+    $('#fold-button').show();
+
+    if (game_state.game_name === "Man-Mouse")
     {
       $('#fold-button').text('Out');
       $('#check-button').text('In');
@@ -1155,21 +1162,15 @@ export function render_ui(
       $('.bet-buttons').hide();
     }
     //remove some buttons for acey-ducey
-    if (game_state.game_name !== "Acey-Ducey")
-    {
-      $('#fold-button').show();
-      $('#check-button').show();
-      $('#call-button').show();
-      $('#post-button').hide();
-      $('#dbl-post-button').hide();
-    }
-    else
+    if (game_state.game_name === "Acey-Ducey")
     {
       $('#fold-button').hide();
       $('#check-button').hide();
       $('#call-button').hide();
       $('#post-button').show();
       $('#dbl-post-button').show();
+      $('win-a-d-button').show();
+      $('lose-a-d-button').show();
     }
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
