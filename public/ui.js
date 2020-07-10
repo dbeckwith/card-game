@@ -237,8 +237,8 @@ export function render_ui(
     $one_down_button.text('all 1DN');
 
     //add:
-//    $deal_all_buttons.append($five_down_button);
-//    $deal_all_buttons.append($two_down_one_up_button);
+    //    $deal_all_buttons.append($five_down_button);
+    //    $deal_all_buttons.append($two_down_one_up_button);
     $deal_all_buttons.append($one_up_button);
     $deal_all_buttons.append($one_down_button);
 
@@ -495,7 +495,7 @@ export function render_ui(
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
-      'Low Spade in the Hole',
+      'Low Spade in Hole',
       'Woolworths',
       'Midnight Baseball',
       'Follow the Queen',
@@ -596,6 +596,60 @@ export function render_ui(
       });
       $set_game_select.append($a_game);
     }
+    //    Common Up
+    //Turn Discard mode On (becomes ...off) (also show button when On)
+    //Collect Cards/Shuffle (leave pot)
+    //Undo
+    //Revert to Start of Hand
+    //Action SELECTOR:
+    const $action_select = $('<select />',
+    {
+      id: 'action-select',
+      title: "Less-frequently-used dealer controls",
+    });
+    $action_select.empty();
+    $action_select.append('<option selected disabled value="prompt">ACTION:</option>');
+    $action_select.change(function ()
+    {
+      switch ($(this).val())
+      {
+        case 'common':
+          game.deal_common();
+          break;
+        case 'discard-mode':
+          game.toggle_draw_mode();
+          break;
+        case 'collect':
+          game.collect_shuffle();
+          break;
+        case 'undo':
+          game.undo();
+          break;
+        case 'revert':
+          game.revert();
+          break;
+      }
+      $(this).val('prompt');
+    });
+
+    var other_dlr_functions = [
+      ['• COMMON Up Card', 'common'],
+      ['• DISCARD MODE On/Off', 'discard-mode'],
+      ['• UNDO last action', 'undo'],
+      ['☠ Collect cards (incl. common), shuffle, leave pot alone ☠', 'collect'],
+      ['☠ Revert to start-of-hand state ☠', 'revert'],
+    ];
+
+    _.forEach(other_dlr_functions, ([label, id]) =>
+    {
+      const $a_function = $('<option />',
+      {
+        value: id,
+      });
+      $a_function.text(label);
+      $action_select.append($a_function);
+    });
+
 
     //COLLECT CARDS AND SHUFFLE BUTTON:
     const $collect_shuffle_button = $('<button />',
@@ -616,30 +670,32 @@ export function render_ui(
 
     $dealer_controls.append($cards_left);
     $dealer_controls.append($deal_all_buttons);
-        $dealer_controls.append($ace_called_button);
+    $dealer_controls.append($ace_called_button);
 
-//    $dealer_controls.append($next_up_button);
-    const $acey_buttons = $("<span />",{
-      id:"acey-buttons",
+    //    $dealer_controls.append($next_up_button);
+    const $acey_buttons = $("<span />",
+    {
+      id: "acey-buttons",
     });
 
     $acey_buttons.append($post_button);
     $acey_buttons.append($dbl_post_button);
-        $acey_buttons.append($win_a_d_button);
+    $acey_buttons.append($win_a_d_button);
     $acey_buttons.append($lose_a_d_button);
     $dealer_controls.append($acey_buttons);
-//    $dealer_controls.append($next_down_button);
-    $dealer_controls.append($common_button);
-    $dealer_controls.append($draw_button);
-    $dealer_controls.append($collect_shuffle_button);
-
+    //    $dealer_controls.append($next_down_button);
+//    $dealer_controls.append($common_button);
+//    $dealer_controls.append($draw_button);
+//    $dealer_controls.append($collect_shuffle_button);
+    $dealer_controls.append($action_select);
     $dealer_controls_bottom.append($set_game_select);
+        $dealer_controls_bottom.append($dealer_select);
+
     $dealer_controls_bottom.append($winners_select);
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($new_game_button);
-    $dealer_controls_bottom.append($reset_game_button);
+//    $dealer_controls_bottom.append($reset_game_button);
     $dealer_controls_bottom.append($new_back_button);
-    $dealer_controls_bottom.append($dealer_select);
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
@@ -679,7 +735,7 @@ export function render_ui(
     {
       id: "ante-btn",
       title: "Ante or pay to the pot 1 chip/doesn't affect \"shy\" displays",
-      text: 'Ante/Add',
+      text: 'Ante/Add:',
     });
 
 
@@ -830,7 +886,7 @@ export function render_ui(
     {
       id: 'bet-button',
       title: 'Bet the amount you\'ve typed in the box; moves to next player',
-      text: 'Bet',
+      text: 'Bet:',
     });
     $bet_button.click(function ()
     {
@@ -925,7 +981,7 @@ export function render_ui(
 
     $header.append($dealer_controls_bottom);
     $header.append($dealer_controls);
-        $header.append('<hr \>');
+    $header.append('<hr \>');
 
 
     $header.append($player_money_display);
@@ -1060,7 +1116,7 @@ export function render_ui(
     //    });
     $dealer_select.prop("title", "Changes dealer to any other player; leaves cards and pot alone");
     $dealer_select.empty();
-    $dealer_select.append('<option selected disabled>Dealer</option>');
+    $dealer_select.append('<option selected disabled>Select Dealer</option>');
     _.forEach(game_state.players, player =>
     {
       if (player.id !== current_player.id)
@@ -1139,11 +1195,11 @@ export function render_ui(
     //reset all buttons/hide acey-ducey buttons:
     $('#check-button').text('Check'); //re-set if last game was man-mouse ("in")
     //acey-ducey buttons
-    $('#post-button').hide();         
+    $('#post-button').hide();
     $('#dbl-post-button').hide();
     $('win-a-d-button').hide();
     $('lose-a-d-button').hide();
-    
+
     //make sure all other buttons are back:
     $('#check-button').css('margin-right', '10px')
     $('#check-button').show();
@@ -1174,6 +1230,10 @@ export function render_ui(
       $('win-a-d-button').show();
       $('lose-a-d-button').show();
     }
+    if (game_state.draw_mode)
+      $('draw-btn').show();
+    else
+      $('draw-btn').hide();
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
@@ -1311,7 +1371,6 @@ export function render_ui(
 
           $up_with_down.append($card_img2);
 
-
           //show backing or card image:
           if (card.up || player.id === current_player.id && game_state.game_name != "Midnight Baseball")
             card_img_name = card.card;
@@ -1384,7 +1443,7 @@ export function render_ui(
         game.set_active_player(player.id);
         game.one_card(false);
       });
-      
+
 
       if (player.in_hand && game_state.dealer === current_player.id)
       {

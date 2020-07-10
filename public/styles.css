@@ -34,7 +34,7 @@ button {
   text-align: center;
   /*  text-decoration: none;*/
   display: inline-block;
-  font-size: 12px;
+  font-size: 13px;
   margin: 4px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
@@ -143,6 +143,13 @@ button:hover {
   height: 30px;
   margin-right: 10px;
 }
+/* dealer action selector */
+#action-select {
+  width: 120px;
+  height: 30px;
+  margin-left: 30px;
+}
+
 
 #payout-button {
   background-color: red;
@@ -156,15 +163,20 @@ button:hover {
   width: 120px;
   margin-left: 20px;
   display: inline-block;
+  height:25px;
 }
 
 #winners-select-box {
   position: relative;
+    height:25px;
+
 }
 
 #winners-select-select {
   width: 100%;
   font-weight: bold;
+    height:25px;
+
 }
 
 #winners-select-over-select {
@@ -173,6 +185,8 @@ button:hover {
   right: 0;
   top: 0;
   bottom: 0;
+    height:25px;
+
 }
 
 #winners-select-content {
@@ -185,6 +199,7 @@ button:hover {
   color: black;
   width: 147px;
   text-align: left;
+  height:25px;
 
 
 }
@@ -205,9 +220,10 @@ button:hover {
 }
 /* same for dealer select */
 #dealer-select {
-  width: 80px;
+  width: 107px;
   display: inline-block;
-  margin-left: 80px;
+  margin-left: 20px;
+  height:25px;
 }
 #win-a-d-button, #lose-a-d-button{
   font-size:20px; 
@@ -286,9 +302,9 @@ button:hover {
 
 /* selector for which game being played */
 #set-game-select {
-  width: 120px;
-  height: 20px;
-  margin-right: 20px;
+  width: 100px;
+  height: 25px;
+/*  margin-right: 20px;*/
 }
 
 #up-button, #down-button {
@@ -563,7 +579,7 @@ input {
 }
 
 .sixth_card {
-  margin-left: 9px;
+  margin-left: 11px;
 }
 
 #up-with-down {

@@ -185,5 +185,11 @@ undo(){
   all_anted(){
     this._send('all_anted');
   }
+  undo(){
+    this._send('undo');
+  }
+  revert(){
+    this._send('revert');
+  }
 }
 
