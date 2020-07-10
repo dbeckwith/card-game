@@ -22,14 +22,14 @@ class GameState(object):
     '''tracks the state of all variables for the game and players'''
     def __init__(self):
         self.players = []
-        self.deck = cards.new_deck()
+        self.deck    = cards.new_deck()
+        self.pot     = 0
 
         self.hand_started  = False
         self.draw_mode     = False
         self.dealer        = None
         self.active_player = None
         self.common_cards  = []
-        self.pot             = 0
         self.last_bet        = 0
         self.game_name       = "Select Game"
         self.chips_bet_in_round = 0 # reset when deal all or deal common

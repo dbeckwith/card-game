@@ -200,14 +200,31 @@ button:hover {
 #winners-select-content label:hover {
   background-color: #1e90ff;
 }
-
+#acey-buttons{
+  float:right;
+}
 /* same for dealer select */
 #dealer-select {
   width: 80px;
   display: inline-block;
   margin-left: 80px;
 }
-
+#win-a-d-button, #lose-a-d-button{
+  font-size:20px; 
+  width:120px;
+}
+#win-a-d-button{
+  background-color:lightgreen;
+  color:darkred;
+}
+#lose-a-d-button{
+  background-color:red;
+  color:darkslategray;
+}
+#post-button, #dbl-post-button{
+  font-size:11px;
+  margin-right:10px;
+}
 #dealer-select-box {
   position: relative;
 }

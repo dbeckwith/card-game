@@ -123,9 +123,7 @@ class RPC(object):
 
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
-        
-        if down == 1 and up == 0 and self.game_state.game_name == "Man-Mouse":
-            down = 3
+    
       
         # check that deck has enough cards to give to each player
         if len(self.game_state.deck) < (down + up) * len(players):

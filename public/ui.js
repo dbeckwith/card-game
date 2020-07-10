@@ -545,8 +545,6 @@ export function render_ui(
       //firsts, hide all:
       show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button, $five_down_button, $next_down_button, $common_button), false);
 
-      //reset in case changed for man-mouse:
-      $one_down_button.text("all 1DN");
 
       //now, show only those needed
       if (choice === "5-Card Draw")
@@ -568,8 +566,6 @@ export function render_ui(
       {
         alert("FYI: when you click \"Payout\" the code will automatically subtract from all those that stayed in and lost");
         show_buttons(new Array($one_down_button), true);
-
-        $one_down_button.text("All 3DN");
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
         show_buttons(new Array($one_down_button, $common_button), true);
@@ -620,12 +616,18 @@ export function render_ui(
 
     $dealer_controls.append($cards_left);
     $dealer_controls.append($deal_all_buttons);
+        $dealer_controls.append($ace_called_button);
+
 //    $dealer_controls.append($next_up_button);
-    $dealer_controls.append($win_a_d_button);
-    $dealer_controls.append($lose_a_d_button);
-    $dealer_controls.append($post_button);
-    $dealer_controls.append($dbl_post_button);
-    $dealer_controls.append($ace_called_button);
+    const $acey_buttons = $("<span />",{
+      id:"acey-buttons",
+    });
+
+    $acey_buttons.append($post_button);
+    $acey_buttons.append($dbl_post_button);
+        $acey_buttons.append($win_a_d_button);
+    $acey_buttons.append($lose_a_d_button);
+    $dealer_controls.append($acey_buttons);
 //    $dealer_controls.append($next_down_button);
     $dealer_controls.append($common_button);
     $dealer_controls.append($draw_button);
@@ -1253,9 +1255,9 @@ export function render_ui(
       //only show shy amount if not playing man-mouse and you are in the hand
       if (game_state.game_name !== "Man-Mouse" && player.in_hand)
       {
-        if (game_state.game_name != "Acey-Ducey")
+        if (game_state.game_name !== "Acey-Ducey")
           $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
-        else if (player.id === current_player.id)
+        else //if (player.id === current_player.id)
           $chips_shy.text(`BET:${$last_chips}`);
       }
       else
