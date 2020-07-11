@@ -251,10 +251,11 @@ export function render_ui(
     const $next_label = $('<span />',
     {
       id: "next-label",
+      text: "NEXT CARD:",
     });
     const $next_up_button = $('<button />',
     {
-      text: 'Next UP',
+      text: 'UP',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
       id: 'next-up',
     });
@@ -301,7 +302,7 @@ export function render_ui(
     $ace_called_button.hide();
     const $next_down_button = $('<button />',
     {
-      text: 'Next DN',
+      text: 'DN',
       title: 'Deals one card to the next player in line (they have an box around their hand)',
       id: 'next-down',
     });
@@ -350,7 +351,6 @@ export function render_ui(
     });
 
     $next_up_button.addClass('one-card-buttons');
-    $next_up_button.addClass('space-on-left');
 
     $next_down_button.addClass('one-card-buttons');
 
@@ -545,24 +545,24 @@ export function render_ui(
       ////  SHOW AND HIDE BUTTONS: /////
 
       //firsts, hide all:
-      show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button, $five_down_button, $next_down_button, $common_button), false);
+      show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button, $five_down_button, $next_down_button, $common_button, $next_label), false);
 
 
       //now, show only those needed
       if (choice === "5-Card Draw")
-        show_buttons(new Array($five_down_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($five_down_button, $next_label, $next_down_button, $common_button), true);
       else if (choice === "Midnight Baseball")
       {
         alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
           "  and players can flip their own cards")
-        show_buttons(new Array($five_down_button, $one_down_button, $next_up_button, $common_button), true);
+        show_buttons(new Array($five_down_button, $one_down_button, $common_button), true);
       }
       else if (choice === "Acey-Ducey")
       {
         alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
         $("#discard-btn").removeClass("not-discard-mode");
         $("#discard-btn").addClass("discard-mode");
-        show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), true);
+        show_buttons(new Array($next_label, $next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), true);
       }
       else if (choice === "Man-Mouse")
       {
@@ -570,18 +570,18 @@ export function render_ui(
         show_buttons(new Array($one_down_button), true);
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
-        show_buttons(new Array($one_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_down_button, $common_button), true);
       else if (choice === "Follow the Queen" || choice === "Woolworths")
-        show_buttons(new Array($one_down_button, $next_up_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button), true);
       else if (choice === "Dirty Gertie")
-        show_buttons(new Array($one_down_button, $next_up_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button), true);
       else if (choice === "5-Card Stud")
-        show_buttons(new Array($one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
+        show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
       else if ("7-Card Stud Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button,$next_label,  $next_down_button, $next_up_button, $one_down_button, $common_button), true);
       else
       {
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($two_down_one_up_button, $next_label, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button, $common_button), true);
       }
     });
 
@@ -689,6 +689,7 @@ export function render_ui(
 //    $dealer_controls.append($discard_button);
 //    $dealer_controls.append($collect_shuffle_button);
     $dealer_controls.append($action_select);
+    $dealer_controls.append($next_label);
             $dealer_controls.append($next_up_button);
             $dealer_controls.append($next_down_button);
 
