@@ -1390,7 +1390,7 @@ export function render_ui(
 
           //outline cards or show halfup half down
           if (!card.up && player.id === current_player.id && game_state.draw_mode)
-            $card_img.addClass('draw-ready'); //show black outline around down cards
+            $card_img2.addClass('draw-ready'); //show black outline around down cards
           if (!card.up && player.id === current_player.id)
             $card_img.addClass('down-card');
 
