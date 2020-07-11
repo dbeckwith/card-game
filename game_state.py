@@ -306,7 +306,7 @@ class GameState(object):
         self.active_player = self.get_player(state['active_player'])
 
         # set `connected` property for each player based on current connection status
-        for player in self.players
+        for player in self.players:
             player.connected = bool(self.player_id_connections[player.id])
 
     def mark_dirty(self):

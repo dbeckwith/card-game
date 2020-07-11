@@ -256,7 +256,7 @@ export function render_ui(
     const $next_up_button = $('<button />',
     {
       text: 'UP',
-      title: 'Deals one card to the next player in line (they have an box around their hand)',
+      title: 'Deals one card to the selected player and moves to next player',
       id: 'next-up',
     });
     //win-lose for acey-ducey
@@ -303,7 +303,7 @@ export function render_ui(
     const $next_down_button = $('<button />',
     {
       text: 'DN',
-      title: 'Deals one card to the next player in line (they have an box around their hand)',
+      title: 'Deals one card to the selected player and moves to next player',
       id: 'next-down',
     });
 

@@ -81,7 +81,7 @@ button:hover {
   font-size: 18px;
 }
 #one-up-button, #one-down-button{
-  background-color: yellow;
+  background-color: #BEFFFF;
 }
 /* all dealer buttons are smaller */
 .dlrbtns {
@@ -93,7 +93,7 @@ button:hover {
 /* 1up and 1down buttons */
 .one-all-buttons {
   border: solid 2px red;
-  background-color:yellow;
+  background-color:#6EAEC1;
 }
 
 /* next up and next down buttons */
@@ -101,6 +101,7 @@ button:hover {
   border: solid 4px orange;
   width: 50px;
   border-radius:4px;
+  background-color:#BEFFFF;
 }
 
 /* common up card button - is different color */
@@ -124,7 +125,7 @@ button:hover {
   border-radius: 4px;
   font-size: 11px;
   margin-left: 55px;
-  color: yellow;
+  color: #BEFFFF;
   background-color: red;
   border-color: lightgreen;
   font-weight: bolder;
@@ -152,20 +153,20 @@ button:hover {
   width: 170px;
   height: 30px;
   margin-left: 30px;
-  background-color:yellow;
+  background-color:#BEFFFF;
 }
 
 
 #payout-button {
   background-color: red;
   margin-left: 6px;
-  color: yellow;
+  color: #BEFFFF;
 }
 
 
 /* selector for players to receive payout */
 #winners-select {
-/*    background-color: yellow;*/
+/*    background-color: #BEFFFF;*/
 
   width: 120px;
   margin-left: 20px;
@@ -176,7 +177,7 @@ button:hover {
 #winners-select-box {
   position: relative;
 /*    height:25px;*/
-/*  background-color: yellow;*/
+/*  background-color: #BEFFFF;*/
 
 }
 
@@ -184,7 +185,7 @@ button:hover {
   width: 100%;
 /*  font-weight: bold;*/
 /*    height:25px;*/
-  background-color: yellow;
+  background-color: #BEFFFF;
 
 }
 
@@ -205,7 +206,7 @@ button:hover {
   display: none;
   border: 1px #dadada solid;
   position: absolute;
-  background-color: yellow;
+  background-color: #BEFFFF;
   color: black;
   width: 147px;
   text-align: left;
@@ -320,11 +321,13 @@ button:hover {
 /*  margin-right: 20px;*/
 }
 
-#-button, #down-button {
+#up-button, #down-button {
   float: right;
   height: 50px;
   width: 50px;
   font-size: 15px;
+  background-color:yellow;
+  border: 4px solid red;
 }
 
 #game-name-display {
@@ -503,7 +506,7 @@ input {
 }
 
 .player-seat.active-player {
-  color: yellow;
+  color: #BEFFFF;
   border: 4px solid yellow;
   border-left: 20px;
   background-color: black;
@@ -594,7 +597,7 @@ input {
 .sixth_card {
   margin-left: 11px;
 }
-#up-button, #down-button {
+#up-button, #-button {
   float: right;
   height: 50px;
   width: 50px;
