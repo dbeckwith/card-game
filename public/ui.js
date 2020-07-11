@@ -1,4 +1,4 @@
-/* authors: A. Bckwith & D. Beckwith, summer 2020 */
+/* authors: A. Beckwith & D. Beckwith, summer 2020 */
 
 let showing_login_screen = false;
 let allow_access_to_totals = true;
@@ -808,9 +808,6 @@ export function render_ui(
         case 'log-out':
           game.logout();
           break;
-        case 'undo':
-          game.undo();
-          break;
         case 'ante':
           game.ante(1);
           break;
@@ -822,7 +819,6 @@ export function render_ui(
     var other_functions = [
       ['Buy-In $10', 'buy-in'],
       ['Log Out', 'log-out'],
-//      ['Undo Last Ante/Bet', 'undo'],
     ];
 
     _.forEach(other_functions, ([label, id]) =>
@@ -1120,7 +1116,7 @@ export function render_ui(
 
     //show all active players in the dealer select menu
     const $dealer_select = $('#dealer-select'); //,{
-    //      title: 
+    //      title:
     //    });
     $dealer_select.prop("title", "Changes dealer to any other player; leaves cards and pot alone");
     $dealer_select.empty();
@@ -1467,7 +1463,7 @@ export function render_ui(
       $player_seat.append($chips_shy);
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
-      
+
 
       //allow to click anywhere to set as active player
       $player_seat.click(function ()

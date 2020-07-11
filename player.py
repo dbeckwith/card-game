@@ -15,7 +15,7 @@ class Player(object):
         self.last_ante  = 0
         self.last_bet   = 0
         self.ante_is_last_bet =  None
-        
+
     def __json__(self):
         '''returns: JSON of all player fields'''
         return {
@@ -34,6 +34,23 @@ class Player(object):
             'ante_is_last_bet' : self.ante_is_last_bet,
         }
 
+    @staticmethod
+    def restore(state):
+        # create a new player from the JSON-serialized state
+        player = Player(state['id'], state['name'])
+        player.connected = state['connected']
+        player.hand = list(map(PlayerCard.restore, state['hand']))
+        player.in_hand = state['in_hand']
+        player.chips = state['chips']
+        player.buy_in = state['buy_in']
+        player.chips_in = state['chips_in']
+        player.anted = state['anted']
+        player.chips_in_hand = state['chips_in_hand']
+        player.last_ante = state['last_ante']
+        player.last_bet = state['last_bet']
+        player.ante_is_last_bet = state['ante_is_last_bet']
+        return player
+
     def new_game(self):
         '''reset player's hand and put them in game'''
         self.hand = []
@@ -42,12 +59,12 @@ class Player(object):
         self.chips_in_hand = 0
         self.anted = False
         self.last_ante  = 0
-        self.last_bet   = 0        
+        self.last_bet   = 0
         self.ante_is_last_bet =  None
 
     def clear_hand(self):
         self.hand = []
-    
+
     def give_card(self, card):
         '''deal one card'''
         self.hand.append(card)
@@ -62,3 +79,9 @@ class PlayerCard(object):
             'card': self.card,
             'up': self.up,
         }
+
+    @staticmethod
+    def restore(state):
+        # create a new card from the JSON-serialized state
+        card = PlayerCard(state['card'], state['up'])
+        return card

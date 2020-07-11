@@ -12,6 +12,7 @@ from pathlib import Path
 import tempfile
 
 import cards
+from player import Player
 from rpc import ClientError
 
 # TODO: "stand up"
@@ -21,25 +22,25 @@ from rpc import ClientError
 class GameState(object):
     '''tracks the state of all variables for the game and players'''
     def __init__(self):
-        self.players = []
-        self.deck    = cards.new_deck()
-        self.pot     = 0
-
-        self.hand_started  = False
-        self.discard_mode     = False
-        self.dealer        = None
-        self.active_player = None
-        self.common_cards  = []
-        self.last_bet        = 0
-        self.game_name       = "Select Game"
+        self.players            = []
+        self.deck               = cards.new_deck()
+        self.pot                = 0
+        self.hand_started       = False
+        self.discard_mode       = False
+        self.dealer             = None
+        self.active_player      = None
+        self.common_cards       = []
+        self.last_bet           = 0
+        self.game_name          = "Select Game"
         self.chips_bet_in_round = 0 # reset when deal all or deal common
+        self.show_chip_totals   = False
+        self.card_back_num      = 1
+        self.current_game       = None
+        self.wait_for_ace       = False
 
-        self.show_chip_totals = False
-        
-        self.card_back_num   = 1
-        self.current_game    = None
-        self.connections     = []
-        self.wait_for_ace    = False
+        self.history = []
+
+        self.connections = []
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -47,20 +48,20 @@ class GameState(object):
 
     def __json__(self):
         return {
-            'players'      : self.players,
-            'deck'         : self.deck,
-            'hand_started' : self.hand_started,
-            'dealer'       : self.dealer.id if self.dealer is not None else None,
-            'active_player': self.active_player.id if self.active_player is not None else None,
-            'pot'          : self.pot,
-            'last_bet'     : self.last_bet,
-            'common_cards' : self.common_cards,
-            'game_name'    : self.game_name,
-            'discard_mode'    : self.discard_mode,
-            'chips_bet_in_round': self.chips_bet_in_round,
-            'card_back_num': self.card_back_num,
-            'wait_for_ace'  : self.wait_for_ace,
-            'show_chip_totals': self.show_chip_totals,
+            'players'            : self.players,
+            'deck'               : self.deck,
+            'hand_started'       : self.hand_started,
+            'dealer'             : self.dealer.id if self.dealer is not None else None,
+            'active_player'      : self.active_player.id if self.active_player is not None else None,
+            'pot'                : self.pot,
+            'last_bet'           : self.last_bet,
+            'common_cards'       : self.common_cards,
+            'game_name'          : self.game_name,
+            'discard_mode'       : self.discard_mode,
+            'chips_bet_in_round' : self.chips_bet_in_round,
+            'card_back_num'      : self.card_back_num,
+            'wait_for_ace'       : self.wait_for_ace,
+            'show_chip_totals'   : self.show_chip_totals,
         }
 
     async def connect(self, rpc):
@@ -82,12 +83,11 @@ class GameState(object):
                 rpc.player.connected = False
 
     def all_anted(self):
-        
         for p in self.players:
             if not p.anted and p.in_hand:
                 return False
         return True
-    
+
     def add_player(self, player):
         '''
         adds player when they login
@@ -125,7 +125,7 @@ class GameState(object):
 
     def toggle_allow_show_chip_totals(self):
         self.show_chip_totals = not self.show_chip_totals
-        
+
     def get_player(self, player_id):
         '''
         finds playern object based on id
@@ -136,21 +136,18 @@ class GameState(object):
             if player.id == player_id:
                 return player
 
-
-        
     def players_in_hand(self):
-        
         for player in self.players:
             if player.in_hand:
                 yield player
-         
+
     def collect_shuffle(self):
         for player in self.players:
             player.clear_hand()
         # shuffle a new deck
         self.common_cards = []
-        self.deck = cards.new_deck() 
-        
+        self.deck = cards.new_deck()
+
     def new_game(self, game_name):
         '''
         creates new game: 0 pot, set players, new deck, clear common cards,
@@ -158,14 +155,14 @@ class GameState(object):
         '''
         if self.pot != 0:
             raise ClientError('WARNING: pot must be empty')
-        
+
         self.last_bet = 0
         self.game_name = game_name
         # reset each player
         for player in self.players:
             player.new_game()
-            
-            
+
+
         self.common_cards = []
         # shuffle a new deck
         self.deck = cards.new_deck()
@@ -183,6 +180,8 @@ class GameState(object):
             self.discard_mode = False
         # pick the first active player
         self.active_player = self.next_player_after(self.dealer)
+
+        self.checkpoint('new_game')
 
     def reset_game(self):
         '''
@@ -202,25 +201,25 @@ class GameState(object):
         self.pot = 0
         for player in self.players:
             player.chips += player.chips_in_hand
-            
+
         # reset each player
         for player in self.players:
-            player.new_game()  
+            player.new_game()
         if self.game_name == "Man-Mouse":
             self.next_active_player()
 
     def pay_acey_ducey(self):
         self.active_player.chips += self.last_bet
-        self.pot                 -= self.last_bet 
-    
+        self.pot                 -= self.last_bet
+
     def lost_acey_ducey(self):
         self.active_player.chips -= self.last_bet
-        self.pot                 += self.last_bet 
-    
+        self.pot                 += self.last_bet
+
     def pay_post(self, num):
         self.active_player.chips -= num * self.last_bet
-        self.pot                 += num * self.last_bet  
-        
+        self.pot                 += num * self.last_bet
+
     def next_dealer(self):
         if self.dealer is not None:
             self.dealer = self.next_player_after(self.dealer)
@@ -245,8 +244,10 @@ class GameState(object):
         seat = self.players.index(player)
         # return the player with the next seat (wrapping around)
         return self.players[(seat + 1) % len(self.players)]
+
     def not_waiting_for_ace(self):
         self.wait_for_ace = False
+
     def draw_card(self):
         '''takes next card from deck'''
         if self.deck:
@@ -255,11 +256,65 @@ class GameState(object):
         else:
             raise ClientError('deck is empty')
 
+    def checkpoint(self, tag):
+        self.history.append(HistoryItem(
+            tag=tag,
+            state=json.loads(json.dumps(self, cls=GameStateSerializer)),
+        ))
+
+    def find_history_item(self, tag):
+        if not self.history:
+            # history is empty, just return None
+            return None
+
+        # starting at next-to-last history item, work backwards
+        for i in reversed(range(len(self.history) - 1)):
+            history_item = self.history[i]
+            # if the item's tag matches the one we're looking for
+            if history_item.tag == tag:
+                # remove all history after and including this one
+                del self.history[i:]
+                return history_item
+
+        # no history items found with the given tag
+        return None
+
+    def restore(self, tag):
+        history_item = self.find_history_item(tag)
+        if history_item is None:
+            return
+
+        state = history_item.state
+
+        # restore all "simple" properties
+        self.deck = state['deck']
+        self.hand_started = state['hand_started']
+        self.pot = state['pot']
+        self.last_bet = state['last_bet']
+        self.common_cards = state['common_cards']
+        self.game_name = state['game_name']
+        self.discard_mode = state['discard_mode']
+        self.chips_bet_in_round = state['chips_bet_in_round']
+        self.card_back_num = state['card_back_num']
+        self.wait_for_ace = state['wait_for_ace']
+        self.show_chip_totals = state['show_chip_totals']
+
+        # reconstruct players
+        self.players = list(map(Player.restore, state['players']))
+        # set player references (state only stores player id)
+        self.dealer = self.get_player(state['dealer'])
+        self.active_player = self.get_player(state['active_player'])
+
+        # set `connected` property for each player based on current connection status
+        for player in self.players
+            player.connected = bool(self.player_id_connections[player.id])
+
     def mark_dirty(self):
         '''
         notify Event objects for client update and backup
         this will trigger those loops to run
         '''
+        self.checkpoint(None)
         self.client_update_event.set()
         self.backup_event.set()
 
@@ -328,3 +383,17 @@ class GameStateSerializer(json.JSONEncoder):
         if hasattr(value, '__json__'):
             return value.__json__()
         return super(GameStateSerializer, self).default(value)
+
+class HistoryItem(object):
+    def __init__(self, tag, state):
+        self.tag = tag
+        self.state = state
+
+    def __json__(self):
+        return {
+            'tag': self.tag,
+            'state': self.state,
+        }
+
+    def __repr__(self):
+        return f'HistoryItem(tag={self.tag!r}, state={self.state!r})'

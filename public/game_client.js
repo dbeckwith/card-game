@@ -51,7 +51,7 @@ export class CardGame {
   connect(player_id) {
     this._send('connect', { player_id });
   }
-  
+
   login(name) {
     this._send('login', { name });
   }
@@ -61,9 +61,6 @@ export class CardGame {
   logout(name) {
     this._send('logout');
   }
-undo(){
-  this._send('undo');
-}
   kick(player_id) {
     this._send('kick', { player_id });
   }
@@ -96,13 +93,13 @@ undo(){
   call() {
     this._send('call');
   }
- 
+
   pay_acey_ducey(){
     this._send('pay_acey_ducey');
   }
 // acey_ducey_on(){
 //   this._send('acey_ducey_on');
-// } 
+// }
 //  acey_ducey_off(){
 //   this._send('acey_ducey_off');
 // }
@@ -114,7 +111,7 @@ undo(){
 //  }
 //  man_mouse_on(){
 //   this._send('man_mouse_on');
-// } 
+// }
 //  man_mouse_off(){
 //   this._send('man_mouse_off');
 // }
@@ -189,7 +186,6 @@ undo(){
     this._send('undo');
   }
   revert(){
-    this._send('revert');
     this._send('revert');
   }
 }
