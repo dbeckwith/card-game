@@ -1123,7 +1123,7 @@ export function render_ui(
     //    });
     $dealer_select.prop("title", "Changes dealer to any other player; leaves cards and pot alone");
     $dealer_select.empty();
-    $dealer_select.append('<option selected disabled>Select Dealer</option>');
+    $dealer_select.append('<option selected disabled>Change Dealer (maintains cards/bets)</option>');
     _.forEach(game_state.players, player =>
     {
       if (player.id !== current_player.id)
