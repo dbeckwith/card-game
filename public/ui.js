@@ -202,10 +202,12 @@ export function render_ui(
     });
     const $one_up_button = $('<button />',
     {
+      id: "one-up-button",
       title: 'Deals 1 up card to every player simultaneously',
     });
     const $one_down_button = $('<button />',
     {
+      id: "one-down-button",
       title: 'Deals 1 down card to every player simultaneously',
     });
 
@@ -233,8 +235,8 @@ export function render_ui(
     //set text:
     $five_down_button.text('all 5DN');
     $two_down_one_up_button.text('all 2DN/1UP');
-    $one_up_button.text('all 1UP');
-    $one_down_button.text('all 1DN');
+    $one_up_button.text('All 1UP');
+    $one_down_button.text('All 1DN');
 
     //add:
     //    $deal_all_buttons.append($five_down_button);
@@ -434,7 +436,7 @@ export function render_ui(
       title: 'Splits the pot between all winners selected in winner menu\n\n' +
         'If uneven split, gives extra to player with least chips',
     });
-    $payout_button.text('Pay-out');
+    $payout_button.text('PAY');
 
     $payout_button.click(function ()
     {
@@ -564,7 +566,7 @@ export function render_ui(
       }
       else if (choice === "Man-Mouse")
       {
-        alert("FYI: when you click \"Payout\" the code will automatically subtract from all those that stayed in and lost");
+        alert("FYI: when you click \"PAY\" the code will automatically subtract from all those that stayed in and lost");
         show_buttons(new Array($one_down_button), true);
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
@@ -608,7 +610,7 @@ export function render_ui(
       title: "Less-frequently-used dealer controls",
     });
     $action_select.empty();
-    $action_select.append('<option selected disabled value="prompt">ACTION:</option>');
+    $action_select.append('<option selected disabled value="prompt">OTHER Dealer Actions:</option>');
     $action_select.change(function ()
     {
       switch ($(this).val())
@@ -636,8 +638,8 @@ export function render_ui(
       ['• COMMON Up Card', 'common'],
       ['• DISCARD MODE On/Off', 'discard-mode'],
       ['• UNDO last action', 'undo'],
-      ['☠ Collect cards (incl. common), shuffle, leave pot alone ☠', 'collect'],
-      ['☠ Revert to start-of-hand state ☠', 'revert'],
+      ['☠ COLLECT CARDS (incl. common), SHUFFLE, leave pot alone ☠', 'collect'],
+      ['☠ REVERT to start-of-hand state ☠', 'revert'],
     ];
 
     _.forEach(other_dlr_functions, ([label, id]) =>
@@ -672,7 +674,6 @@ export function render_ui(
     $dealer_controls.append($deal_all_buttons);
     $dealer_controls.append($ace_called_button);
 
-    //    $dealer_controls.append($next_up_button);
     const $acey_buttons = $("<span />",
     {
       id: "acey-buttons",
@@ -688,14 +689,18 @@ export function render_ui(
 //    $dealer_controls.append($discard_button);
 //    $dealer_controls.append($collect_shuffle_button);
     $dealer_controls.append($action_select);
+            $dealer_controls.append($next_up_button);
+            $dealer_controls.append($next_down_button);
+
     $dealer_controls_bottom.append($set_game_select);
-        $dealer_controls_bottom.append($dealer_select);
 
     $dealer_controls_bottom.append($winners_select);
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($new_game_button);
 //    $dealer_controls_bottom.append($reset_game_button);
     $dealer_controls_bottom.append($new_back_button);
+            $dealer_controls_bottom.append($dealer_select);
+
 
     //horizontal rule:
     $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
@@ -791,7 +796,7 @@ export function render_ui(
     });
 
     $other_select.empty();
-    $other_select.append('<option selected disabled value="prompt">Action:</option>');
+    $other_select.append('<option selected disabled value="prompt">Other:</option>');
     $other_select.change(function ()
     {
       switch ($(this).val())
@@ -816,8 +821,7 @@ export function render_ui(
     var other_functions = [
       ['Buy-In $10', 'buy-in'],
       ['Log Out', 'log-out'],
-      ['Undo Last Ante/Bet', 'undo'],
-      ['Ante 1 chip', 'ante'],
+//      ['Undo Last Ante/Bet', 'undo'],
     ];
 
     _.forEach(other_functions, ([label, id]) =>
@@ -898,6 +902,9 @@ export function render_ui(
       }
     });
 
+    const $pot_buttons = $('<span />',{
+      id:"pot-buttons",
+    })
     //BET BUTTONS 1-8:
     const $bet_buttons = $('<span />');
 
@@ -931,7 +938,7 @@ export function render_ui(
         {
           game.bet_half_pot();
         });
-        $bet_buttons.append($bet_button_half_pot);
+        $pot_buttons.append($bet_button_half_pot);
 
       }
       else
@@ -946,11 +953,10 @@ export function render_ui(
         {
           game.bet_pot();
         });
-        $bet_buttons.append($bet_button_pot);
+        $pot_buttons.append($bet_button_pot);
 
       }
     }
-
 
     //DISPLAY AMOUNT EACH PLAYER HAS:
     const $player_money_display = $('<span />',
@@ -969,6 +975,7 @@ export function render_ui(
 
     $player_controls.append($bet_input);
     $player_controls.append($bet_buttons);
+    $player_controls.append($pot_buttons);
 
     $player_controls.append($ante_button);
     $player_controls.append($ante_input);
@@ -1048,8 +1055,8 @@ export function render_ui(
     //    });
     $("#new-game-button").prop("disabled", game_state.pot != 0);
     $("#set-game-select").prop("disabled", game_state.pot != 0);
-    $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey");
-    $("#ante-input").prop("disabled", game_state.game_name == "Acey-Ducey");
+//    $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey");
+//    $("#ante-input").prop("disabled", game_state.game_name == "Acey-Ducey");
     //if no players in game, call setup:
     if ($('#game-board').length === 0)
     {
@@ -1197,9 +1204,9 @@ export function render_ui(
     //acey-ducey buttons
     $('#post-button').hide();
     $('#dbl-post-button').hide();
-    $('win-a-d-button').hide();
-    $('lose-a-d-button').hide();
-
+    $('#win-a-d-button').hide();
+    $('#lose-a-d-button').hide();
+    $('#pot-buttons').hide();
     //make sure all other buttons are back:
     $('#check-button').css('margin-right', '10px')
     $('#check-button').show();
@@ -1227,13 +1234,14 @@ export function render_ui(
       $('#call-button').hide();
       $('#post-button').show();
       $('#dbl-post-button').show();
-      $('win-a-d-button').show();
-      $('lose-a-d-button').show();
+      $('#win-a-d-button').show();
+      $('#lose-a-d-button').show();
+      $('#pot-buttons').show();
     }
-    if (game_state.discard_mode)
-      $('discard-btn').show();
-    else
-      $('discard-btn').hide();
+//    if (game_state.discard_mode)
+//      $('#discard-btn').show();
+//    else
+//      $('#discard-btn').hide();
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
@@ -1458,6 +1466,7 @@ export function render_ui(
       $player_seat.append($chips_shy);
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
+      
 
       //allow to click anywhere to set as active player
       $player_seat.click(function ()
