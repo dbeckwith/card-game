@@ -148,7 +148,7 @@ class GameState(object):
         for player in self.players:
             player.clear_hand()
         # shuffle a new deck
-        common_cards = []
+        self.common_cards = []
         self.deck = cards.new_deck() 
         
     def new_game(self, game_name):
