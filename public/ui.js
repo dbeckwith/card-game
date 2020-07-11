@@ -365,10 +365,10 @@ export function render_ui(
       text: 'COMMON UP',
     });
 
-    //DRAW MODE button:
-    const $draw_button = $('<button />',
+    //DISACRD MODE button:
+    const $discard_button = $('<button />',
     {
-      id: 'draw-btn',
+      id: 'discard-btn',
       text: 'DISCARD MODE',
       title: 'Allows TWO things: \n\n1. PLAYERS can click their cards to discard them\n2. NEXT DN deals cards one-by-one to same player',
     });
@@ -378,11 +378,11 @@ export function render_ui(
       game.deal_common();
     });
 
-    $draw_button.click(function ()
+    $discard_button.click(function ()
     {
-      game.toggle_draw_mode();
+      game.toggle_discard_mode();
     });
-    $draw_button.addClass("not-draw-mode");
+    $discard_button.addClass("not-discard-mode");
 
 
     //SELECTOR FOR WINNERS/Payout:
@@ -558,8 +558,8 @@ export function render_ui(
       else if (choice === "Acey-Ducey")
       {
         alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
-        $("#draw-btn").removeClass("not-draw-mode");
-        $("#draw-btn").addClass("draw-mode");
+        $("#discard-btn").removeClass("not-discard-mode");
+        $("#discard-btn").addClass("discard-mode");
         show_buttons(new Array($next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), true);
       }
       else if (choice === "Man-Mouse")
@@ -617,7 +617,7 @@ export function render_ui(
           game.deal_common();
           break;
         case 'discard-mode':
-          game.toggle_draw_mode();
+          game.toggle_discard_mode();
           break;
         case 'collect':
           game.collect_shuffle();
@@ -685,7 +685,7 @@ export function render_ui(
     $dealer_controls.append($acey_buttons);
     //    $dealer_controls.append($next_down_button);
 //    $dealer_controls.append($common_button);
-//    $dealer_controls.append($draw_button);
+//    $dealer_controls.append($discard_button);
 //    $dealer_controls.append($collect_shuffle_button);
     $dealer_controls.append($action_select);
     $dealer_controls_bottom.append($set_game_select);
@@ -1136,22 +1136,22 @@ export function render_ui(
     const $game_name_display = $('#game-name-display');
     $game_name_display.text(game_state.game_name);
 
-    const $draw_button = $('#draw-btn');
+    const $discard_button = $('#discard-btn');
 
     //make down cards outline in black to show discarding
     var downs = $(".down-card").children();
-    downs.toggleClass("draw-ready");
+    downs.toggleClass("discard-ready");
 
-    //alter draw mode button depending on mode:
-    if (game_state.draw_mode)
+    //alter discard mode button depending on mode:
+    if (game_state.discard_mode)
     {
-      $("#draw-btn").removeClass("not-draw-mode");
-      $("#draw-btn").addClass("draw-mode");
+      $("#discard-btn").removeClass("not-discard-mode");
+      $("#discard-btn").addClass("discard-mode");
     }
     else
     {
-      $("#draw-btn").removeClass("draw-mode");
-      $("#draw-btn").addClass("not-draw-mode");
+      $("#discard-btn").removeClass("discard-mode");
+      $("#discard-btn").addClass("not-discard-mode");
     }
 
 
@@ -1230,10 +1230,10 @@ export function render_ui(
       $('win-a-d-button').show();
       $('lose-a-d-button').show();
     }
-    if (game_state.draw_mode)
-      $('draw-btn').show();
+    if (game_state.discard_mode)
+      $('discard-btn').show();
     else
-      $('draw-btn').hide();
+      $('discard-btn').hide();
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
@@ -1389,8 +1389,8 @@ export function render_ui(
           }
 
           //outline cards or show halfup half down
-          if (!card.up && player.id === current_player.id && game_state.draw_mode)
-            $card_img2.addClass('draw-ready'); //show black outline around down cards
+          if (!card.up && player.id === current_player.id && game_state.discard_mode)
+            $card_img2.addClass('discard-ready'); //show black outline around down cards
           if (!card.up && player.id === current_player.id)
             $card_img.addClass('down-card');
 
@@ -1401,7 +1401,7 @@ export function render_ui(
           {
             $card_img.click(function ()
             {
-              if (game_state.draw_mode) //add to upcard
+              if (game_state.discard_mode) //add to upcard
                 game.discard(idx);
               else
                 game.flip(idx);
@@ -1409,7 +1409,7 @@ export function render_ui(
             if (!card.up) //add to down card
               $card_img2.click(function ()
               {
-                if (game_state.draw_mode)
+                if (game_state.discard_mode)
                   game.discard(idx);
                 else
                   game.flip(idx);

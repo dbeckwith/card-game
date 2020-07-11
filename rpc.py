@@ -174,13 +174,13 @@ class RPC(object):
             else:
                 self.game_state.wait_for_ace = False
             
-            # go to next player unless it's draw mode or if you just completed a 5-card hand in 5-card draw:
+            # go to next player unless it's discard mode or if you just completed a 5-card hand in 5-card draw:
             fifth_card = self.game_state.game_name == "5-Card Draw" and num_cards_in_hand == 5
     
-            not_draw = not self.game_state.draw_mode
+            not_discard = not self.game_state.discard_mode
             not_midnight_four = self.game_state.game_name != "Midnight Baseball"
             
-            if fifth_card or (not_draw and not_midnight_four):
+            if fifth_card or (not_discard and not_midnight_four):
                 self.game_state.next_active_player()
             
 
@@ -209,8 +209,8 @@ class RPC(object):
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
 
-    def toggle_draw_mode(self):
-        self.game_state.draw_mode = not self.game_state.draw_mode
+    def toggle_discard_mode(self):
+        self.game_state.discard_mode = not self.game_state.discard_mode
           
     
     def undo(self):

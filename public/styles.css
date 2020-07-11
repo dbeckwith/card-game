@@ -105,8 +105,8 @@ button:hover {
   margin-left: 40px;
 }
 
-/* draw-mode toggle button */
-.not-draw-mode, .not-draw_mode:hover {
+/* discard-mode toggle button */
+.not-discard-mode, .not-discard-mode:hover {
   border-radius: 4px;
   font-size: 10px;
   margin-left: 55px;
@@ -116,7 +116,7 @@ button:hover {
   border-width: 0px;
 }
 
-.draw-mode, .draw-mode:hover {
+.discard-mode, .discard-mode:hover {
   border-radius: 4px;
   font-size: 11px;
   margin-left: 55px;
@@ -603,7 +603,7 @@ input {
   /*  z-index:1;*/
 }
 
-.draw-ready {
+.discard-ready {
 /*  border: 1px solid black;*/
     animation: pulsate 1s infinite;
 

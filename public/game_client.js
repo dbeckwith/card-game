@@ -149,8 +149,8 @@ undo(){
    slide_off(){
     this._send('slide_off');
   }
-  toggle_draw_mode() {
-    this._send('toggle_draw_mode');
+  toggle_discard_mode() {
+    this._send('toggle_discard_mode');
   }
   buy_in(amount) {
     this._send('buy_in', { amount });
@@ -158,8 +158,8 @@ undo(){
   reset_game(){
     this._send('reset_game');
   }
- set_draw_mode(on){
-   this._send('set_draw_mode', { on });
+ set_discard_mode(on){
+   this._send('set_discard_mode', { on });
  }
   pay_post(num){
     this._send('pay_post', { num });
@@ -189,6 +189,7 @@ undo(){
     this._send('undo');
   }
   revert(){
+    this._send('revert');
     this._send('revert');
   }
 }

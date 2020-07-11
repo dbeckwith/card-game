@@ -26,7 +26,7 @@ class GameState(object):
         self.pot     = 0
 
         self.hand_started  = False
-        self.draw_mode     = False
+        self.discard_mode     = False
         self.dealer        = None
         self.active_player = None
         self.common_cards  = []
@@ -56,7 +56,7 @@ class GameState(object):
             'last_bet'     : self.last_bet,
             'common_cards' : self.common_cards,
             'game_name'    : self.game_name,
-            'draw_mode'    : self.draw_mode,
+            'discard_mode'    : self.discard_mode,
             'chips_bet_in_round': self.chips_bet_in_round,
             'card_back_num': self.card_back_num,
             'wait_for_ace'  : self.wait_for_ace,
@@ -148,6 +148,7 @@ class GameState(object):
         for player in self.players:
             player.clear_hand()
         # shuffle a new deck
+        common_cards = []
         self.deck = cards.new_deck() 
         
     def new_game(self, game_name):
@@ -169,7 +170,7 @@ class GameState(object):
         # shuffle a new deck
         self.deck = cards.new_deck()
 
-        self.draw_mode = False
+        self.discard_mode = False
         # new hand
         self.hand_started = False
 
@@ -177,9 +178,9 @@ class GameState(object):
             # pick a new dealer
             self.next_dealer()
         if self.game_name == "Acey-Ducey":
-            self.draw_mode = True
+            self.discard_mode = True
         else:
-            self.draw_mode = False
+            self.discard_mode = False
         # pick the first active player
         self.active_player = self.next_player_after(self.dealer)
 
