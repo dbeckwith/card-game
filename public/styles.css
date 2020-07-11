@@ -82,6 +82,7 @@ button:hover {
 }
 #one-up-button, #one-down-button{
   background-color: #BEFFFF;
+  border: solid 3px black;
 }
 /* all dealer buttons are smaller */
 .dlrbtns {
@@ -154,6 +155,7 @@ button:hover {
   height: 30px;
   margin-left: 30px;
   background-color:#BEFFFF;
+  border: 3px solid black;
 }
 
 
@@ -171,7 +173,9 @@ button:hover {
   width: 120px;
   margin-left: 20px;
   display: inline-block;
-/*  height:25px;*/
+    border: solid 3px black;
+
+/*  height:15px;*/
 }
 
 #winners-select-box {
@@ -184,7 +188,7 @@ button:hover {
 #winners-select-select {
   width: 100%;
 /*  font-weight: bold;*/
-/*    height:25px;*/
+    height:25px;
   background-color: #BEFFFF;
 
 }
@@ -204,7 +208,7 @@ button:hover {
   z-index: 10000;
 
   display: none;
-  border: 1px #dadada solid;
+  border: 3px #dadada solid;
   position: absolute;
   background-color: #BEFFFF;
   color: black;
@@ -216,7 +220,7 @@ button:hover {
 }
 #next-label{
   margin-left: 30px;
-  font-size: 13px;
+  font-size: 15px;
 }
 #next-up, #next-down{
   padding-top: 2px;
@@ -237,7 +241,7 @@ button:hover {
 #dealer-select {
   width: 115px;
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 5px;
   height:25px;
 }
 #win-a-d-button, #lose-a-d-button{
@@ -293,13 +297,13 @@ button:hover {
 }
 
 #new-back-button {
-  margin-left: 25px;
-  margin-right: 25px;
+  margin-left: 105px;
+  margin-right: 5px;
 }
 
 /* new game button */
 #new-game-button {
-  margin-left: 35px;
+  margin-left: 95px;
   color: white;
   background-color: blue;
 }
