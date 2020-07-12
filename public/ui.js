@@ -142,7 +142,7 @@ export function render_ui(
   }
   /*********************************
    * INITIAL SETUP of game screen
-   *  by render_game
+   * called at start of render_game
    ***********************************/
   function setup_game_html()
   {
@@ -167,7 +167,7 @@ export function render_ui(
     });
     $logo_link.on('click', function ()
     {
-      //      alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
+      //alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
       toggle_fireworks();
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
@@ -178,7 +178,7 @@ export function render_ui(
     {
       id: 'dealer-controls',
     });
-
+    //display for how many cards left
     const $cards_left = $('<span />',
     {
       id: "cards-left",
@@ -192,14 +192,6 @@ export function render_ui(
 
     //create buttons:
     const $deal_all_buttons = $('<span \>');
-    const $five_down_button = $('<button />',
-    {
-      title: 'Deals 5 down cards to every player simultaneously',
-    });
-    const $two_down_one_up_button = $('<button />',
-    {
-      title: 'Deals 2 down and 1 up card to every player simultaneously',
-    });
     const $one_up_button = $('<button />',
     {
       id: "one-up-button",
@@ -211,17 +203,6 @@ export function render_ui(
       title: 'Deals 1 down card to every player simultaneously',
     });
 
-
-
-    //add function:
-    $five_down_button.on('click', function ()
-    {
-      game.deal_all(5, 0);
-    });
-    $two_down_one_up_button.on('click', function ()
-    {
-      game.deal_all(2, 1);
-    });
     $one_up_button.on('click', function ()
     {
       game.deal_all(0, 1);
@@ -233,14 +214,10 @@ export function render_ui(
     });
 
     //set text:
-    $five_down_button.text('all 5DN');
-    $two_down_one_up_button.text('all 2DN/1UP');
     $one_up_button.text('All 1UP');
     $one_down_button.text('All 1DN');
 
     //add:
-    //    $deal_all_buttons.append($five_down_button);
-    //    $deal_all_buttons.append($two_down_one_up_button);
     $deal_all_buttons.append($one_up_button);
     $deal_all_buttons.append($one_down_button);
 
@@ -258,6 +235,22 @@ export function render_ui(
       text: 'UP',
       title: 'Deals one card to the selected player and moves to next player',
       id: 'next-up',
+    });
+    const $card_confirmed_button = $('<button />',
+    {
+      text: 'Confirm Card',
+      id: 'card-confirmed-button',
+      hidden: true,
+      title: 'Click to confirm low or hi ace has been called for Acey-Ducey\n ' +
+        'or to confirm 4, 5, 10 has been noticed in Woolworths',
+    });
+    $card_confirmed_button.hide();
+
+    const $next_down_button = $('<button />',
+    {
+      text: 'DN',
+      title: 'Deals one card to the selected player and moves to next player',
+      id: 'next-down',
     });
     //win-lose for acey-ducey
     const $win_a_d_button = $('<button />',
@@ -292,34 +285,22 @@ export function render_ui(
       hidden: true,
       title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
     });
-    const $card_confirmed_button = $('<button />',
-    {
-      text: 'Confirm Card',
-      id: 'card-confirmed-button',
-      hidden: true,
-      title: 'Click to confirm low or hi ace has been called for Acey-Ducey\n ' +
-        'or to confirm 4, 5, 10 has been noticed in Woolworths',
-    });
-    $card_confirmed_button.hide();
-    const $next_down_button = $('<button />',
-    {
-      text: 'DN',
-      title: 'Deals one card to the selected player and moves to next player',
-      id: 'next-down',
-    });
 
+
+    //***** ADD FUNCTIONS TO BUTTONS *****//
     $next_up_button.click(function ()
     {
       game.one_card(true);
     });
-    //
+    $next_down_button.click(function ()
+    {
+      game.one_card(false);
+    });
     $win_a_d_button.click(function ()
     {
       game.clear_hand();
-      //payout:
-      game.pay_acey_ducey();
-      //nextplayer:
-      game.increment_bettor_drawer();
+      game.pay_acey_ducey(); // pay out
+      game.increment_bettor_drawer(); // next player
     });
 
     $lose_a_d_button.click(function ()
@@ -341,52 +322,21 @@ export function render_ui(
       game.clear_hand();
       game.increment_bettor_drawer();
     });
+
     $card_confirmed_button.click(function ()
     {
       game.card_confirmed();
     });
 
-    $next_down_button.click(function ()
-    {
-      game.one_card(false);
-    });
-
+    //these buttons have a different look:
     $next_up_button.addClass('one-card-buttons');
-
     $next_down_button.addClass('one-card-buttons');
 
-    const $dealer_controls_bottom = $('<span />',
+    
+    const $dealer_controls_top = $('<span />',
     {
-      id: 'dealer-controls-bottom',
+      id: 'dealer-controls-top',
     });
-
-    //COMMON BUTTON  - deals one card up for all players
-    const $common_button = $('<button />',
-    {
-      id: 'common-button',
-      title: 'Deals 1 common card to center of table',
-      text: 'COMMON UP',
-    });
-
-    //DISACRD MODE button:
-    const $discard_button = $('<button />',
-    {
-      id: 'discard-btn',
-      text: 'DISCARD MODE',
-      title: 'Allows TWO things: \n\n1. PLAYERS can click their cards to discard them\n2. NEXT DN deals cards one-by-one to same player',
-    });
-
-    $common_button.click(function ()
-    {
-      game.deal_common();
-    });
-
-    $discard_button.click(function ()
-    {
-      game.toggle_discard_mode();
-    });
-    $discard_button.addClass("not-discard-mode");
-
 
     //SELECTOR FOR WINNERS/Payout:
     const $winners_select = $(`
@@ -460,6 +410,7 @@ export function render_ui(
         'Pot must be zero (game not started or payout happened or Reset Game chosen) to start new game',
       text: 'New Game',
     });
+    
     //change card backing button:
     const $new_back_button = $('<button />',
     {
@@ -467,6 +418,7 @@ export function render_ui(
       title: 'picks randomly from card backs',
       text: 'Backs',
     });
+    
     //reset game button:
     const $reset_game_button = $('<button />',
     {
@@ -475,6 +427,7 @@ export function render_ui(
       text: '☠ RESET Game ☠',
     });
 
+    //add functions to buttons:
     $new_game_button.click(function ()
     {
       game.new_game("Select Game"); //will show popup and set pot_cleared to False when appropriate
@@ -509,7 +462,7 @@ export function render_ui(
 
       '',
       'Texas Hold-Em',
-//      'Criss-Cross',
+      //      'Criss-Cross',
       '',
       'Acey-Ducey',
       'Man-Mouse',
@@ -535,11 +488,7 @@ export function render_ui(
         else shows[i].hide();
       }
     }
-    //WHEN GAME IS SELECTED, show game name and if...
-    //
-    //Acey-Ducey - add W, L buttons and set in acey-ducey mode
-    //Midnight Baseball - put automatically in draw mode
-    //5-card draw - remove 1up/1dn buttons
+
     $set_game_select.change(function ()
     {
       let choice = $(this).val();
@@ -548,17 +497,16 @@ export function render_ui(
       ////  SHOW AND HIDE BUTTONS: /////
 
       //firsts, hide all:
-      show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $card_confirmed_button, $five_down_button, $next_down_button, $common_button, $next_label), false);
-
+      show_buttons(new Array($one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $card_confirmed_button, $next_down_button, $next_label), false);
 
       //now, show only those needed
       if (choice === "5-Card Draw")
-        show_buttons(new Array($five_down_button, $next_label, $next_down_button, $one_down_button, $common_button), true);
+        show_buttons(new Array($next_label, $next_down_button, $one_down_button), true);
       else if (choice === "Midnight Baseball")
       {
         alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
           "  and players can flip their own cards")
-        show_buttons(new Array($five_down_button, $one_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button), true);
       }
       else if (choice === "Acey-Ducey")
       {
@@ -573,20 +521,20 @@ export function render_ui(
         show_buttons(new Array($one_down_button), true);
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
-        show_buttons(new Array($one_down_button, $next_label, $next_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_down_button), true);
       else if (choice === "Woolworths")
-        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button, $card_confirmed_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button,  $card_confirmed_button), true);
       else if (choice === "Follow the Queen")
-        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button), true);
       else if (choice === "Dirty Gertie")
-        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button), true);
       else if (choice === "5-Card Stud")
-        show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
+        show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
       else if ("7-Card Stud Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
-        show_buttons(new Array($two_down_one_up_button, $one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
+        show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
       else
       {
-        show_buttons(new Array($two_down_one_up_button, $next_label, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button, $common_button), true);
+        show_buttons(new Array($next_label, $one_up_button, $one_down_button, $next_up_button,  $next_down_button), true);
       }
     });
 
@@ -689,27 +637,23 @@ export function render_ui(
     $acey_buttons.append($win_a_d_button);
     $acey_buttons.append($lose_a_d_button);
     $dealer_controls.append($acey_buttons);
-    //    $dealer_controls.append($next_down_button);
-    //    $dealer_controls.append($common_button);
-    //    $dealer_controls.append($discard_button);
-    //    $dealer_controls.append($collect_shuffle_button);
+
     $dealer_controls.append($action_select);
     $dealer_controls.append($next_label);
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
 
-    $dealer_controls_bottom.append($set_game_select);
+    $dealer_controls_top.append($set_game_select);
 
-    $dealer_controls_bottom.append($winners_select);
-    $dealer_controls_bottom.append($payout_button);
-    $dealer_controls_bottom.append($new_game_button);
-    //    $dealer_controls_bottom.append($reset_game_button);
-    $dealer_controls_bottom.append($new_back_button);
-    $dealer_controls_bottom.append($dealer_select);
+    $dealer_controls_top.append($winners_select);
+    $dealer_controls_top.append($payout_button);
+    $dealer_controls_top.append($new_game_button);
+    $dealer_controls_top.append($new_back_button);
+    $dealer_controls_top.append($dealer_select);
 
 
     //horizontal rule:
-    $dealer_controls_bottom.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
+    $dealer_controls_top.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
 
     /*****************************
      * PLAYER CONTROLS
@@ -982,7 +926,7 @@ export function render_ui(
 
     $header.append($logo_link);
 
-    $header.append($dealer_controls_bottom);
+    $header.append($dealer_controls_top);
     $header.append($dealer_controls);
     $header.append('<hr \>');
 
@@ -1082,12 +1026,12 @@ export function render_ui(
     if (game_state.dealer === current_player.id)
     {
       $('#dealer-controls').show();
-      $('#dealer-controls-bottom').show();
+      $('#dealer-controls-top').show();
     }
     else
     {
       $('#dealer-controls').hide();
-      $('#dealer-controls-bottom').hide();
+      $('#dealer-controls-top').hide();
     }
     $("#player-money-display").click(function ()
     {
@@ -1489,7 +1433,6 @@ export function render_ui(
       $player_seat.append($chip_stack_display);
       $player_seat.append($hand);
 
-
       //allow to click anywhere to set as active player
       $player_seat.click(function ()
       {
@@ -1556,7 +1499,6 @@ export function render_ui(
     for (let i = 0; i < num_spaces; i++)
       spaces += "&nbsp";
 
-
     return spaces + s;
   }
 
@@ -1607,9 +1549,7 @@ export function render_ui(
           "background-image": "linear-gradient(to bottom, #007712, #2AcF15)"
         });
         $("#chips-summary").hide();
-
         $("#app").css("opacity", "1.0");
-
         show_summary = false;
       }
     }
