@@ -550,7 +550,7 @@ export function render_ui(
 
       //now, show only those needed
       if (choice === "5-Card Draw")
-        show_buttons(new Array($five_down_button, $next_label, $next_down_button, $common_button), true);
+        show_buttons(new Array($five_down_button, $next_label, $next_down_button, $one_down_button, $common_button), true);
       else if (choice === "Midnight Baseball")
       {
         alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
@@ -578,7 +578,7 @@ export function render_ui(
       else if (choice === "5-Card Stud")
         show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
       else if ("7-Card Stud Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
-        show_buttons(new Array($two_down_one_up_button, $one_up_button,$next_label,  $next_down_button, $next_up_button, $one_down_button, $common_button), true);
+        show_buttons(new Array($two_down_one_up_button, $one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button, $common_button), true);
       else
       {
         show_buttons(new Array($two_down_one_up_button, $next_label, $one_up_button, $one_down_button, $next_up_button, $five_down_button, $next_down_button, $common_button), true);
@@ -685,22 +685,22 @@ export function render_ui(
     $acey_buttons.append($lose_a_d_button);
     $dealer_controls.append($acey_buttons);
     //    $dealer_controls.append($next_down_button);
-//    $dealer_controls.append($common_button);
-//    $dealer_controls.append($discard_button);
-//    $dealer_controls.append($collect_shuffle_button);
+    //    $dealer_controls.append($common_button);
+    //    $dealer_controls.append($discard_button);
+    //    $dealer_controls.append($collect_shuffle_button);
     $dealer_controls.append($action_select);
     $dealer_controls.append($next_label);
-            $dealer_controls.append($next_up_button);
-            $dealer_controls.append($next_down_button);
+    $dealer_controls.append($next_up_button);
+    $dealer_controls.append($next_down_button);
 
     $dealer_controls_bottom.append($set_game_select);
 
     $dealer_controls_bottom.append($winners_select);
     $dealer_controls_bottom.append($payout_button);
     $dealer_controls_bottom.append($new_game_button);
-//    $dealer_controls_bottom.append($reset_game_button);
+    //    $dealer_controls_bottom.append($reset_game_button);
     $dealer_controls_bottom.append($new_back_button);
-            $dealer_controls_bottom.append($dealer_select);
+    $dealer_controls_bottom.append($dealer_select);
 
 
     //horizontal rule:
@@ -880,6 +880,7 @@ export function render_ui(
       id: 'bet-input',
       type: 'number',
       min: 1,
+      value: 1,
     });
 
     //BET BUTTON:
@@ -899,61 +900,53 @@ export function render_ui(
       }
     });
 
-    const $pot_buttons = $('<span />',{
-      id:"pot-buttons",
-    })
+    //    const $pot_buttons = $('<span />',{
+    //      id:"pot-buttons",
+    //    })
     //BET BUTTONS 1-8:
     const $bet_buttons = $('<span />');
 
-    for (let i = 1; i <= 10; i++)
+    for (let i = 1; i <= 8; i++)
     {
-      if (i < 9)
-      {
-        const $bet_button_num = $('<button />',
-        {
-          class: 'bet-buttons',
-          title: 'Bet this many chips; moves to next player',
-          text: i,
-        });
-        $bet_button_num.click(function ()
-        {
-          const amount = +i;
-          game.bet(i);
-        });
-        $bet_buttons.append($bet_button_num);
 
-      }
-      else if (i == 9)
+      const $bet_button_num = $('<button />',
       {
-        const $bet_button_half_pot = $('<button />',
-        {
-          class: 'bet-buttons',
-          title: 'Bet half pot',
-          text: "Pot/2",
-        });
-        $bet_button_half_pot.click(function ()
-        {
-          game.bet_half_pot();
-        });
-        $pot_buttons.append($bet_button_half_pot);
-
-      }
-      else
+        class: 'bet-buttons',
+        title: 'Bet this many chips; moves to next player',
+        text: i,
+      });
+      $bet_button_num.click(function ()
       {
-        const $bet_button_pot = $('<button />',
-        {
-          class: 'bet-buttons',
-          title: 'Bet  pot',
-          text: "POT",
-        });
-        $bet_button_pot.click(function ()
-        {
-          game.bet_pot();
-        });
-        $pot_buttons.append($bet_button_pot);
-
-      }
+        const amount = +i;
+        game.bet(i);
+      });
+      $bet_buttons.append($bet_button_num);
     }
+
+    const $bet_button_half_pot = $('<button />',
+    {
+      class: 'bet-buttons',
+      id: 'bet-button-half-pot',
+      title: 'Bet half pot',
+      text: "Pot/2",
+    });
+    $bet_button_half_pot.click(function ()
+    {
+      game.bet_half_pot();
+    });
+
+
+    const $bet_button_pot = $('<button />',
+    {
+      class: 'bet-buttons',
+      id: 'bet-button-pot',
+      title: 'Bet  pot',
+      text: "POT",
+    });
+    $bet_button_pot.click(function ()
+    {
+      game.bet_pot();
+    });
 
     //DISPLAY AMOUNT EACH PLAYER HAS:
     const $player_money_display = $('<span />',
@@ -972,7 +965,8 @@ export function render_ui(
 
     $player_controls.append($bet_input);
     $player_controls.append($bet_buttons);
-    $player_controls.append($pot_buttons);
+    $player_controls.append($bet_button_half_pot);
+    $player_controls.append($bet_button_pot);
 
     $player_controls.append($ante_button);
     $player_controls.append($ante_input);
@@ -1052,8 +1046,8 @@ export function render_ui(
     //    });
     $("#new-game-button").prop("disabled", game_state.pot != 0);
     $("#set-game-select").prop("disabled", game_state.pot != 0);
-//    $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey");
-//    $("#ante-input").prop("disabled", game_state.game_name == "Acey-Ducey");
+    //    $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey");
+    //    $("#ante-input").prop("disabled", game_state.game_name == "Acey-Ducey");
     //if no players in game, call setup:
     if ($('#game-board').length === 0)
     {
@@ -1198,19 +1192,19 @@ export function render_ui(
     }
     //reset all buttons/hide acey-ducey buttons:
     $('#check-button').text('Check'); //re-set if last game was man-mouse ("in")
-    //acey-ducey buttons
+    //hide acey-ducey buttons:
     $('#post-button').hide();
     $('#dbl-post-button').hide();
     $('#win-a-d-button').hide();
     $('#lose-a-d-button').hide();
-    $('#pot-buttons').hide();
+    $('#bet-button-half-pot').hide();
+    $('#bet-button-pot').hide();
     //make sure all other buttons are back:
     $('#check-button').css('margin-right', '10px')
     $('#check-button').show();
     $('#call-button').show();
     $('#bet-button').show();
     $('#bet-input').show();
-    $('.bet-buttons').show();
     $('#fold-button').show();
 
     if (game_state.game_name === "Man-Mouse")
@@ -1221,7 +1215,6 @@ export function render_ui(
       $('#call-button').hide();
       $('#bet-button').hide();
       $('#bet-input').hide();
-      $('.bet-buttons').hide();
     }
     //remove some buttons for acey-ducey
     if (game_state.game_name === "Acey-Ducey")
@@ -1233,12 +1226,15 @@ export function render_ui(
       $('#dbl-post-button').show();
       $('#win-a-d-button').show();
       $('#lose-a-d-button').show();
-      $('#pot-buttons').show();
+      $('#bet-button-half-pot').show();
+      $('#bet-button-pot').show();
     }
-//    if (game_state.discard_mode)
-//      $('#discard-btn').show();
-//    else
-//      $('#discard-btn').hide();
+    if (game_state.game_name === "Midnight Baseball")
+      $('#bet-button-pot').show();
+    //    if (game_state.discard_mode)
+    //      $('#discard-btn').show();
+    //    else
+    //      $('#discard-btn').hide();
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 

@@ -394,6 +394,7 @@ button:hover {
   border: solid 1px black;
 }
 
+
 /* POT DISPLAY */
 #pot-display {
   color: black;
@@ -504,11 +505,12 @@ input {
 #new-back-button {
   font-size: 10px;
 }
-
+td:nth-child(2){
+  background-color:red;
+}
 .player-seat.dealer {
   background-color: rebeccapurple;
 }
-
 .player-seat.active-player {
   color: #BEFFFF;
   border: 4px solid yellow;
