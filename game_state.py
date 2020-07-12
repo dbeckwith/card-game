@@ -153,11 +153,16 @@ class GameState(object):
                 yield player
 
     def collect_shuffle(self):
+        '''collect cards and reshuffle deck
+        used for Man-Mouse and Dirty Gertie'''
+        
         for player in self.players:
             player.clear_hand()
-        # shuffle a new deck
+            if self.game_name == "Man-Mouse":
+                player.in_hand = True  # put everyone that was out back in
+                
         self.common_cards = []
-        self.deck = cards.new_deck()
+        self.deck = cards.new_deck()  # shuffle a new deck
 
     def new_game(self, game_name):
         '''

@@ -420,22 +420,22 @@ export function render_ui(
     });
     
     //reset game button:
-    const $reset_game_button = $('<button />',
-    {
-      id: 'reset-game-button',
-      title: 'resets game - shuffles, gives back money, but same dealer',
-      text: '☠ RESET Game ☠',
-    });
+//    const $reset_game_button = $('<button />',
+//    {
+//      id: 'reset-game-button',
+//      title: 'resets game - shuffles, gives back money, but same dealer',
+//      text: '☠ RESET Game ☠',
+//    });
 
     //add functions to buttons:
     $new_game_button.click(function ()
     {
       game.new_game("Select Game"); //will show popup and set pot_cleared to False when appropriate
     });
-    $reset_game_button.click(function ()
-    {
-      game.reset_game();
-    });
+//    $reset_game_button.click(function ()
+//    {
+//      game.reset_game();
+//    });
     $new_back_button.click(function ()
     {
       game.new_back();
@@ -588,10 +588,13 @@ export function render_ui(
     });
 
     var other_dlr_functions = [
-      ['• COMMON Up Card', 'common'],
-      ['• DISCARD MODE On/Off', 'discard-mode'],
+      ['• Deal COMMON Up Card', 'common'],
+      ['• Turn DISCARD MODE On/Off', 'discard-mode'],
+      ['',''],
+            ['• COLLECT CARDS/SHUFFLE (Man-Mouse & Dirty Gertie) leaves pot alone ', 'collect'],
+      ['',''],
+
       ['• UNDO last action', 'undo'],
-      ['☠ COLLECT CARDS (incl. common), SHUFFLE, leave pot alone ☠', 'collect'],
       ['☠ REVERT to start-of-hand state ☠', 'revert'],
     ];
 
