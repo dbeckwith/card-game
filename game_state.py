@@ -37,7 +37,7 @@ class GameState(object):
         self.card_back_num      = 1
         self.current_game       = None
         self.wait_for_ace       = False
-
+        self.reshuffled         = False
         self.history = []
 
         self.connections = []
@@ -62,6 +62,7 @@ class GameState(object):
             'card_back_num'      : self.card_back_num,
             'wait_for_ace'       : self.wait_for_ace,
             'show_chip_totals'   : self.show_chip_totals,
+            'reshuffled'         : self.reshuffled,
         }
 
     async def connect(self, rpc):

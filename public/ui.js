@@ -1495,7 +1495,25 @@ export function render_ui(
 
     $common_display.append($common_hand);
 
+    //Reshuffle display for acey-ducey only when 1 card goes to 52 cards:
+    const $reshuffle_display = $('<div>',
+    {
+      id: "reshuffle-display",
+      text: "RESHUFFLED!",
+    });
+    const $reshuff_wrapper = $('<center \>');
+    
+    
     $game_board.append($common_display);
+    
+    $reshuff_wrapper.append($reshuffle_display);
+    $game_board.append($reshuff_wrapper);
+
+    if (game_state.reshuffled)
+      $("#reshuffle-display").show();
+    else
+      $("#reshuffle-display").hide();
+    
     $game_board.append($player_seats);
   }
 

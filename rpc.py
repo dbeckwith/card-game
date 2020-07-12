@@ -164,6 +164,9 @@ class RPC(object):
             if len(self.game_state.deck) == 0 and self.game_state.game_name == "Acey-Ducey":
                 # shuffle a new deck
                 self.game_state.deck = cards.new_deck()
+                self.game_state.reshuffled = True
+            else:
+                self.game_state.reshuffled = False
 
             num_cards_in_hand = len(self.game_state.active_player.hand)
 

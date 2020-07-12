@@ -501,7 +501,14 @@ input {
   background-color: black;
   color: white;
 }
+#reshuffle-display{
+  border: 30px solid red;
+  display: inline;
+  font-size:45px;
+      animation: pulsate 1s infinite;
 
+
+}
 #new-back-button {
   font-size: 10px;
 }
