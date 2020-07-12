@@ -192,7 +192,6 @@ class GameState(object):
         # pick the first active player
         self.active_player = self.next_player_after(self.dealer)
 
-        self.checkpoint('new_game')
 
     def reset_game(self):
         '''
@@ -330,6 +329,7 @@ class GameState(object):
         this will trigger those loops to run
         '''
         self.checkpoint(None)
+       
         self.client_update_event.set()
         self.backup_event.set()
 

@@ -100,6 +100,9 @@ class RPC(object):
 
     def new_game(self, game_name):
         self.game_state.new_game(game_name)
+        self.game_state.checkpoint('new_game')
+        self.game_state.checkpoint('money_or_card')
+        
 
     def reset_game(self):
         self.game_state.reset_game()
@@ -145,9 +148,13 @@ class RPC(object):
                 card = self.game_state.draw_card()
 
                 player.give_card(PlayerCard(card, True))
+        
+        self.game_state.checkpoint('money_or_card')
 
     def collect_shuffle(self):
         self.game_state.collect_shuffle()
+        self.game_state.checkpoint('money_or_card')
+        
 
     def one_card(self, up):
         '''
@@ -192,6 +199,8 @@ class RPC(object):
 
             if fifth_card or (not_discard and not_midnight_four):
                 self.game_state.next_active_player()
+            
+            self.game_state.checkpoint('money_or_card')
 
 
     def card_confirmed(self):
@@ -203,6 +212,8 @@ class RPC(object):
         :param card_num: card to flip
         '''
         self.player.hand[card_num].up = True
+        self.game_state.checkpoint('money_or_card')
+        
 
     def discard(self, card_num):
         '''
@@ -210,6 +221,8 @@ class RPC(object):
         :param card_num: card to flip
         '''
         del self.player.hand[card_num]
+        self.game_state.checkpoint('money_or_card')
+        
 
     def deal_common(self):
         '''deal one common up card'''
@@ -218,12 +231,16 @@ class RPC(object):
 
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
+        self.game_state.checkpoint('money_or_card')
+        
 
     def toggle_discard_mode(self):
         self.game_state.discard_mode = not self.game_state.discard_mode
 
     def fold_current_player(self):
         self.game_state.fold_current_player()
+        self.game_state.checkpoint('money_or_card')
+        
         
     def fold(self):
         '''fold current player'''
@@ -238,12 +255,18 @@ class RPC(object):
         self.player.chips_in = 0
 
         self.game_state.next_active_player()
+        self.game_state.checkpoint('money_or_card')
+        
 
     def bet_half_pot(self):
         self.bet(math.ceil(self.game_state.pot / 2))
+        self.game_state.checkpoint('money_or_card')
+        
 
     def bet_pot(self):
         self.bet(self.game_state.pot)
+        self.game_state.checkpoint('money_or_card')
+        
 
     def bet(self, amount):
         '''player bet - subtract from chips, add to pot, move to next player'''
@@ -279,6 +302,9 @@ class RPC(object):
 
         if self.game_state.game_name != "Acey-Ducey":
             self.game_state.next_active_player()
+        
+        self.game_state.checkpoint('money_or_card')
+            
 
     def call(self):
         if self.player is None:
@@ -290,6 +316,8 @@ class RPC(object):
 
         self.bet(max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in)
+        self.game_state.checkpoint('money_or_card')
+        
 
     def ante(self, amt):
         '''takes amt chips from player and puts in pot'''
@@ -302,18 +330,26 @@ class RPC(object):
         self.player.anted = True
         self.player.last_ante = amt
         self.player.ante_is_last_bet = True
+        self.game_state.checkpoint('money_or_card')
+        
     def all_anted(self):
         return self.game_state.all_anted()
 
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()
+        self.game_state.checkpoint('money_or_card')
+        
     def lost_acey_ducey(self):
         self.game_state.lost_acey_ducey()
+        self.game_state.checkpoint('money_or_card')
+        
 
 
     def pay_post(self, num):
         self.game_state.pay_post(num)
+        self.game_state.checkpoint('money_or_card')
+        
 
     def set_active_player(self, id):
         '''called when click on name to set as active player'''
@@ -374,6 +410,7 @@ class RPC(object):
             player.chips_in_hand = 0
 
         self.game_state.last_bet = 0
+        self.game_state.checkpoint('money_or_card')
 
 
     def increment_bettor_drawer(self):
@@ -400,7 +437,7 @@ class RPC(object):
         self.player.buy_in += amount
 
     def undo(self):
-        self.game_state.restore(None)
+        self.game_state.restore('money_or_card')
 
     def revert(self):
         self.game_state.restore('new_game')
