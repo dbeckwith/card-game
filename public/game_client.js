@@ -155,6 +155,12 @@ export class CardGame {
   reset_game(){
     this._send('reset_game');
   }
+  fold_current_player(){
+    this._send('fold_current_player');
+  }
+  next_dealer(){
+    this._send('next_dealer');
+  }
  set_discard_mode(on){
    this._send('set_discard_mode', { on });
  }
@@ -164,8 +170,8 @@ export class CardGame {
   collect_shuffle(){
     this._send('collect_shuffle');
   }
-  ace_called(){
-    this._send('ace_called');
+  card_confirmed(){
+    this._send('card_confirmed');
   }
   bet_half_pot(){
     this._send('bet_half_pot');

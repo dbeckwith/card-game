@@ -36,7 +36,7 @@ class GameState(object):
         self.show_chip_totals   = False
         self.card_back_num      = 1
         self.current_game       = None
-        self.wait_for_ace       = False
+        self.wait_for_card      = False
         self.reshuffled         = False
         self.history = []
 
@@ -60,7 +60,7 @@ class GameState(object):
             'discard_mode'       : self.discard_mode,
             'chips_bet_in_round' : self.chips_bet_in_round,
             'card_back_num'      : self.card_back_num,
-            'wait_for_ace'       : self.wait_for_ace,
+            'wait_for_card'      : self.wait_for_card,
             'show_chip_totals'   : self.show_chip_totals,
             'reshuffled'         : self.reshuffled,
         }
@@ -104,6 +104,16 @@ class GameState(object):
         if self.dealer is None:
             self.dealer = player
 
+    def fold_current_player(self):
+        if self.active_player is None:
+            raise ClientError('not logged-in')
+        if not self.active_player.in_hand:
+            raise ClientError('not in hand')
+
+        self.active_player.in_hand = False
+        self.active_player.chips_in = 0
+
+        self.next_active_player()
     def remove_player(self, player):
         '''
         removes player from game
@@ -171,7 +181,7 @@ class GameState(object):
         self.discard_mode = False
         # new hand
         self.hand_started = False
-
+        self.wait_for_card = False
         if self.dealer is not None and self.game_name == "Select Game": # vs. from new game btn
             # pick a new dealer
             self.next_dealer()
@@ -248,8 +258,8 @@ class GameState(object):
         # return the player with the next seat (wrapping around)
         return self.players[(seat + 1) % len(self.players)]
 
-    def not_waiting_for_ace(self):
-        self.wait_for_ace = False
+    def not_waiting_for_card(self):
+        self.wait_for_card = False
 
     def draw_card(self):
         '''takes next card from deck'''
@@ -300,7 +310,7 @@ class GameState(object):
         
         self.chips_bet_in_round = state['chips_bet_in_round']
         self.card_back_num      = state['card_back_num']
-        self.wait_for_ace       = state['wait_for_ace']
+        self.wait_for_card       = state['wait_for_card']
         self.show_chip_totals   = state['show_chip_totals']
 
         # reconstruct players

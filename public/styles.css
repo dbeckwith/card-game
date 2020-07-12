@@ -639,13 +639,23 @@ td:nth-child(2){
 .discard-ready {
 /*  border: 1px solid black;*/
     animation: pulsate 1s infinite;
-
 }
 @-webkit-keyframes pulsate {
     0%   { box-shadow: 0 0 0 magenta; }
     50%  { box-shadow: 0 0 36px magenta; }
     100% { box-shadow: 0 0 0 magenta; }
 }
+
+.confirm {
+/*  border: 1px solid black;*/
+    animation: pulsate2 1s infinite;
+}
+@-webkit-keyframes pulsate2 {
+    0%   { box-shadow: 0 0 0 yellow; }
+    50%  { box-shadow: 0 0 46px white; }
+    100% { box-shadow: 0 0 0 yellow; }
+}
+
 #chips-summary {
   font-size: 20px;
   color: white;

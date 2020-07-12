@@ -30,6 +30,9 @@ class RPC(object):
             player.connected = True
             self._player = player.id
 
+    def next_dealer(self):
+        self.game_state.next_dealer()
+        
     def login(self, name):
         '''
         called by Join button in opening screen
@@ -153,7 +156,7 @@ class RPC(object):
         '''
         # don't deal card if acey ducey first card is ace and btn not yet pressed
 
-        if not self.game_state.wait_for_ace and self.player.id == self.game_state.dealer.id:
+        if not self.game_state.wait_for_card and self.player.id == self.game_state.dealer.id:
             self.game_state.hand_started = True
 
             self.reset_antes_and_chips_in(True)
@@ -171,12 +174,15 @@ class RPC(object):
             num_cards_in_hand = len(self.game_state.active_player.hand)
 
             # acedy-ducey - stop if first ace:
+            # woolworths stop if 4, 5, or 10
             is_first_card = num_cards_in_hand == 1
             is_ace = card[0] == "1"
-            if is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey":
-                self.game_state.wait_for_ace = True
+            is_4510 = card[0] in ['4', '5', 'T']
+            if is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey" or\
+               self.game_state.game_name == "Woolworths" and is_4510:
+                self.game_state.wait_for_card = True
             else:
-                self.game_state.wait_for_ace = False
+                self.game_state.wait_for_card = False
 
             # go to next player unless it's discard mode or if you just completed a 5-card hand in 5-card draw:
             fifth_card = self.game_state.game_name == "5-Card Draw" and num_cards_in_hand == 5
@@ -188,8 +194,8 @@ class RPC(object):
                 self.game_state.next_active_player()
 
 
-    def ace_called(self):
-        self.game_state.not_waiting_for_ace()
+    def card_confirmed(self):
+        self.game_state.not_waiting_for_card()
 
     def flip(self, card_num):
         '''
@@ -216,6 +222,9 @@ class RPC(object):
     def toggle_discard_mode(self):
         self.game_state.discard_mode = not self.game_state.discard_mode
 
+    def fold_current_player(self):
+        self.game_state.fold_current_player()
+        
     def fold(self):
         '''fold current player'''
         if self.player is None:

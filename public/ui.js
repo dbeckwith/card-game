@@ -142,7 +142,7 @@ export function render_ui(
   }
   /*********************************
    * INITIAL SETUP of game screen
-   * called by render_game
+   *  by render_game
    ***********************************/
   function setup_game_html()
   {
@@ -292,14 +292,15 @@ export function render_ui(
       hidden: true,
       title: 'For acey-ducey - will take bet amount and give 2x back to winner ',
     });
-    const $ace_called_button = $('<button />',
+    const $card_confirmed_button = $('<button />',
     {
-      text: 'Ace Confirmed',
-      id: 'ace-called-button',
+      text: 'Card Confirmed',
+      id: 'card-confirmed-button',
       hidden: true,
-      title: 'For acey-ducey - click to confirm low or hi ace has been called ',
+      title: 'For acey-ducey and woolworths - click to confirm low or hi ace has been called ' +
+        'or 4, 5, 10 has been noticed',
     });
-    $ace_called_button.hide();
+    $card_confirmed_button.hide();
     const $next_down_button = $('<button />',
     {
       text: 'DN',
@@ -340,9 +341,9 @@ export function render_ui(
       game.clear_hand();
       game.increment_bettor_drawer();
     });
-    $ace_called_button.click(function ()
+    $card_confirmed_button.click(function ()
     {
-      game.ace_called();
+      game.card_confirmed();
     });
 
     $next_down_button.click(function ()
@@ -545,7 +546,7 @@ export function render_ui(
       ////  SHOW AND HIDE BUTTONS: /////
 
       //firsts, hide all:
-      show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $ace_called_button, $five_down_button, $next_down_button, $common_button, $next_label), false);
+      show_buttons(new Array($two_down_one_up_button, $one_up_button, $win_a_d_button, $lose_a_d_button, $next_up_button, $one_down_button, $card_confirmed_button, $five_down_button, $next_down_button, $common_button, $next_label), false);
 
 
       //now, show only those needed
@@ -562,7 +563,7 @@ export function render_ui(
         alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
         $("#discard-btn").removeClass("not-discard-mode");
         $("#discard-btn").addClass("discard-mode");
-        show_buttons(new Array($next_label, $next_up_button, $win_a_d_button, $lose_a_d_button, $ace_called_button), true);
+        show_buttons(new Array($next_label, $next_up_button, $win_a_d_button, $lose_a_d_button, $card_confirmed_button), true);
       }
       else if (choice === "Man-Mouse")
       {
@@ -571,7 +572,9 @@ export function render_ui(
       }
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
         show_buttons(new Array($one_down_button, $next_label, $next_down_button, $common_button), true);
-      else if (choice === "Follow the Queen" || choice === "Woolworths")
+      else if (choice === "Woolworths")
+        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button, $card_confirmed_button), true);
+      else if (choice === "Follow the Queen")
         show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button), true);
       else if (choice === "Dirty Gertie")
         show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $common_button), true);
@@ -672,7 +675,7 @@ export function render_ui(
 
     $dealer_controls.append($cards_left);
     $dealer_controls.append($deal_all_buttons);
-    $dealer_controls.append($ace_called_button);
+    $dealer_controls.append($card_confirmed_button);
 
     const $acey_buttons = $("<span />",
     {
@@ -1044,6 +1047,24 @@ export function render_ui(
     //        game.toggle_allow_show_chip_totals();
     //      }
     //    });
+    Mousetrap.bind('ctrl+`', function ()
+    {
+      if (!showing_login_screen)
+      {
+        game.next_dealer();
+      }
+    });
+
+    Mousetrap.bind('ctrl+shift+`', function ()
+    {
+      if (!showing_login_screen)
+      {
+        game.fold_current_player();
+      }
+    });
+
+
+   
     $("#new-game-button").prop("disabled", game_state.pot != 0);
     $("#set-game-select").prop("disabled", game_state.pot != 0);
     //    $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey");
@@ -1237,6 +1258,12 @@ export function render_ui(
     //      $('#discard-btn').hide();
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
+
+    
+     if (game_state.wait_for_card)
+      $("#card-confirmed-button").addClass("confirm");
+    else
+      $("#card-confirmed-button").removeClass("confirm");
 
     //game board has all players:
     const $game_board = $('#game-board');
@@ -1502,10 +1529,10 @@ export function render_ui(
       text: "RESHUFFLED!",
     });
     const $reshuff_wrapper = $('<center \>');
-    
-    
+
+
     $game_board.append($common_display);
-    
+
     $reshuff_wrapper.append($reshuffle_display);
     $game_board.append($reshuff_wrapper);
 
@@ -1513,7 +1540,7 @@ export function render_ui(
       $("#reshuffle-display").show();
     else
       $("#reshuffle-display").hide();
-    
+
     $game_board.append($player_seats);
   }
 
