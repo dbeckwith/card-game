@@ -249,11 +249,14 @@ class RPC(object):
 
         bet_minimum = max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in
+        
         if amount < bet_minimum and self.game_state.game_name != "Acey-Ducey":
             raise ClientError(f'\nWARNING:  you must bet at least {bet_minimum} chips')
+        
         if self.game_state.game_name != "Acey-Ducey":
             self.player.chips         -= amount
             self.game_state.pot       += amount
+        
         self.game_state.last_bet   = amount
         self.player.chips_in      += amount
         self.player.chips_in_hand += amount

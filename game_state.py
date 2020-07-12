@@ -211,10 +211,12 @@ class GameState(object):
     def pay_acey_ducey(self):
         self.active_player.chips += self.last_bet
         self.pot                 -= self.last_bet
+        self.active_player.last_bet = 0
 
     def lost_acey_ducey(self):
         self.active_player.chips -= self.last_bet
         self.pot                 += self.last_bet
+        self.active_player.last_bet = 0
 
     def pay_post(self, num):
         self.active_player.chips -= num * self.last_bet
@@ -287,20 +289,22 @@ class GameState(object):
         state = history_item.state
 
         # restore all "simple" properties
-        self.deck = state['deck']
+        self.deck         = state['deck']
         self.hand_started = state['hand_started']
-        self.pot = state['pot']
-        self.last_bet = state['last_bet']
+        self.pot          = state['pot']
+        self.last_bet     = state['last_bet']
         self.common_cards = state['common_cards']
-        self.game_name = state['game_name']
+        self.game_name    = state['game_name']
         self.discard_mode = state['discard_mode']
+        
         self.chips_bet_in_round = state['chips_bet_in_round']
-        self.card_back_num = state['card_back_num']
-        self.wait_for_ace = state['wait_for_ace']
-        self.show_chip_totals = state['show_chip_totals']
+        self.card_back_num      = state['card_back_num']
+        self.wait_for_ace       = state['wait_for_ace']
+        self.show_chip_totals   = state['show_chip_totals']
 
         # reconstruct players
         self.players = list(map(Player.restore, state['players']))
+        
         # set player references (state only stores player id)
         self.dealer = self.get_player(state['dealer'])
         self.active_player = self.get_player(state['active_player'])

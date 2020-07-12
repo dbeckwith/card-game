@@ -1318,7 +1318,7 @@ export function render_ui(
       {
         if (game_state.game_name !== "Acey-Ducey")
           $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
-        else //if (player.id === current_player.id)
+        else if (game_state.active_player === player.id)
           $chips_shy.text(`BET:${$last_chips}`);
       }
       else
