@@ -648,12 +648,14 @@ td:nth-child(2){
 
 .confirm {
 /*  border: 1px solid black;*/
-    animation: pulsate2 1s infinite;
+    animation: pulsate2 2s infinite;
+  background-color:yellow;
+  color:red;
 }
 @-webkit-keyframes pulsate2 {
-    0%   { box-shadow: 0 0 0 yellow; }
-    50%  { box-shadow: 0 0 46px white; }
-    100% { box-shadow: 0 0 0 yellow; }
+    0%   { box-shadow: 0 0 0 blue; }
+    50%  { box-shadow: 0 0 66px magenta; }
+    100% { box-shadow: 0 0 0 red; }
 }
 
 #chips-summary {

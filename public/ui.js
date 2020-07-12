@@ -294,11 +294,11 @@ export function render_ui(
     });
     const $card_confirmed_button = $('<button />',
     {
-      text: 'Card Confirmed',
+      text: 'Confirm Card',
       id: 'card-confirmed-button',
       hidden: true,
-      title: 'For acey-ducey and woolworths - click to confirm low or hi ace has been called ' +
-        'or 4, 5, 10 has been noticed',
+      title: 'Click to confirm low or hi ace has been called for Acey-Ducey\n ' +
+        'or to confirm 4, 5, 10 has been noticed in Woolworths',
     });
     $card_confirmed_button.hide();
     const $next_down_button = $('<button />',
@@ -499,15 +499,17 @@ export function render_ui(
       '',
       'Chicago Hi-Lo',
       'Low Spade in Hole',
-      'Woolworths',
-      'Midnight Baseball',
-      'Follow the Queen',
-      'Dirty Gertie',
       'Gay Bar',
       'Raise the Flag',
+      'Woolworths',
+      'Follow the Queen',
+      'Dirty Gertie',
+
+      'Midnight Baseball',
+
       '',
       'Texas Hold-Em',
-      'Criss-Cross',
+//      'Criss-Cross',
       '',
       'Acey-Ducey',
       'Man-Mouse',
@@ -1064,7 +1066,7 @@ export function render_ui(
     });
 
 
-   
+
     $("#new-game-button").prop("disabled", game_state.pot != 0);
     $("#set-game-select").prop("disabled", game_state.pot != 0);
     //    $("#ante-btn").prop("disabled", game_state.game_name == "Acey-Ducey");
@@ -1259,8 +1261,8 @@ export function render_ui(
     //update player's money amount:
     $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
 
-    
-     if (game_state.wait_for_card)
+
+    if (game_state.wait_for_card)
       $("#card-confirmed-button").addClass("confirm");
     else
       $("#card-confirmed-button").removeClass("confirm");
