@@ -7,6 +7,7 @@ class Player(object):
         self.connected  = False
         self.hand       = []
         self.in_hand    = False
+        self.left_seat  = False
         self.chips      = 0 # how much they currently have, total
         self.buy_in     = 0 # how many chips they have bought over the course of the night
         self.chips_in   = 0 # how much bet in round for this player
@@ -33,6 +34,7 @@ class Player(object):
             'last_bet'  : self.last_bet,
             'ante_is_last_bet' : self.ante_is_last_bet,
             'info_num'   : self.info_num,
+            'left_seat'  : self.left_seat,
         }
 
     @staticmethod
@@ -42,6 +44,7 @@ class Player(object):
         player.connected = state['connected']
         player.hand = list(map(PlayerCard.restore, state['hand']))
         player.in_hand = state['in_hand']
+        player.left_seat = state['left_seat']
         player.chips = state['chips']
         player.buy_in = state['buy_in']
         player.chips_in = state['chips_in']

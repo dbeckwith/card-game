@@ -774,10 +774,11 @@ export function render_ui(
           game.set_player_num(current_player.id, 2);
           break;
         case 'leave-seat':
-          //
+          console.log(current_player.id);
+          game.leave_seat(current_player.id);
           break;
         case 'return-to-seat':
-          //
+          game.return_to_seat(current_player.id);
           break;
         default:
           break;
@@ -1093,7 +1094,7 @@ export function render_ui(
 
       $player_row.append($player_input);
 
-      if (player.in_hand)
+      if (player.in_hand && !player.left_seat)
         $player_row.append(player.name);
       else
       {
@@ -1176,7 +1177,7 @@ export function render_ui(
     $common_info.append($pot_display);
 
     //show hand of all active players:
-    if (current_player.in_hand)
+    if (current_player.in_hand && !current_player.left_seat)
       $('#player-controls').show(1000); //animate controls 1 sec
     else
       $('#player-controls').hide();
@@ -1292,7 +1293,7 @@ export function render_ui(
       $player_name.addClass('player-name');
 
       //add ante, dealer indicators:
-      if (player.in_hand && player.anted)
+      if (player.in_hand && player.anted && !player.left_seat)
         $player_name.append('•');
       $player_name.append(player.name);
       if (game_state.dealer === player.id)
@@ -1329,7 +1330,7 @@ export function render_ui(
       else
         $last_chips = player.last_bet;
       //only show shy amount if not playing man-mouse and you are in the hand
-      if (game_state.game_name !== "Man-Mouse" && player.in_hand)
+      if (game_state.game_name !== "Man-Mouse" && player.in_hand && !player.left_seat)
       {
         if (game_state.game_name !== "Acey-Ducey")
           $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
@@ -1354,7 +1355,7 @@ export function render_ui(
       const $hand = $('<div />');
       $hand.addClass('hand');
 
-      if (player.in_hand)
+      if (player.in_hand && !player.left_seat)
       {
         _.forEach(player.hand, (card, idx) =>
         {
@@ -1467,7 +1468,7 @@ export function render_ui(
       //            {
       //              game.increment_player_num(player.id);
       //            });
-      if (player.in_hand && game_state.dealer === current_player.id)
+      if (player.in_hand && game_state.dealer === current_player.id && !player.left_seat)
       {
         $hand.append($up_button);
         $hand.append($down_button);
@@ -1484,7 +1485,7 @@ export function render_ui(
       //allow to click anywhere to set as active player
       $player_seat.click(function ()
       {
-        if (player.in_hand)
+        if (player.in_hand && !player.left_seat)
           game.set_active_player(player.id);
       });
 

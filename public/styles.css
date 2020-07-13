@@ -690,6 +690,7 @@ td:nth-child(2){
     100% { box-shadow: 0 0 0 red; }
 }
 
+
 #chips-summary {
   font-size: 20px;
   color: white;
@@ -727,11 +728,9 @@ td:nth-child(2){
 }
 
 /***** ANIMATIONS ******/
-/* shake card on hover */
 
 #logo:hover {
-  animation: shake 1.5s;
-  animation-iteration-count: 1;
+    opacity: 0.5;
 }
 
 @keyframes shake {
