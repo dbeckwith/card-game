@@ -122,10 +122,12 @@ class RPC(object):
     def toggle_allow_show_chip_totals(self):
         self.game_state.toggle_allow_show_chip_totals()
 
-    def leave_seat(player_id):
+    def leave_seat(self):
         self.player.left_seat = True
-    def return_to_seat(player_id):
+        
+    def return_to_seat(self):
         self.player.left_seat = False
+    
     def deal_all(self, down, up):
         '''
         Deal cards to every active player

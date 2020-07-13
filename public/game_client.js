@@ -197,11 +197,11 @@ export class CardGame {
   revert(){
     this._send('revert');
   }
-  leave_seat(player_id){
-    this._send('leave_seat', { player_id });
+  leave_seat(){
+    this._send('leave_seat');
   }
-  return_to_seat(player_id){
-    this._send('return_to_seat', { player_id });
+  return_to_seat(){
+    this._send('return_to_seat');
   }
 }
 

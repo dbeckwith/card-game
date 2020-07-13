@@ -775,10 +775,10 @@ export function render_ui(
           break;
         case 'leave-seat':
           console.log(current_player.id);
-          game.leave_seat(current_player.id);
+          game.leave_seat();
           break;
         case 'return-to-seat':
-          game.return_to_seat(current_player.id);
+          game.return_to_seat();
           break;
         default:
           break;
