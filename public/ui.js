@@ -641,10 +641,10 @@ export function render_ui(
     $acey_buttons.append($lose_a_d_button);
     $dealer_controls.append($acey_buttons);
 
-    $dealer_controls.append($action_select);
     $dealer_controls.append($next_label);
     $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
+    $dealer_controls.append($action_select);
 
     $dealer_controls_top.append($set_game_select);
 
@@ -656,7 +656,7 @@ export function render_ui(
 
 
     //horizontal rule:
-    $dealer_controls_top.append('<br /><hr style="margin-top:0px; margin-bottom:0px;"/>');
+    $dealer_controls_top.append('<br /><hr />');
 
     /*****************************
      * PLAYER CONTROLS
@@ -763,14 +763,41 @@ export function render_ui(
         case 'ante':
           game.ante(1);
           break;
+
+        case 'name-only':
+          game.set_player_num(current_player.id, 0);
+          break;
+        case 'dollars':
+          game.set_player_num(current_player.id, 1);
+          break;
+        case 'dollars-and-buy-in':
+          game.set_player_num(current_player.id, 2);
+          break;
+        case 'leave-seat':
+          //
+          break;
+        case 'return-to-seat':
+          //
+          break;
+        default:
           break;
       }
       $(this).val('prompt');
     });
 
     var other_functions = [
-      ['Buy-In $10', 'buy-in'],
-      ['Log Out', 'log-out'],
+      ['💰 BUY-IN $10', 'buy-in'],
+      ['=========================', ''],
+      ['NAME DISPLAY:', ''],
+      ['👤   (name only)', 'name-only'],
+      ['👤 💰 (name, current $$)', 'dollars'],
+      ['👤 💰/💰 (name, current $$ / buy-in $$)', 'dollars-and-buy-in'],
+      ['=========================', ''],
+      ['⇦🚶 LEAVE SEAT', 'leave-seat'],
+      ['⇨💺 RETURN TO SEAT','return-to-seat' ],
+      ['=========================', ''],
+      ['👋 LOG OUT', 'log-out'],
+
     ];
 
     _.forEach(other_functions, ([label, id]) =>
@@ -905,51 +932,12 @@ export function render_ui(
     {
       id: 'player-money-display',
     });
-    const $show_both_button = $('<button />',
-    {
-      id: 'show-both-button',
-      title: 'Show this player\'s current amount and buy-in',
-      text: '',
-    });
 
-    $show_both_button.click(function ()
-    {
-      game.set_player_num(current_player.id, 2);
-    });
-    const $show_money_button = $('<button />',
-    {
-      id: 'show-money-button',
-      title: 'Show this player\'s current amount',
-      text: '',
-    });
 
-    $show_money_button.click(function ()
-    {
-      game.set_player_num(current_player.id, 1);
-    });
-    const $show_none_button = $('<button />',
-    {
-      id: 'show-none-button',
-      title: 'Show nothng about this player\'s money',
-      text: '',
-    });
-
-    $show_none_button.click(function ()
-    {
-      game.set_player_num(current_player.id, 0);
-    });
-
-    const $dollaz = $('<div />',
-    {
-      id: "dollaz",
-    })
-    $dollaz.append($show_none_button);
-    $dollaz.append($show_money_button);
-    $dollaz.append($show_both_button);
     /*******************************************
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
      *******************************************/
-    $player_controls.append($dollaz);
+
     $player_controls.append('<br />');
     $player_controls.append($player_money_display);
 
@@ -980,9 +968,10 @@ export function render_ui(
 
     //  $header.append('<br \>');
     $header.append($player_controls);
-    $header.append($common_info);
 
     $header.append($other_select);
+    $header.append($common_info);
+
     $header.append($game_name_display);
 
     $header.append('<hr />');
@@ -1605,7 +1594,7 @@ export function render_ui(
       {
         $("body").css(
         {
-          "background-image": "linear-gradient(to bottom, #007712, #2AcF15)"
+          "background-color": "#2f7532",
         });
         $("#chips-summary").hide();
         $("#app").css("opacity", "1.0");

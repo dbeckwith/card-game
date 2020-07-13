@@ -51,7 +51,7 @@ button:hover {
 }
 
 /* player buttons are larger */
-.player_btn {
+.player-btn {
   font-size: 20px;
 }
 
@@ -150,6 +150,7 @@ button:hover {
   width: 60px;
   height: 30px;
   margin-right: 10px;
+  margin-left: 10px;
 }
 /* dealer action selector */
 #action-select {
@@ -353,18 +354,10 @@ button:hover {
 }
 
 #player-money-display {
-/*
-    display: flex;
-    align-items: left;
-*/
   float: left;
-/*
-  position:absolute;
-  left:0;
-*/
   color: yellow;
   margin-left: 5px;
-  font-size: 14px;
+  font-size: 16px;
 }
 .dollar-display{
   background-color:red;
@@ -408,18 +401,20 @@ button:hover {
 
 #bet-input {
   width: 42px;
-  height: 23px;
+  height: 24px;
   font-size: 15px;
 }
 
 #ante-input {
   width: 36px;
-  height: 23px;
+  height: 24px;
   font-size: 15px;
 }
 
 #ante-btn {
   margin-left: 20px;
+  margin-right: 0px;
+  
 }
 
 .bet-buttons {
@@ -432,11 +427,11 @@ button:hover {
 /* POT DISPLAY */
 #pot-display {
   color: black;
-  font-size: 24px;
+  font-size: 25px;
   margin-left: 10px;
   margin-right: 10px;
   background-color: red;
-  padding: 4px;
+  padding: 3px;
   border: solid 2px;
   border-color: yellow;
 }
@@ -453,6 +448,7 @@ button:hover {
   border-radius: 4px;
 }
 
+/*
 #logout-btn {
   margin-left: 10px;
   border-radius: 0px;
@@ -460,6 +456,7 @@ button:hover {
   color: white;
   background-color: black;
 }
+*/
 
 #player-chips {
   float: left;
@@ -600,7 +597,8 @@ td:nth-child(2){
   /* this calc should be updated if these values change */
   /* CHANGE ABOVE ALSO
   /* (first column width + second column width) / (starting chip amount / chips per chip image) */
-  width: calc((115px + 70px) / (400 / 40));
+  width: 20px;
+/*  ((115px + 70px) / (400 / 40));*/
 }
 
 #common-display {
