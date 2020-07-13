@@ -176,7 +176,10 @@ export class CardGame {
   bet_half_pot(){
     this._send('bet_half_pot');
   }
-    bet_pot(){
+ set_player_num(current_player, num){
+    this._send('set_player_num', { current_player, num});
+  } 
+  bet_pot(){
     this._send('bet_pot');
   }
   lost_acey_ducey(){

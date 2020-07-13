@@ -15,7 +15,7 @@ class Player(object):
         self.last_ante  = 0
         self.last_bet   = 0
         self.ante_is_last_bet =  None
-
+        self.info_num   = 0  # 0 = no info, 1 = just total, 2 = total/buyin
     def __json__(self):
         '''returns: JSON of all player fields'''
         return {
@@ -32,6 +32,7 @@ class Player(object):
             'last_ante' : self.last_ante,
             'last_bet'  : self.last_bet,
             'ante_is_last_bet' : self.ante_is_last_bet,
+            'info_num'   : self.info_num,
         }
 
     @staticmethod
@@ -62,6 +63,10 @@ class Player(object):
         self.last_bet   = 0
         self.ante_is_last_bet =  None
 
+    def set_player_num(self, num):
+        self.info_num = num
+       
+        
     def clear_hand(self):
         self.hand = []
 

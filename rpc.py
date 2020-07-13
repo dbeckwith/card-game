@@ -116,6 +116,9 @@ class RPC(object):
             if chips:
                 player.chips_in = 0
 
+    def set_player_num(self, current_player, num):
+        self.game_state.get_player(current_player).set_player_num(num)
+        
     def toggle_allow_show_chip_totals(self):
         self.game_state.toggle_allow_show_chip_totals()
 

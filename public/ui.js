@@ -332,7 +332,7 @@ export function render_ui(
     $next_up_button.addClass('one-card-buttons');
     $next_down_button.addClass('one-card-buttons');
 
-    
+
     const $dealer_controls_top = $('<span />',
     {
       id: 'dealer-controls-top',
@@ -410,7 +410,7 @@ export function render_ui(
         'Pot must be zero (game not started or payout happened or Reset Game chosen) to start new game',
       text: 'New Game',
     });
-    
+
     //change card backing button:
     const $new_back_button = $('<button />',
     {
@@ -418,24 +418,24 @@ export function render_ui(
       title: 'picks randomly from card backs',
       text: 'Backs',
     });
-    
+
     //reset game button:
-//    const $reset_game_button = $('<button />',
-//    {
-//      id: 'reset-game-button',
-//      title: 'resets game - shuffles, gives back money, but same dealer',
-//      text: '☠ RESET Game ☠',
-//    });
+    //    const $reset_game_button = $('<button />',
+    //    {
+    //      id: 'reset-game-button',
+    //      title: 'resets game - shuffles, gives back money, but same dealer',
+    //      text: '☠ RESET Game ☠',
+    //    });
 
     //add functions to buttons:
     $new_game_button.click(function ()
     {
       game.new_game("Select Game"); //will show popup and set pot_cleared to False when appropriate
     });
-//    $reset_game_button.click(function ()
-//    {
-//      game.reset_game();
-//    });
+    //    $reset_game_button.click(function ()
+    //    {
+    //      game.reset_game();
+    //    });
     $new_back_button.click(function ()
     {
       game.new_back();
@@ -523,7 +523,7 @@ export function render_ui(
       else if (choice === "Texas Hold-Em" || choice === "Criss-Cross")
         show_buttons(new Array($one_down_button, $next_label, $next_down_button), true);
       else if (choice === "Woolworths")
-        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button,  $card_confirmed_button), true);
+        show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button, $card_confirmed_button), true);
       else if (choice === "Follow the Queen")
         show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button), true);
       else if (choice === "Dirty Gertie")
@@ -534,7 +534,7 @@ export function render_ui(
         show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
       else
       {
-        show_buttons(new Array($next_label, $one_up_button, $one_down_button, $next_up_button,  $next_down_button), true);
+        show_buttons(new Array($next_label, $one_up_button, $one_down_button, $next_up_button, $next_down_button), true);
       }
     });
 
@@ -590,9 +590,9 @@ export function render_ui(
     var other_dlr_functions = [
       ['• Deal COMMON Up Card', 'common'],
       ['• Turn DISCARD MODE On/Off', 'discard-mode'],
-      ['',''],
+      ['', ''],
             ['• COLLECT CARDS/SHUFFLE (Man-Mouse & Dirty Gertie) leaves pot alone ', 'collect'],
-      ['',''],
+      ['', ''],
 
       ['• UNDO last action', 'undo'],
       ['☠ REVERT to start-of-hand state ☠', 'revert'],
@@ -656,7 +656,7 @@ export function render_ui(
 
 
     //horizontal rule:
-    $dealer_controls_top.append('<br /><hr style="margin-top:0px; margin-bottom:10px;"/>');
+    $dealer_controls_top.append('<br /><hr style="margin-top:0px; margin-bottom:0px;"/>');
 
     /*****************************
      * PLAYER CONTROLS
@@ -905,11 +905,54 @@ export function render_ui(
     {
       id: 'player-money-display',
     });
+    const $show_both_button = $('<button />',
+    {
+      id: 'show-both-button',
+      title: 'Show this player\'s current amount and buy-in',
+      text: '',
+    });
 
+    $show_both_button.click(function ()
+    {
+      game.set_player_num(current_player.id, 2);
+    });
+    const $show_money_button = $('<button />',
+    {
+      id: 'show-money-button',
+      title: 'Show this player\'s current amount',
+      text: '',
+    });
 
+    $show_money_button.click(function ()
+    {
+      game.set_player_num(current_player.id, 1);
+    });
+    const $show_none_button = $('<button />',
+    {
+      id: 'show-none-button',
+      title: 'Show nothng about this player\'s money',
+      text: '',
+    });
+
+    $show_none_button.click(function ()
+    {
+      game.set_player_num(current_player.id, 0);
+    });
+
+    const $dollaz = $('<div />',
+    {
+      id: "dollaz",
+    })
+    $dollaz.append($show_none_button);
+    $dollaz.append($show_money_button);
+    $dollaz.append($show_both_button);
     /*******************************************
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
      *******************************************/
+    $player_controls.append($dollaz);
+    $player_controls.append('<br />');
+    $player_controls.append($player_money_display);
+
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
     $player_controls.append($call_button);
@@ -934,8 +977,8 @@ export function render_ui(
     $header.append('<hr \>');
 
 
-    $header.append($player_money_display);
 
+    //  $header.append('<br \>');
     $header.append($player_controls);
     $header.append($common_info);
 
@@ -957,7 +1000,7 @@ export function render_ui(
     //    //next active player
     //    Mousetrap.bind('n', function ()
     //    {
-    //      if (game_state.dealer === current_player.id && !showing_login_screen)
+    //      if (game_state.dealer === current_player && !showing_login_screen)
     //        game.increment_bettor_drawer();
     //    });
     //    //1 up
@@ -981,21 +1024,21 @@ export function render_ui(
     //        $bet_input.val('');
     //      }
     //    });
-    //show chip totals
-    //    Mousetrap.bind('q', function ()
-    //    {
-    //      if (!showing_login_screen)
-    //      {
-    //        show_chip_totals();
-    //      }
-    //    });
-    //    Mousetrap.bind('q', function ()
-    //    {
-    //      if (!showing_login_screen)
-    //      {
-    //        game.toggle_allow_show_chip_totals();
-    //      }
-    //    });
+    //    show chip totals
+    Mousetrap.bind('q', function ()
+    {
+      if (!showing_login_screen)
+      {
+        show_chip_totals();
+      }
+    });
+    //        Mousetrap.bind('q', function ()
+    //        {
+    //          if (!showing_login_screen)
+    //          {
+    //            game.toggle_allow_show_chip_totals();
+    //          }
+    //        });
     Mousetrap.bind('ctrl+`', function ()
     {
       if (!showing_login_screen)
@@ -1036,10 +1079,10 @@ export function render_ui(
       $('#dealer-controls').hide();
       $('#dealer-controls-top').hide();
     }
-    $("#player-money-display").click(function ()
-    {
-      show_chip_totals();
-    });
+    //    $("#player-money-display").click(function ()
+    //    {
+    //      game.increment_player_num(current_player.id);
+    //    });
     //show all active players in the winners select menu
     const $winners_select_content = $('#winners-select-content');
     $winners_select_content.empty();
@@ -1205,8 +1248,15 @@ export function render_ui(
     //      $('#discard-btn').show();
     //    else
     //      $('#discard-btn').hide();
+
+
     //update player's money amount:
-    $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
+    if (current_player.info_num === 2)
+      $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}/${formatChips(current_player.buy_in)}`);
+    else if (current_player.info_num === 1)
+      $('#player-money-display').text(`${current_player.name} $${formatChips(current_player.chips)}`);
+    else
+      $('#player-money-display').text(`${current_player.name}`);
 
 
     if (game_state.wait_for_card)
@@ -1422,6 +1472,12 @@ export function render_ui(
       });
 
 
+
+
+      //            $("#player-money-display").click(function ()
+      //            {
+      //              game.increment_player_num(player.id);
+      //            });
       if (player.in_hand && game_state.dealer === current_player.id)
       {
         $hand.append($up_button);

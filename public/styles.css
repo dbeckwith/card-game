@@ -35,7 +35,7 @@ button {
   /*  text-decoration: none;*/
   display: inline-block;
   font-size: 13px;
-  margin: 4px 2px;
+  margin: 1px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
   border-radius: 10px;
@@ -60,14 +60,16 @@ button:hover {
   font-size: 16px;
   margin-left: 8px;
 }
-
+#dollaz{
+  align-content: left;
+}
 #dealer-controls {
-  margin-top: 8px;
+  margin-top: 1px;
   margin-bottom: 0px;
 }
 
 #dealer-controls-top{
-  margin-top: 6px;
+  margin-top: 1px;
 }
 
 /****************
@@ -351,12 +353,44 @@ button:hover {
 }
 
 #player-money-display {
+/*
+    display: flex;
+    align-items: left;
+*/
   float: left;
+/*
+  position:absolute;
+  left:0;
+*/
   color: yellow;
   margin-left: 5px;
   font-size: 14px;
 }
+.dollar-display{
+  background-color:red;
+}
 
+
+
+#show-money-button{
+  font-size:4px;
+  border-radius:1px;
+   position:absolute;
+  left:20px;
+}
+#show-none-button{
+    font-size:4px;
+  border-radius:1px;
+   position:absolute;
+  left:0px;
+
+}
+#show-both-button{
+    font-size:4px;
+  border-radius:1px;
+   position:absolute;
+  left:40px;;
+}
 /* fold button */
 #fold {
   padding: 4px 7px;
@@ -454,7 +488,7 @@ input {
 }
 
 #logo {
-  float: left;
+  float: right;
 }
 
 #last-bet {
