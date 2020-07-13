@@ -159,7 +159,8 @@ class GameState(object):
         for player in self.players:
             player.clear_hand()
             if self.game_name == "Man-Mouse":
-                player.in_hand = True  # put everyone that was out back in
+                if not player.left_seat:
+                    player.in_hand = True  # put everyone that was out back in
                 
         self.common_cards = []
         self.deck = cards.new_deck()  # shuffle a new deck
