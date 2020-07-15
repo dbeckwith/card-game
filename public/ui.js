@@ -1,7 +1,7 @@
 /* authors: A. Beckwith & D. Beckwith, summer 2020 */
 
 let showing_login_screen = false;
-let allow_access_to_totals = false;
+let allow_access_to_totals = true;
 /**
  * show chips as $d.cc
  */
@@ -9,7 +9,6 @@ function formatChips(chips)
 {
   return (chips * 0.25).toFixed(2);
 }
-
 /****************************
  * SETS UP LOGIN SCREEN
  ***************************/
@@ -27,7 +26,7 @@ export function render_ui(
     //fireworks:
     $(".before").hide();
     $(".after").hide();
-//    $("#credits").hide();
+    //    $("#credits").hide();
     $("#text").hide();
 
     $app.empty();
@@ -168,7 +167,7 @@ export function render_ui(
     $logo_link.on('click', function ()
     {
       //alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
-//      toggle_fireworks();
+      //      toggle_fireworks();
       show_chip_totals();
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
@@ -796,7 +795,7 @@ export function render_ui(
       ['👤 💰/💰 (name, current $$ / buy-in $$)', 'dollars-and-buy-in'],
       ['=========================', ''],
       ['⇦🚶 LEAVE SEAT', 'leave-seat'],
-      ['⇨💺 RETURN TO SEAT','return-to-seat' ],
+      ['⇨💺 RETURN TO SEAT', 'return-to-seat'],
       ['=========================', ''],
       ['👋 LOG OUT', 'log-out'],
 
@@ -1016,13 +1015,13 @@ export function render_ui(
     //      }
     //    });
     //    show chip totals
-//    Mousetrap.bind('q', function ()
-//    {
-//      if (!showing_login_screen)
-//      {
-//        show_chip_totals();
-//      }
-//    });
+    //    Mousetrap.bind('q', function ()
+    //    {
+    //      if (!showing_login_screen)
+    //      {
+    //        show_chip_totals();
+    //      }
+    //    });
     //        Mousetrap.bind('q', function ()
     //        {
     //          if (!showing_login_screen)
@@ -1554,11 +1553,13 @@ export function render_ui(
 
   function show_chip_totals()
   {
+
     if (allow_access_to_totals)
     {
       works = false;
-      let t = "<table id='summary'>";
-      t += "<tr><th>NAME</th><th>HAS:</th><th>BUY-IN:</th><th>Result:</th></tr>";
+      let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>';
+      t += "<table style='width:80%' id='summary'>";
+      t += "<tr><th>NAME</th><th>HAS:</th><th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
 
 
       for (var i = 0; i < game_state.players.length; i++)
@@ -1576,30 +1577,35 @@ export function render_ui(
         else
           t += "<td>EVEN:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
       }
+      t += "</table>";
 
-      $("#chips-summary").css("color", "white");
-      $("#chips-summary").html(t);
+      //      $("#chips-summary").css("color", "white");
+      //      $("#chips-summary").html(t);
 
       if (!show_summary)
       {
-        $("#app").css("opacity", "0.3");
-        $("body").css(
-        {
-          "background-image": "none",
-          "background-color": "black",
-        });
-        $("#chips-summary").show();
+        //        $("#app").css("opacity", "0.3");
+        //        $("body").css(
+        //        {
+        //          "background-image": "none",
+        //          "background-color": "black",
+        //        });
+
+        document.write('<html><head><link rel="stylesheet" href="styles.css" /></head><body style="background-color:black"><br><Br>' + t + '</body></html>');
+        //        $("#chips-summary").show();
 
         show_summary = true;
       }
       else
       {
-        $("body").css(
-        {
-          "background-color": "#2f7532",
-        });
-        $("#chips-summary").hide();
-        $("#app").css("opacity", "1.0");
+        //        $("body").css(
+        //        {
+        //          "background-color": "#2f7532",
+        //        });
+        //        $("#chips-summary").hide();
+        //        $("#app").css("opacity", "1.0");
+        render_game();
+
         show_summary = false;
       }
     }
