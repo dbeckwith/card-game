@@ -27,7 +27,7 @@ export function render_ui(
     //fireworks and text when click CP:
     $(".before").hide();
     $(".after").hide();
-    $("#credits").hide();
+//    $("#credits").hide();
     $("#text").hide();
 
     $app.empty();
