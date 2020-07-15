@@ -1,7 +1,7 @@
 /* authors: A. Beckwith & D. Beckwith, summer 2020 */
 
 let showing_login_screen = false;
-let allow_access_to_totals = true;
+let allow_access_to_totals = false;
 /**
  * show chips as $d.cc
  */
@@ -24,7 +24,7 @@ export function render_ui(
 
   function setup_login_screen()
   {
-    //fireworks and text when click CP:
+    //fireworks:
     $(".before").hide();
     $(".after").hide();
 //    $("#credits").hide();
@@ -147,7 +147,7 @@ export function render_ui(
   function setup_game_html()
   {
     $app.empty(); //get rid of login screen HTML
-
+    $("#credits").hide();
     const $header = $('<div />',
     {
       id: 'header',
@@ -168,7 +168,8 @@ export function render_ui(
     $logo_link.on('click', function ()
     {
       //alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
-      toggle_fireworks();
+//      toggle_fireworks();
+      show_chip_totals();
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
 
@@ -1015,13 +1016,13 @@ export function render_ui(
     //      }
     //    });
     //    show chip totals
-    Mousetrap.bind('q', function ()
-    {
-      if (!showing_login_screen)
-      {
-        show_chip_totals();
-      }
-    });
+//    Mousetrap.bind('q', function ()
+//    {
+//      if (!showing_login_screen)
+//      {
+//        show_chip_totals();
+//      }
+//    });
     //        Mousetrap.bind('q', function ()
     //        {
     //          if (!showing_login_screen)
