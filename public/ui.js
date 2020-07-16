@@ -1561,7 +1561,7 @@ export function render_ui(
       t += "<table style='width:80%' id='summary'>";
       t += "<tr><th>NAME</th><th>HAS:</th><th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
 
-
+      //go through each player to show their data in table:
       for (var i = 0; i < game_state.players.length; i++)
       {
         let p = game_state.players[i];
