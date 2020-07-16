@@ -939,8 +939,6 @@ export function render_ui(
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
      *******************************************/
 
-    $player_controls.append('<br />');
-    $player_controls.append($player_money_display);
 
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
@@ -968,6 +966,8 @@ export function render_ui(
 
 
     //  $header.append('<br \>');
+        $header.append('<br />');
+    $header.append($player_money_display);
     $header.append($player_controls);
 
     $header.append($other_select);
@@ -1180,7 +1180,7 @@ export function render_ui(
     if (current_player.in_hand && !current_player.left_seat)
       $('#player-controls').show(1000); //animate controls 1 sec
     else
-      $('#player-controls').hide();
+      $('#player-controls').hide(1000);
 
     //set the max a player can bet to their chips:
     $('#bet-input').prop('max', current_player.chips);
