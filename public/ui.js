@@ -1135,7 +1135,7 @@ export function render_ui(
     $set_game_select.val(game_state.game_name);
 
     const $game_name_display = $('#game-name-display');
-    $game_name_display.text(game_state.game_name);
+    $game_name_display.text(game_state.game_name + " (" + game_state.game_count + ")");
 
     const $discard_button = $('#discard-btn');
 
@@ -1558,8 +1558,9 @@ export function render_ui(
     {
       works = false;
       let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>';
-      t += "<table style='width:80%' id='summary'>";
-      t += "<tr><th>NAME</th><th>HAS:</th><th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
+      t += "<table style='width:30%' id='summary'>";
+      t += "<tr><th>NAME</th><th>HAS:</th>";
+//      <th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
 
       //go through each player to show their data in table:
       for (var i = 0; i < game_state.players.length; i++)
@@ -1568,14 +1569,16 @@ export function render_ui(
 
         //update player's money amount:
         t += "<tr><td>" + p.name + "</td>" +
-          "<td>$" + format_$_for_table(formatChips(p.chips)) + "</td><td>$" + format_$_for_table(formatChips(p.buy_in)) + "</td>";
+          "<td>$" + format_$_for_table(formatChips(p.chips)) + "</td>";
+//          + "</td><td>$" 
+//          + format_$_for_table(formatChips(p.buy_in)) + "</td>";
 
-        if (p.chips < p.buy_in)
-          t += "<td>DOWN:</td><td id='down'> $" + format_$_for_table(formatChips(p.buy_in - p.chips)) + "</td></tr>";
-        else if (p.chips > p.buy_in)
-          t += "<td>UP:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
-        else
-          t += "<td>EVEN:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
+//        if (p.chips < p.buy_in)
+//          t += "<td>DOWN:</td><td id='down'> $" + format_$_for_table(formatChips(p.buy_in - p.chips)) + "</td></tr>";
+//        else if (p.chips > p.buy_in)
+//          t += "<td>UP:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
+//        else
+//          t += "<td>EVEN:</td><td id='up'> $" + format_$_for_table(formatChips(p.chips - p.buy_in)) + "</td></tr>";
       }
       t += "</table>";
 

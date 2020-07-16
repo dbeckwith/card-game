@@ -38,9 +38,10 @@ class GameState(object):
         self.current_game       = None
         self.wait_for_card      = False
         self.reshuffled         = False
-        self.history = []
-
-        self.connections = []
+        self.history            = []
+        self.game_count         = 0
+        
+        self.connections        = []
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -63,6 +64,7 @@ class GameState(object):
             'wait_for_card'      : self.wait_for_card,
             'show_chip_totals'   : self.show_chip_totals,
             'reshuffled'         : self.reshuffled,
+            'game_count'         : self.game_count,
         }
 
     async def connect(self, rpc):
@@ -197,7 +199,7 @@ class GameState(object):
             self.discard_mode = False
         # pick the first active player
         self.active_player = self.next_player_after(self.dealer)
-
+        self.game_count += 1
 
     def reset_game(self):
         '''
