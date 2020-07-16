@@ -168,7 +168,7 @@ class GameState(object):
         self.common_cards = []
         self.deck = cards.new_deck()  # shuffle a new deck
 
-    def new_game(self, game_name):
+    def new_game(self, game_name, from_button):
         '''
         creates new game: 0 pot, set players, new deck, clear common cards,
         new dealer
@@ -201,7 +201,8 @@ class GameState(object):
             self.discard_mode = False
         # pick the first active player
         self.active_player = self.next_player_after(self.dealer)
-        self.game_count += 1
+        if from_button:
+            self.game_count += 1
 
     def reset_game(self):
         '''

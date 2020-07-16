@@ -98,8 +98,8 @@ class RPC(object):
     def clear_hand(self):
         self.game_state.active_player.clear_hand()
 
-    def new_game(self, game_name):
-        self.game_state.new_game(game_name)
+    def new_game(self, game_name, from_button):
+        self.game_state.new_game(game_name, from_button)
         self.game_state.checkpoint('new_game')
         self.game_state.checkpoint('money_or_card')
         

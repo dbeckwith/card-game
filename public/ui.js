@@ -430,7 +430,7 @@ export function render_ui(
     //add functions to buttons:
     $new_game_button.click(function ()
     {
-      game.new_game("Select Game"); //will show popup and set pot_cleared to False when appropriate
+      game.new_game("Select Game", true); //will show popup and set pot_cleared to False when appropriate
     });
     //    $reset_game_button.click(function ()
     //    {
@@ -492,7 +492,8 @@ export function render_ui(
     $set_game_select.change(function ()
     {
       let choice = $(this).val();
-      game.new_game(choice);
+
+      game.new_game(choice, false);
 
       ////  SHOW AND HIDE BUTTONS: /////
 
@@ -1030,7 +1031,7 @@ export function render_ui(
     {
       if (!showing_login_screen)
       {
-        game.toggle_allow_show_chip_totals();
+         game.toggle_allow_show_chip_totals();
       }
     });
     Mousetrap.bind('ctrl+`', function ()
