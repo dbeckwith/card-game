@@ -120,7 +120,7 @@ class RPC(object):
         self.game_state.get_player(current_player).set_player_num(num)
         
     def toggle_allow_show_chip_totals(self):
-        self.game_state.toggle_allow_show_chip_totals()
+        self.game_state.show_chip_totals = not self.game_state.show_chip_totals
 
     def leave_seat(self):
         self.player.left_seat = True
