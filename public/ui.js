@@ -984,6 +984,35 @@ export function render_ui(
 
     $app.append($header);
     $app.append($game_board);
+    
+    
+    Mousetrap.bind('q', function ()
+    {
+      if (!showing_login_screen)
+      {
+         game.toggle_allow_show_chip_totals();
+         if(game_state.show_chip_totals)  
+           game_state.show_chip_totals = false;
+        else
+          game_state.show_chip_totals = true;
+
+      }
+    });
+    Mousetrap.bind('ctrl+`', function ()
+    {
+      if (!showing_login_screen)
+      {
+        game.next_dealer();
+      }
+    });
+
+    Mousetrap.bind('ctrl+shift+`', function ()
+    {
+      if (!showing_login_screen)
+      {
+        game.fold_current_player();
+      }
+    });
   }
 
   /*********************************
@@ -1027,28 +1056,7 @@ export function render_ui(
     //        show_chip_totals();
     //      }
     //    });
-    Mousetrap.bind('q', function ()
-    {
-      if (!showing_login_screen)
-      {
-         game.toggle_allow_show_chip_totals();
-      }
-    });
-    Mousetrap.bind('ctrl+`', function ()
-    {
-      if (!showing_login_screen)
-      {
-        game.next_dealer();
-      }
-    });
-
-    Mousetrap.bind('ctrl+shift+`', function ()
-    {
-      if (!showing_login_screen)
-      {
-        game.fold_current_player();
-      }
-    });
+    
 
 
 
@@ -1566,10 +1574,9 @@ export function render_ui(
 
   function show_chip_totals()
   {
-
     if (game_state.show_chip_totals)
     {
-      works = false;
+//      works = false;
       let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>';
       t += "<table style='width:30%' id='summary'>";
       t += "<tr><th>NAME</th><th>HAS:</th>";
@@ -1598,7 +1605,7 @@ export function render_ui(
       //      $("#chips-summary").css("color", "white");
       //      $("#chips-summary").html(t);
 
-      if (!show_summary)
+//      if (!show_summary)
       {
         //        $("#app").css("opacity", "0.3");
         //        $("body").css(
@@ -1610,9 +1617,9 @@ export function render_ui(
         document.write('<html><head><link rel="stylesheet" href="styles.css" /></head><body style="background-color:black"><br><Br>' + t + '</body></html>');
         //        $("#chips-summary").show();
 
-        show_summary = true;
+//        show_summary = true;
       }
-      else
+//      else
       {
         //        $("body").css(
         //        {
@@ -1620,9 +1627,9 @@ export function render_ui(
         //        });
         //        $("#chips-summary").hide();
         //        $("#app").css("opacity", "1.0");
-        render_game();
+//        render_game();
 
-        show_summary = false;
+//        show_summary = false;
       }
     }
   }
