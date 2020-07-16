@@ -339,8 +339,8 @@ button:hover {
 
 #game-name-display {
   margin-right: 10px;
-  font-size: 13x;
-  font-style: italic;
+  font-size: 12x;
+/*  font-style: italic;*/
   float: right;
   color: yellow;
 }
