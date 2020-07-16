@@ -1022,13 +1022,14 @@ export function render_ui(
     //        show_chip_totals();
     //      }
     //    });
-    //        Mousetrap.bind('q', function ()
-    //        {
-    //          if (!showing_login_screen)
-    //          {
-    //            game.toggle_allow_show_chip_totals();
-    //          }
-    //        });
+            Mousetrap.bind('q', function ()
+            {
+              if (!showing_login_screen)
+              {
+                console.log("toggleing")
+                game.toggle_allow_show_chip_totals();
+              }
+            });
     Mousetrap.bind('ctrl+`', function ()
     {
       if (!showing_login_screen)
@@ -1554,7 +1555,7 @@ export function render_ui(
   function show_chip_totals()
   {
 
-    if (allow_access_to_totals)
+    if (game_state.show_chip_totals)
     {
       works = false;
       let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>';
