@@ -1150,7 +1150,7 @@ export function render_ui(
     if (game_state.game_name === "Acey-Ducey")
      {
         const num_rounds = Math.ceil(game_state.acey_ducey_deals / game_state.players.length);
-       gn_disp += " " + num_rounds + " rnds";
+       gn_disp += " round:" + num_rounds + " ";
      }
     gn_disp += "(" + game_state.game_count + ")";
     $game_name_display.text(gn_disp);
