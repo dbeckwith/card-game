@@ -257,10 +257,12 @@ class GameState(object):
     def next_active_player(self):
         '''finds next active player and sets instance variable'''
         if self.active_player is not None:
+            print("doign it")
             original = self.active_player
 
             while True:
                 self.active_player = self.next_player_after(self.active_player)
+                print(json.dumps(self.active_player, cls=GameStateSerializer))
                 if self.active_player is original:
                     # we've looped back around
                     break

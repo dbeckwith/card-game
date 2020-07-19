@@ -1323,11 +1323,11 @@ export function render_ui(
 
       //add name:
       const $player_name = $('<div />');
-      //      //allow to click on name to set as active player
-      //      $player_name.click(function ()
-      //      {
-      //        game.set_active_player(player.id);
-      //      });
+      //allow to click on name to set as active player
+      $player_name.click(function ()
+      {
+        game.set_active_player(player.id);
+      });
       $player_name.addClass('player-name');
 
       //add ante, dealer indicators:
@@ -1416,6 +1416,10 @@ export function render_ui(
             {
               src: `card_images/${card_img_name}.svg`,
             });
+//            $card_img2.click(function ()
+//            {
+//              alert("\nYou need to    === DOUBLE-CLICK ===    to turn a card over");
+//            });
             $card_img2.addClass('card');
             $card_img2.addClass('backing');
             if (idx === 5) //put a little extra space
@@ -1469,6 +1473,11 @@ export function render_ui(
                 else
                   game.flip(idx);
               });
+//            $card_img.click(function ()
+//            {
+//              alert("\nYou need to    === DOUBLE-CLICK ===    to discard a card");
+//            });
+
 
           }
           $hand.append($up_with_down);
@@ -1512,6 +1521,10 @@ export function render_ui(
         $hand.append($down_button);
       }
 
+      const $player_info = $('<span />',
+      {
+        id: "player-info"
+      });
       $player_name.append($kick_button);
 
       //ADD ALL STUFF TO PLAYER SEAT
@@ -1523,8 +1536,8 @@ export function render_ui(
       //allow to click anywhere to set as active player
       $player_seat.click(function ()
       {
-        if (player.in_hand && !player.left_seat)
-          game.set_active_player(player.id);
+        //        if (player.in_hand && !player.left_seat)
+        //          game.set_active_player(player.id);
       });
 
       //ADD THIS SEATS TO ALL SEATS:
