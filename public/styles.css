@@ -22,7 +22,15 @@ body {
 #header {
   text-align: center;
 }
-
+#name-input
+    {
+      width: '210px';
+      height: '40px';
+      font-size: '20px';
+    }
+#login-button{
+  font-size: 25px;
+}
 #game-board {
   overflow-y: auto;
 }

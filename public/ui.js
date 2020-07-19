@@ -34,16 +34,16 @@ export function render_ui(
 
     const $login_screen = $('<center />');
 
-    const $name_input = $('<input />');
-    $name_input.css(
-    {
-      width: '210px',
-      height: '40px',
-      fontSize: '20px',
-    });
 
-    const $login_button = $('<button />');
-    $login_button.text('Login');
+    const $name_input = $('<input placeholder= " (your name here)"/>',{
+      id:"name-input",
+    });
+  
+
+    const $login_button = $('<button />',{
+      id: "login-button",
+    });
+    $login_button.text('LOGIN');
     $login_button.on('click', function ()
     {
       const name = $name_input.val();
