@@ -1,4 +1,4 @@
-__author__ = 'D. Beckwith'
+__author__ = 'D. Beckwith & A.Beckwith'
 
 from player import Player, PlayerCard
 import random, cards, math
@@ -99,6 +99,8 @@ class RPC(object):
     def clear_hand(self):
         self.game_state.active_player.clear_hand()
 
+    def reset_last_bet_and_ante(self):
+        self.game_state.reset_last_bet_and_ante()
     def new_game(self, game_name, from_button):
         self.game_state.new_game(game_name, from_button)
         self.game_state.checkpoint('new_game')

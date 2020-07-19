@@ -516,6 +516,7 @@ export function render_ui(
         alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
         $("#discard-btn").removeClass("not-discard-mode");
         $("#discard-btn").addClass("discard-mode");
+        self.active_player.last_ante = 0
         show_buttons(new Array($next_label, $next_up_button, $win_a_d_button, $lose_a_d_button, $card_confirmed_button), true);
       }
       else if (choice === "Man-Mouse")

@@ -1,4 +1,4 @@
-__author__ = 'D. Beckwith'
+__author__ = 'D. Beckwith & A. Beckwith'
 
 '''
 provides gamestate object to track all values in game
@@ -149,7 +149,11 @@ class GameState(object):
         for player in self.players:
             if player.id == player_id:
                 return player
-
+    def reset_last_bet_and_ante(self):
+        for player in self.players:
+            player.last_bet = 0
+            player.last_ante = 0
+            
     def players_in_hand(self):
         for player in self.players:
             if player.in_hand:
@@ -228,14 +232,16 @@ class GameState(object):
     def pay_acey_ducey(self):
         self.active_player.chips += self.last_bet
         self.pot                 -= self.last_bet
-        self.active_player.last_bet = 0
-        self.acey_ducey_deals+= 1
+        self.active_player.last_bet  = 0
+        self.active_player.last_ante = 0
+        self.acey_ducey_deals += 1
 
     def lost_acey_ducey(self):
         self.active_player.chips -= self.last_bet
         self.pot                 += self.last_bet
-        self.active_player.last_bet = 0
-        self.acey_ducey_deals+= 1
+        self.active_player.last_bet  = 0
+        self.active_player.last_ante = 0        
+        self.acey_ducey_deals += 1
 
     
     def pay_post(self, num):

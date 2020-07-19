@@ -203,5 +203,8 @@ export class CardGame {
   return_to_seat(){
     this._send('return_to_seat');
   }
+  reset_last_bet_and_ante(){
+    this._send('reset_last_bet_and_ante');
+  }
 }
 
