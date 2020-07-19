@@ -22,14 +22,20 @@ body {
 #header {
   text-align: center;
 }
+/*
 #name-input
     {
       width: '210px';
       height: '40px';
       font-size: '20px';
+  font-family: 'PT Mono', monospace;
+      color:red;
     }
+*/
 #login-button{
   font-size: 25px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 #game-board {
   overflow-y: auto;
@@ -492,7 +498,11 @@ button:hover {
 }
 
 input {
-  font-size: 22px;
+  font-size: 26px;
+    font-family: 'PT Mono', monospace;
+color:red;
+  width:390px;
+  text-align: center;
 }
 
 .opening-cards {

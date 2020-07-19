@@ -35,7 +35,7 @@ export function render_ui(
     const $login_screen = $('<center />');
 
 
-    const $name_input = $('<input placeholder= " (your name here)"/>',
+    const $name_input = $('<input placeholder= "==> your name here <=="/>',
     {
       id: "name-input",
     });
