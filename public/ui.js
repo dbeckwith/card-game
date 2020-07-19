@@ -1148,7 +1148,7 @@ export function render_ui(
 
     //GAME NAME DISPLAY (also acey-ducey rounds and total games played):
     const $game_name_display = $('#game-name-display');
-    let gn_disp = game_state.game_count + "." + game_state.game_name;
+    let gn_disp = "#" + game_state.game_count + " " + game_state.game_name;
     if (game_state.game_name === "Acey-Ducey")
     {
       const num_rounds = Math.ceil(game_state.acey_ducey_deals / game_state.players.length);

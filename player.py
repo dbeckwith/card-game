@@ -16,7 +16,7 @@ class Player(object):
         self.last_ante  = 0
         self.last_bet   = 0
         self.ante_is_last_bet =  None
-        self.info_num   = 0  # 0 = no info, 1 = just total, 2 = total/buyin
+        self.info_num   = 2  # 0 = no info, 1 = just total, 2 = total/buyin
     def __json__(self):
         '''returns: JSON of all player fields'''
         return {
