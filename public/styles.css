@@ -90,6 +90,9 @@ button:hover {
   margin-right: 20px;
   font-size: 18px;
 }
+#cards-left-display{
+/*  margin-bottom:30px;*/
+}
 #one-up-button, #one-down-button{
   background-color: #BEFFFF;
   border: solid 3px black;
@@ -371,8 +374,7 @@ button:hover {
   background-color:red;
 }
 
-
-
+/*
 #show-money-button{
   font-size:4px;
   border-radius:1px;
@@ -384,14 +386,16 @@ button:hover {
   border-radius:1px;
    position:absolute;
   left:0px;
-
 }
+*/
+/*
 #show-both-button{
     font-size:4px;
   border-radius:1px;
    position:absolute;
   left:40px;;
 }
+*/
 /* fold button */
 #fold {
   padding: 4px 7px;
@@ -400,7 +404,7 @@ button:hover {
 
 #check-button {}
 
-#increment-active-bettor-drawer-button {}
+/*#increment-active-bettor-drawer-button {}*/
 
 /* ALL BETTING BUTTONS AND ENTRY */
 #bet-button {
@@ -424,7 +428,10 @@ button:hover {
   margin-right: 0px;
   
 }
-
+#card-backing{
+  width:20px;
+   vertical-align: text-bottom;
+}
 .bet-buttons {
   margin: 0px;
   border-radius: 1px;
@@ -446,7 +453,7 @@ button:hover {
 
 #pot-display-last-bet {
   margin-left: 5px;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 #buy-10-btn {

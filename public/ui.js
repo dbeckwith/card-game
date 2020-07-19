@@ -35,12 +35,14 @@ export function render_ui(
     const $login_screen = $('<center />');
 
 
-    const $name_input = $('<input placeholder= " (your name here)"/>',{
-      id:"name-input",
+    const $name_input = $('<input placeholder= " (your name here)"/>',
+    {
+      id: "name-input",
     });
-  
 
-    const $login_button = $('<button />',{
+
+    const $login_button = $('<button />',
+    {
       id: "login-button",
     });
     $login_button.text('LOGIN');
@@ -934,10 +936,10 @@ export function render_ui(
       id: 'player-money-display',
     });
 
-//    const $acey_ducey_rounds = $('<span />',
-//    {
-//      id: 'acey-ducey-rounds-display',
-//    });
+    //    const $acey_ducey_rounds = $('<span />',
+    //    {
+    //      id: 'acey-ducey-rounds-display',
+    //    });
 
     /*******************************************
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
@@ -976,7 +978,7 @@ export function render_ui(
 
     $header.append($other_select);
     $header.append($common_info);
-//    $header.append($acey_ducey_rounds);
+    //    $header.append($acey_ducey_rounds);
 
     $header.append($game_name_display);
 
@@ -984,14 +986,14 @@ export function render_ui(
 
     $app.append($header);
     $app.append($game_board);
-    
-    
+
+
     Mousetrap.bind('q', function ()
     {
       if (!showing_login_screen)
       {
-         game.toggle_allow_show_chip_totals();
-  
+        game.toggle_allow_show_chip_totals();
+
 
       }
     });
@@ -1053,7 +1055,7 @@ export function render_ui(
     //        show_chip_totals();
     //      }
     //    });
-    
+
 
 
 
@@ -1146,15 +1148,15 @@ export function render_ui(
 
     //GAME NAME DISPLAY (also acey-ducey rounds and total games played):
     const $game_name_display = $('#game-name-display');
-    let gn_disp = game_state.game_name;
+    let gn_disp = game_state.game_count + "." + game_state.game_name;
     if (game_state.game_name === "Acey-Ducey")
-     {
-        const num_rounds = Math.ceil(game_state.acey_ducey_deals / game_state.players.length);
-       gn_disp += " round:" + num_rounds + " ";
-     }
-    gn_disp +=  "(" + game_state.game_count + ")";
+    {
+      const num_rounds = Math.ceil(game_state.acey_ducey_deals / game_state.players.length);
+      gn_disp += " round:" + num_rounds + " ";
+    }
+
     $game_name_display.text(gn_disp);
-    
+
     const $discard_button = $('#discard-btn');
 
     //make down cards outline in black to show discarding
@@ -1184,19 +1186,32 @@ export function render_ui(
       title: "Shows current amount in Pot and most recent bet in parentheses",
     });
     const $pot_display_pot = $('<span />');
-    const $pot_display_last_bet = $('<span />', { id:'pot-display-last-bet'});
-    const $cards_left_display = $('<span />', { id:'cards_left_display'});
+    const $pot_display_last_bet = $('<span />',
+    {
+      id: 'pot-display-last-bet'
+    });
+    const $cards_left_display = $('<span />',
+    {
+      id: 'cards-left-display'
+    });
+    let card_img_name1 = '2B' + game_state.card_back_num;
+    const $card_backing = $('<img />',
+    {
+      id: "card-backing",
+      src: `card_images/${card_img_name1}.svg`,
+    });
 
     $pot_display_last_bet.addClass('pot-display-last-bet');
     //POT: amt (+last_bet_amt):
     $pot_display_pot.text(`POT $${formatChips(game_state.pot)}`);
-    $pot_display_last_bet.text(`(+${formatChips(game_state.last_bet)})`);
-    $cards_left_display.text(`${game_state.deck.length}`);
-    
+    $pot_display_last_bet.text(`(${formatChips(game_state.last_bet)})`);
+    $cards_left_display.text(`${game_state.deck.length} `);
+
     $pot_display.append($pot_display_pot);
     $pot_display.append($pot_display_last_bet);
     $common_info.append($pot_display);
     $common_info.append($cards_left_display);
+    $common_info.append($card_backing);
 
     //show hand of all active players:
     if (current_player.in_hand && !current_player.left_seat)
@@ -1577,7 +1592,7 @@ export function render_ui(
   {
     if (game_state.show_chip_totals || allow_access_to_totals)
     {
-//      works = false;
+      //      works = false;
       let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>';
       t += "<table style='width:30%' id='summary'>";
       t += "<tr><th>NAME</th><th>HAS:</th>";
@@ -1606,7 +1621,7 @@ export function render_ui(
       //      $("#chips-summary").css("color", "white");
       //      $("#chips-summary").html(t);
 
-//      if (!show_summary)
+      //      if (!show_summary)
       {
         //        $("#app").css("opacity", "0.3");
         //        $("body").css(
@@ -1618,9 +1633,9 @@ export function render_ui(
         document.write('<html><head><link rel="stylesheet" href="styles.css" /></head><body style="background-color:black"><br><Br>' + t + '</body></html>');
         //        $("#chips-summary").show();
 
-//        show_summary = true;
+        //        show_summary = true;
       }
-//      else
+      //      else
       {
         //        $("body").css(
         //        {
@@ -1628,9 +1643,9 @@ export function render_ui(
         //        });
         //        $("#chips-summary").hide();
         //        $("#app").css("opacity", "1.0");
-//        render_game();
+        //        render_game();
 
-//        show_summary = false;
+        //        show_summary = false;
       }
     }
   }
