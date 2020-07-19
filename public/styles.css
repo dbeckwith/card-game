@@ -444,9 +444,9 @@ button:hover {
   border-color: yellow;
 }
 
-.pot-display-last-bet {
+#pot-display-last-bet {
   margin-left: 5px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 #buy-10-btn {

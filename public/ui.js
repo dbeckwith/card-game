@@ -1152,7 +1152,7 @@ export function render_ui(
         const num_rounds = Math.ceil(game_state.acey_ducey_deals / game_state.players.length);
        gn_disp += " round:" + num_rounds + " ";
      }
-    gn_disp += "(" + game_state.game_count + ")";
+    gn_disp +=  "(" + game_state.game_count + ")";
     $game_name_display.text(gn_disp);
     
     const $discard_button = $('#discard-btn');
@@ -1184,15 +1184,19 @@ export function render_ui(
       title: "Shows current amount in Pot and most recent bet in parentheses",
     });
     const $pot_display_pot = $('<span />');
-    const $pot_display_last_bet = $('<span />');
+    const $pot_display_last_bet = $('<span />', { id:'pot-display-last-bet'});
+    const $cards_left_display = $('<span />', { id:'cards_left_display'});
+
     $pot_display_last_bet.addClass('pot-display-last-bet');
     //POT: amt (+last_bet_amt):
     $pot_display_pot.text(`POT $${formatChips(game_state.pot)}`);
     $pot_display_last_bet.text(`(+${formatChips(game_state.last_bet)})`);
+    $cards_left_display.text(`${game_state.deck.length}`);
+    
     $pot_display.append($pot_display_pot);
     $pot_display.append($pot_display_last_bet);
-
     $common_info.append($pot_display);
+    $common_info.append($cards_left_display);
 
     //show hand of all active players:
     if (current_player.in_hand && !current_player.left_seat)
