@@ -214,7 +214,6 @@ class RPC(object):
             not_midnight_four = self.game_state.game_name != "Midnight Baseball"
 
             if fifth_card or (not_discard and not_midnight_four):
-                print("calling next active")
                 self.game_state.next_active_player()
             
             self.game_state.checkpoint('money_or_card')
