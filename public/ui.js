@@ -1453,7 +1453,7 @@ export function render_ui(
           //allow player to click down card to make up:
           if (player.id === current_player.id)
           {
-            $card_img.click(function ()
+            $card_img.dblclick(function ()
             {
               if (game_state.discard_mode) //add to upcard
                 game.discard(idx);
@@ -1461,7 +1461,7 @@ export function render_ui(
                 game.flip(idx);
             });
             if (!card.up) //add to down card
-              $card_img2.click(function ()
+              $card_img2.dblclick(function ()
               {
                 if (game_state.discard_mode)
                   game.discard(idx);
