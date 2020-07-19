@@ -37,6 +37,7 @@ class RPC(object):
         '''
         called by Join button in opening screen
         makes new player object, adds player to game
+        
         :param name: name of player
         '''
         if self.player is not None:
@@ -129,10 +130,14 @@ class RPC(object):
         self.player.left_seat = False
     
     def deal_all(self, down, up):
+        
         '''
         Deal cards to every active player
+        
         :param down: number of down cards to deal
         :param up: number of up cards to deal
+        
+        :return: None
         '''
         # dealing cards starts the hand
         self.game_state.hand_started = True
@@ -278,6 +283,7 @@ class RPC(object):
         
 
     def bet(self, amount):
+        
         '''player bet - subtract from chips, add to pot, move to next player'''
         if self.player is None:
             raise ClientError('not logged-in')
