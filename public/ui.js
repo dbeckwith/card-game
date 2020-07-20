@@ -31,15 +31,12 @@ export function render_ui(
 
     $app.empty();
 
-
     const $login_screen = $('<center />');
-
 
     const $name_input = $('<input placeholder= "==> your name here <=="/>',
     {
       id: "name-input",
     });
-
 
     const $login_button = $('<button />',
     {
@@ -49,7 +46,8 @@ export function render_ui(
     $login_button.on('click', function ()
     {
       const name = $name_input.val();
-      game.login(name);
+      if(name !== "") 
+        game.login(name);
     });
 
     const $current_players = $('<div />',
