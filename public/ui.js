@@ -39,16 +39,16 @@ export function render_ui(
       id: "name-input",
       placeholder: "==> your name here <==",
     });
-//    $("#name-input").css(
-//    {
-//      "background-color": "yellow",
-//      "font-size": "20px",
-//      "width": '210px',
-//      "font-family": "'PT Mono', monospace",
-//      "color": 'red',
-//      "height": '40px',
+    //    $("#name-input").css(
+    //    {
+    //      "background-color": "yellow",
+    //      "font-size": "20px",
+    //      "width": '210px',
+    //      "font-family": "'PT Mono', monospace",
+    //      "color": 'red',
+    //      "height": '40px',
 
-//    });
+    //    });
 
     const $login_button = $('<button />',
     {
@@ -549,7 +549,7 @@ export function render_ui(
       });
       $set_game_select.append($a_game);
     }
-   
+
     const $action_select = $('<select />',
     {
       id: 'action-select',
@@ -582,9 +582,12 @@ export function render_ui(
 
     var other_dlr_functions = [
       ['• Deal COMMON Up Card', 'common'],
+      ['', ''],
+
       ['• Turn DISCARD MODE On/Off', 'discard-mode'],
       ['', ''],
-            ['• COLLECT CARDS/SHUFFLE (Man-Mouse & Dirty Gertie) leaves pot alone ', 'collect'],
+      
+      ['• COLLECT CARDS/SHUFFLE (Man-Mouse & Dirty Gertie) leaves pot alone ', 'collect'],
       ['', ''],
 
       ['• UNDO last action', 'undo'],
@@ -1057,13 +1060,13 @@ export function render_ui(
     });
 
     $('#logo-link').off('click');
-  $("#logo-link").on('click', function ()
-    { 
+    $("#logo-link").on('click', function ()
+    {
       show_chip_totals(game_state);
     });
 
     //show all active players in the dealer select menu
-    const $dealer_select = $('#dealer-select'); 
+    const $dealer_select = $('#dealer-select');
     $dealer_select.prop("title", "Changes dealer to any other player; leaves cards and pot alone");
     $dealer_select.empty();
     $dealer_select.append('<option selected disabled>Change Dealer (maintains cards/bets)</option>');
@@ -1108,7 +1111,7 @@ export function render_ui(
     }
     else
     {
-      $("#discard-btn").removeClass("discard-mode");
+      $("#discard-btn").removeClass("discard-modediscard-mode");
       $("#discard-btn").addClass("not-discard-mode");
     }
 
@@ -1538,7 +1541,10 @@ export function render_ui(
       }
       t += "</table>";
 
-      $('body').css({ backgroundColor: 'black'});
+      $('body').css(
+      {
+        backgroundColor: 'black'
+      });
       $('body').html('<br><Br>' + t + '</body></html>');
     }
     else
