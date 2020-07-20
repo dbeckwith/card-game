@@ -33,9 +33,20 @@ export function render_ui(
 
     const $login_screen = $('<center />');
 
-    const $name_input = $('<input placeholder= "==> your name here <=="/>',
+    const $name_input = $('<input />',
     {
       id: "name-input",
+      placeholder: "==> your name here <==",
+    });
+    $("#name-input").css(
+    {
+//      "background-color": "yellow",
+//      "font-size": "20px",
+      "width": '210px',
+//      "font-family": "'PT Mono', monospace",
+//      "color": 'red',
+//      "height": '40px',
+
     });
 
     const $login_button = $('<button />',
@@ -1604,7 +1615,7 @@ export function render_ui(
   {
     if (game_state.show_chip_totals || allow_access_to_totals)
     {
-//      game_state.mark_dirty();
+      //      game_state.mark_dirty();
       //      works = false;
       let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>(refresh and hit CP again to get correct totals)';
       t += "<table style='width:30%' id='summary'>";
