@@ -22,19 +22,22 @@ body {
 #header {
   text-align: center;
 }
-#name-input
-    {
-      width: '210px';
-      height: '40px';
-      font-size: '20px';
-  font-family: 'PT Mono, monospace';
-      color:red;
-    }
-#login-button{
+
+input#name-input {
+  width: 270px;
+  height: 35px;
+  font-size: 25px;
+  font-family: 'PT Mono', monospace;
+  text-align: center;
+  color: red;
+}
+
+button#login-button {
   font-size: 25px;
   border-top-right-radius: 10px;
   border-bottom-left-radius: 10px;
 }
+
 #game-board {
   overflow-y: auto;
 }
@@ -72,15 +75,17 @@ button:hover {
   font-size: 16px;
   margin-left: 8px;
 }
-#dollaz{
+
+#dollaz {
   align-content: left;
 }
+
 #dealer-controls {
   margin-top: 1px;
   margin-bottom: 0px;
 }
 
-#dealer-controls-top{
+#dealer-controls-top {
   margin-top: 1px;
 }
 
@@ -94,13 +99,17 @@ button:hover {
   margin-right: 20px;
   font-size: 18px;
 }
-#cards-left-display{
-/*  margin-bottom:30px;*/
+
+#cards-left-display {
+  /*  margin-bottom:30px;*/
 }
-#one-up-button, #one-down-button{
+
+#one-up-button,
+#one-down-button {
   background-color: #BEFFFF;
   border: solid 3px black;
 }
+
 /* all dealer buttons are smaller */
 .dlrbtns {
   padding: 4px 7px;
@@ -111,15 +120,15 @@ button:hover {
 /* 1up and 1down buttons */
 .one-all-buttons {
   border: solid 2px red;
-  background-color:#6EAEC1;
+  background-color: #6EAEC1;
 }
 
 /* next up and next down buttons */
 .one-card-buttons {
   border: solid 4px orange;
   width: 50px;
-  border-radius:4px;
-  background-color:#BEFFFF;
+  border-radius: 4px;
+  background-color: #BEFFFF;
 }
 
 /* common up card button - is different color */
@@ -129,7 +138,8 @@ button:hover {
 }
 
 /* discard-mode toggle button */
-.not-discard-mode, .not-discard-mode:hover {
+.not-discard-mode,
+.not-discard-mode:hover {
   border-radius: 4px;
   font-size: 10px;
   margin-left: 55px;
@@ -139,7 +149,8 @@ button:hover {
   border-width: 0px;
 }
 
-.discard-mode, .discard-mode:hover {
+.discard-mode,
+.discard-mode:hover {
   border-radius: 4px;
   font-size: 11px;
   margin-left: 55px;
@@ -148,7 +159,7 @@ button:hover {
   border-color: lightgreen;
   font-weight: bolder;
   border-width: 3px;
-/*  animation: shadow-pulse 1s infinite;*/
+  /*  animation: shadow-pulse 1s infinite;*/
 }
 
 /****************
@@ -167,12 +178,13 @@ button:hover {
   margin-right: 10px;
   margin-left: 10px;
 }
+
 /* dealer action selector */
 #action-select {
   width: 170px;
   height: 30px;
   margin-left: 30px;
-  background-color:#BEFFFF;
+  background-color: #BEFFFF;
   border: 3px solid black;
 }
 
@@ -186,27 +198,27 @@ button:hover {
 
 /* selector for players to receive payout */
 #winners-select {
-/*    background-color: #BEFFFF;*/
+  /*    background-color: #BEFFFF;*/
 
   width: 120px;
   margin-left: 20px;
   display: inline-block;
-    border: solid 3px black;
+  border: solid 3px black;
 
-/*  height:15px;*/
+  /*  height:15px;*/
 }
 
 #winners-select-box {
   position: relative;
-/*    height:25px;*/
-/*  background-color: #BEFFFF;*/
+  /*    height:25px;*/
+  /*  background-color: #BEFFFF;*/
 
 }
 
 #winners-select-select {
   width: 100%;
-/*  font-weight: bold;*/
-    height:25px;
+  /*  font-weight: bold;*/
+  height: 25px;
   background-color: #BEFFFF;
 
 }
@@ -217,8 +229,8 @@ button:hover {
   right: 0;
   top: 0;
   bottom: 0;
-/*    height:25px;*/
-/*  background-color: white;*/
+  /*    height:25px;*/
+  /*  background-color: white;*/
 
 }
 
@@ -232,18 +244,22 @@ button:hover {
   color: black;
   width: 147px;
   text-align: left;
-/*  height:25px;*/
+  /*  height:25px;*/
 
 
 }
-#next-label{
+
+#next-label {
   margin-left: 30px;
   font-size: 15px;
 }
-#next-up, #next-down{
+
+#next-up,
+#next-down {
   padding-top: 2px;
   padding-bottom: 2px;
 }
+
 #winners-select-content label {
   display: block;
   padding: 4px;
@@ -252,32 +268,41 @@ button:hover {
 #winners-select-content label:hover {
   background-color: #1e90ff;
 }
-#acey-buttons{
-  float:right;
+
+#acey-buttons {
+  float: right;
 }
+
 /* same for dealer select */
 #dealer-select {
   width: 115px;
   display: inline-block;
   margin-left: 5px;
-  height:25px;
+  height: 25px;
 }
-#win-a-d-button, #lose-a-d-button{
-  font-size:20px; 
-  width:120px;
+
+#win-a-d-button,
+#lose-a-d-button {
+  font-size: 20px;
+  width: 120px;
 }
-#win-a-d-button{
-  background-color:lightgreen;
-  color:darkred;
+
+#win-a-d-button {
+  background-color: lightgreen;
+  color: darkred;
 }
-#lose-a-d-button{
-  background-color:red;
-  color:darkslategray;
+
+#lose-a-d-button {
+  background-color: red;
+  color: darkslategray;
 }
-#post-button, #dbl-post-button{
-  font-size:11px;
-  margin-right:10px;
+
+#post-button,
+#dbl-post-button {
+  font-size: 11px;
+  margin-right: 10px;
 }
+
 #dealer-select-box {
   position: relative;
 }
@@ -340,22 +365,23 @@ button:hover {
 #set-game-select {
   width: 100px;
   height: 25px;
-/*  margin-right: 20px;*/
+  /*  margin-right: 20px;*/
 }
 
-#up-button, #down-button {
+#up-button,
+#down-button {
   float: right;
   height: 50px;
   width: 50px;
   font-size: 15px;
-  background-color:yellow;
+  background-color: yellow;
   border: 4px solid red;
 }
 
 #game-name-display {
   margin-right: 10px;
   font-size: 18px;
-/*  font-style: italic;*/
+  /*  font-style: italic;*/
   float: right;
   color: yellow;
 }
@@ -374,8 +400,9 @@ button:hover {
   margin-left: 5px;
   font-size: 16px;
 }
-.dollar-display{
-  background-color:red;
+
+.dollar-display {
+  background-color: red;
 }
 
 /*
@@ -430,12 +457,14 @@ button:hover {
 #ante-btn {
   margin-left: 20px;
   margin-right: 0px;
-  
+
 }
-#card-backing{
-  width:20px;
-   vertical-align: text-bottom;
+
+#card-backing {
+  width: 20px;
+  vertical-align: text-bottom;
 }
+
 .bet-buttons {
   margin: 0px;
   border-radius: 1px;
@@ -509,7 +538,7 @@ button:hover {
 
 .login-cards {
   margin-top: 100px;
-  width: 200px;
+  width: 150px;
   border: 4px solid transparent;
   border-radius: 6px;
 }
@@ -541,23 +570,27 @@ button:hover {
   border-radius: 4px;
 }
 
-#reset-game-button, #collect-shuffle-button {
+#reset-game-button,
+#collect-shuffle-button {
   margin-left: 15px;
   font-size: 10px;
   background-color: black;
   color: white;
 }
-#reshuffle-display{
+
+#reshuffle-display {
   border: 30px solid red;
   display: inline;
-  font-size:45px;
-      animation: pulsate 1s infinite;
+  font-size: 45px;
+  animation: pulsate 1s infinite;
 
 
 }
+
 #new-back-button {
   font-size: 10px;
 }
+
 /*
 td:nth-child(2){
   background-color:lightblue;
@@ -566,6 +599,7 @@ td:nth-child(2){
 .player-seat.dealer {
   background-color: rebeccapurple;
 }
+
 .player-seat.active-player {
   color: #BEFFFF;
   border: 4px solid yellow;
@@ -615,7 +649,7 @@ td:nth-child(2){
   /* CHANGE ABOVE ALSO
   /* (first column width + second column width) / (starting chip amount / chips per chip image) */
   width: 20px;
-/*  ((115px + 70px) / (400 / 40));*/
+  /*  ((115px + 70px) / (400 / 40));*/
 }
 
 #common-display {
@@ -659,11 +693,14 @@ td:nth-child(2){
 .sixth_card {
   margin-left: 11px;
 }
-#up-button, #-button {
+
+#up-button,
+#-button {
   float: right;
   height: 50px;
   width: 50px;
 }
+
 #up-with-down {
   position: relative;
 }
@@ -686,32 +723,50 @@ td:nth-child(2){
 }
 
 .discard-ready {
-/*  border: 1px solid black;*/
-    animation: pulsate 1s infinite;
+  /*  border: 1px solid black;*/
+  animation: pulsate 1s infinite;
 }
+
 @-webkit-keyframes pulsate {
-    0%   { box-shadow: 0 0 0 magenta; }
-    50%  { box-shadow: 0 0 36px magenta; }
-    100% { box-shadow: 0 0 0 magenta; }
+  0% {
+    box-shadow: 0 0 0 magenta;
+  }
+
+  50% {
+    box-shadow: 0 0 36px magenta;
+  }
+
+  100% {
+    box-shadow: 0 0 0 magenta;
+  }
 }
 
 .confirm {
-/*  border: 1px solid black;*/
-    animation: pulsate2 2s infinite;
-  background-color:yellow;
-  color:red;
+  /*  border: 1px solid black;*/
+  animation: pulsate2 2s infinite;
+  background-color: yellow;
+  color: red;
 }
+
 @-webkit-keyframes pulsate2 {
-    0%   { box-shadow: 0 0 0 blue; }
-    50%  { box-shadow: 0 0 66px magenta; }
-    100% { box-shadow: 0 0 0 red; }
+  0% {
+    box-shadow: 0 0 0 blue;
+  }
+
+  50% {
+    box-shadow: 0 0 66px magenta;
+  }
+
+  100% {
+    box-shadow: 0 0 0 red;
+  }
 }
 
 
 #chips-summary {
   font-size: 20px;
   color: white;
-    font-family: 'PT Mono', monospace;
+  font-family: 'PT Mono', monospace;
 
 }
 
@@ -749,7 +804,7 @@ td:nth-child(2){
 /***** ANIMATIONS ******/
 
 #logo-link:hover {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 @keyframes shake {
