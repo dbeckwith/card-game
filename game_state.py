@@ -40,7 +40,7 @@ class GameState(object):
         self.reshuffled         = False
         self.history            = []
         self.game_count         = 0
-        self.acey_ducey_deals  = 0
+        self.acey_ducey_deals   = 0
         self.connections        = []
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
@@ -327,9 +327,10 @@ class GameState(object):
         
         self.chips_bet_in_round = state['chips_bet_in_round']
         self.card_back_num      = state['card_back_num']
-        self.wait_for_card       = state['wait_for_card']
+        self.wait_for_card      = state['wait_for_card']
         self.show_chip_totals   = state['show_chip_totals']
-
+        self.reshuffled         = state['reshuffled']
+        
         # reconstruct players
         self.players = list(map(Player.restore, state['players']))
         

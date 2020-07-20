@@ -52,7 +52,8 @@ class RPC(object):
         # mark player as connected
         player.connected = True
         self._player = player.id
-
+    
+        
     def logout(self):
         '''called by Login button - takes player out of game'''
         if self.player is None:

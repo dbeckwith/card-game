@@ -46,7 +46,7 @@ export function render_ui(
     $login_button.on('click', function ()
     {
       const name = $name_input.val();
-      if(name !== "") 
+      if (name !== "")
         game.login(name);
     });
 
@@ -1414,10 +1414,10 @@ export function render_ui(
             {
               src: `card_images/${card_img_name}.svg`,
             });
-//            $card_img2.click(function ()
-//            {
-//              alert("\nYou need to    === DOUBLE-CLICK ===    to turn a card over");
-//            });
+            //            $card_img2.click(function ()
+            //            {
+            //              alert("\nYou need to    === DOUBLE-CLICK ===    to turn a card over");
+            //            });
             $card_img2.addClass('card');
             $card_img2.addClass('backing');
             if (idx === 5) //put a little extra space
@@ -1471,10 +1471,10 @@ export function render_ui(
                 else
                   game.flip(idx);
               });
-//            $card_img.click(function ()
-//            {
-//              alert("\nYou need to    === DOUBLE-CLICK ===    to discard a card");
-//            });
+            //            $card_img.click(function ()
+            //            {
+            //              alert("\nYou need to    === DOUBLE-CLICK ===    to discard a card");
+            //            });
 
 
           }
@@ -1604,8 +1604,9 @@ export function render_ui(
   {
     if (game_state.show_chip_totals || allow_access_to_totals)
     {
+//      game_state.mark_dirty();
       //      works = false;
-      let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>';
+      let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>(refresh and hit CP again to get correct totals)';
       t += "<table style='width:30%' id='summary'>";
       t += "<tr><th>NAME</th><th>HAS:</th>";
       //      <th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
@@ -1634,31 +1635,32 @@ export function render_ui(
       //      $("#chips-summary").html(t);
 
       //      if (!show_summary)
-      {
-        //        $("#app").css("opacity", "0.3");
-        //        $("body").css(
-        //        {
-        //          "background-image": "none",
-        //          "background-color": "black",
-        //        });
+      //      {
+      //        $("#app").css("opacity", "0.3");
+      //        $("body").css(
+      //        {
+      //          "background-image": "none",
+      //          "background-color": "black",
+      //        });
 
-        document.write('<html><head><link rel="stylesheet" href="styles.css" /></head><body style="background-color:black"><br><Br>' + t + '</body></html>');
-        //        $("#chips-summary").show();
+      document.write('<html><head><link rel="stylesheet" href="styles.css" /></head><body style="background-color:black"><br><Br>' + t + '</body></html>');
 
-        //        show_summary = true;
-      }
+      //        $("#chips-summary").show();
+
+      //        show_summary = true;
+      //      }
       //      else
-      {
-        //        $("body").css(
-        //        {
-        //          "background-color": "#2f7532",
-        //        });
-        //        $("#chips-summary").hide();
-        //        $("#app").css("opacity", "1.0");
-        //        render_game();
+      //      {
+      //        $("body").css(
+      //        {
+      //          "background-color": "#2f7532",
+      //        });
+      //        $("#chips-summary").hide();
+      //        $("#app").css("opacity", "1.0");
+      //        render_game();
 
-        //        show_summary = false;
-      }
+      //        show_summary = false;
+      //      }
     }
   }
 
