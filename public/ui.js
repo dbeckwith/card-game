@@ -229,8 +229,8 @@ export function render_ui(
     $one_down_button.text('All 1DN');
 
     //add:
-    $deal_all_buttons.append($one_up_button);
     $deal_all_buttons.append($one_down_button);
+    $deal_all_buttons.append($one_up_button);
 
     /*****************************
      * DEAL ONE CARD TO NEXT PLAYER BUTTONS:
@@ -655,8 +655,8 @@ export function render_ui(
     $dealer_controls.append($acey_buttons);
 
     $dealer_controls.append($next_label);
-    $dealer_controls.append($next_up_button);
     $dealer_controls.append($next_down_button);
+    $dealer_controls.append($next_up_button);
     $dealer_controls.append($action_select);
 
     $dealer_controls_top.append($set_game_select);
