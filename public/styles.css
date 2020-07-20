@@ -22,7 +22,6 @@ body {
 #header {
   text-align: center;
 }
-/*
 #name-input
     {
       width: '210px';
@@ -31,7 +30,6 @@ body {
   font-family: 'PT Mono, monospace';
       color:red;
     }
-*/
 #login-button{
   font-size: 25px;
   border-top-right-radius: 10px;
@@ -501,7 +499,7 @@ button:hover {
   border: solid 3px;
 }
 
-#logo {
+#logo-link {
   float: right;
 }
 
@@ -750,7 +748,7 @@ td:nth-child(2){
 
 /***** ANIMATIONS ******/
 
-#logo:hover {
+#logo-link:hover {
     opacity: 0.5;
 }
 

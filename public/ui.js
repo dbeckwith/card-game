@@ -38,16 +38,16 @@ export function render_ui(
       id: "name-input",
       placeholder: "==> your name here <==",
     });
-    $("#name-input").css(
-    {
+//    $("#name-input").css(
+//    {
 //      "background-color": "yellow",
 //      "font-size": "20px",
-      "width": '210px',
+//      "width": '210px',
 //      "font-family": "'PT Mono', monospace",
 //      "color": 'red',
 //      "height": '40px',
 
-    });
+//    });
 
     const $login_button = $('<button />',
     {
@@ -172,14 +172,8 @@ export function render_ui(
     const $logo_link = $('<span />',
     {
       href: '#',
-      id: 'logo',
+      id: 'logo-link',
 
-    });
-    $logo_link.on('click', function ()
-    {
-      //alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
-      //      toggle_fireworks();
-      show_chip_totals();
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
 
@@ -1003,8 +997,6 @@ export function render_ui(
       if (!showing_login_screen)
       {
         game.toggle_allow_show_chip_totals();
-
-
       }
     });
     Mousetrap.bind('ctrl+`', function ()
@@ -1065,8 +1057,6 @@ export function render_ui(
     //        show_chip_totals();
     //      }
     //    });
-
-
 
 
     $("#new-game-button").prop("disabled", game_state.pot != 0);
@@ -1131,6 +1121,15 @@ export function render_ui(
 
       $winners_select_content.append($player_row);
       //      }
+    });
+
+    $('#logo-link').off('click');
+  $("#logo-link").on('click', function ()
+    {
+      //alert('CambridgePoker \u00a92020\nCredits:\nFront End: Anthony Beckwith\nBack End: Daniel Beckwith');
+      //      toggle_fireworks();
+      
+      show_chip_totals(game_state);
     });
 
     //show all active players in the dealer select menu
@@ -1611,9 +1610,10 @@ export function render_ui(
     return spaces + s;
   }
 
-  function show_chip_totals()
+  function show_chip_totals(game_state)
   {
-    if (game_state.show_chip_totals || allow_access_to_totals)
+    console.log(game_state.show_chip_totals);
+    if (game_state.show_chip_totals)
     {
       //      game_state.mark_dirty();
       //      works = false;
@@ -1654,7 +1654,8 @@ export function render_ui(
       //          "background-color": "black",
       //        });
 
-      document.write('<html><head><link rel="stylesheet" href="styles.css" /></head><body style="background-color:black"><br><Br>' + t + '</body></html>');
+      $('body').css({ backgroundColor: 'black'});
+      $('body').html('<br><Br>' + t + '</body></html>');
 
       //        $("#chips-summary").show();
 
@@ -1673,6 +1674,8 @@ export function render_ui(
       //        show_summary = false;
       //      }
     }
+    else
+      window.open('instructions.html', '_blank');
   }
 
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
