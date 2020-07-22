@@ -188,17 +188,14 @@ class RPC(object):
 
             self.game_state.active_player.give_card(PlayerCard(card, up))
             
-            self.game_state.acey_cards_dealt += 1
-
-            
             if self.game_state.game_name == "Acey-Ducey":
-                # reshuffle when 1 card left (0 in case mistake in dealing was made)
-                if len(self.game_state.deck == 0) or len(self.game.deck == 1):
+                # reshuffle when 1 card left (0  incl. in case mistake in dealing was made)
+                if len(self.game_state.deck) == 0 or len(self.game_state.deck) == 1:
                     # shuffle a new deck
                     self.game_state.deck = cards.new_deck()
                     self.game_state.reshuffled = True
-            else:
-                self.game_state.reshuffled = False
+                else:
+                    self.game_state.reshuffled = False
 
             num_cards_in_hand = len(self.game_state.active_player.hand)
 
