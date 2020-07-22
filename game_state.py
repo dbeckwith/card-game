@@ -42,6 +42,7 @@ class GameState(object):
         self.game_count         = 0
         self.acey_ducey_deals   = 0
         self.connections        = []
+        self.acey_cards_dealt   = 0
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -65,7 +66,8 @@ class GameState(object):
             'show_chip_totals'   : self.show_chip_totals,
             'reshuffled'         : self.reshuffled,
             'game_count'         : self.game_count,
-            'acey_ducey_deals'  : self.acey_ducey_deals,
+            'acey_ducey_deals'   : self.acey_ducey_deals,
+            'acey_cards_dealt'   : self.acey_cards_dealt,
         }
 
     async def connect(self, rpc):
@@ -235,6 +237,7 @@ class GameState(object):
         self.active_player.last_bet  = 0
         self.active_player.last_ante = 0
         self.acey_ducey_deals += 1
+        self.acey_cards_dealt = 0
 
     def lost_acey_ducey(self):
         self.active_player.chips -= self.last_bet
@@ -242,12 +245,16 @@ class GameState(object):
         self.active_player.last_bet  = 0
         self.active_player.last_ante = 0        
         self.acey_ducey_deals += 1
+        self.acey_cards_dealt = 0
 
     
     def pay_post(self, num):
         self.active_player.chips -= num * self.last_bet
         self.pot                 += num * self.last_bet
+        self.active_player.last_bet  = 0
+        self.active_player.last_ante = 0         
         self.acey_ducey_deals+= 1
+        self.acey_cards_dealt = 0
 
             
     def next_dealer(self):
