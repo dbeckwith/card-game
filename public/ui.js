@@ -178,7 +178,14 @@ export function render_ui(
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
 
+     const $dollar_dot = $('<span />',
+    {
+      href: '#',
+      id: 'dollar-dot',
 
+    });
+    $dollar_dot.append("•");
+    
     //top half of dealer controls:
     const $dealer_controls = $('<div />',
     {
@@ -952,7 +959,7 @@ $player_controls.append($ante_button);
      *******************************************/
 
     $header.append($logo_link);
-
+    $header.append($dollar_dot);
     $header.append($dealer_controls_top);
     $header.append($dealer_controls);
     $header.append('<hr \>');
@@ -1059,11 +1066,15 @@ $player_controls.append($ante_button);
       //      }
     });
 
-    $('#logo-link').off('click');
     $("#logo-link").on('click', function ()
     {
-      show_chip_totals(game_state);
+      show_instructions();
     });
+    $("#dollar-dot").dblclick(function ()
+    {
+      show_chip_totals();
+    });
+
 
     //show all active players in the dealer select menu
     const $dealer_select = $('#dealer-select');
@@ -1518,14 +1529,12 @@ $player_controls.append($ante_button);
     return spaces + s;
   }
 
-  function show_chip_totals(game_state)
+  function show_chip_totals()
   {
-    console.log(game_state.show_chip_totals);
-    if (game_state.show_chip_totals)
-    {
+  
       //      game_state.mark_dirty();
       //      works = false;
-      let t = '<center><Br><u><a onclick="location.reload()" style="color:red; font-size:50px;">BACK</u><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a></center><br>(refresh and hit CP again to get correct totals)';
+      let t = '<Br><a onclick="location.reload()" style="color:red; font-size:50px; cursor:pointer;">⇦⇦⇦<u>BACK</u></a><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a><br>';
       t += "<table style='width:30%' id='summary'>";
       t += "<tr><th>NAME</th><th>HAS:</th>";
       //      <th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
@@ -1547,10 +1556,10 @@ $player_controls.append($ante_button);
       });
       $('body').html('<br><Br>' + t + '</body></html>');
     }
-    else
-      window.open('instructions.html', '_blank');
-  }
 
+  function show_instructions(){
+      window.open('instructions.html', '_blank');
+}
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
   if (current_player == null)
   {

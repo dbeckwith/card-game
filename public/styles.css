@@ -532,9 +532,15 @@ button:hover {
 }
 
 #logo-link {
+    cursor: pointer;
+
   float: right;
 }
+#dollar-dot{
+    cursor: pointer;
 
+  float:left;
+}
 #last-bet {
   color: #ff7777;
 }
