@@ -1,7 +1,7 @@
 /* authors: A. Beckwith & D. Beckwith, summer 2020 */
 
 let showing_login_screen = false;
-let allow_access_to_totals = true;
+let allow_access_to_totals = false;
 /**
  * show chips as $d.cc
  */
@@ -933,7 +933,8 @@ export function render_ui(
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
      *******************************************/
 
-
+$player_controls.append($ante_button);
+    $player_controls.append($ante_input);
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
     $player_controls.append($call_button);
@@ -944,8 +945,7 @@ export function render_ui(
     $player_controls.append($bet_button_half_pot);
     $player_controls.append($bet_button_pot);
 
-    $player_controls.append($ante_button);
-    $player_controls.append($ante_input);
+    
 
     /*******************************************
      * BUILD ENTIRE PAGE:
