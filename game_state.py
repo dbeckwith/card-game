@@ -41,6 +41,7 @@ class GameState(object):
         self.history            = []
         self.game_count         = 0
         self.connections        = []
+        self.acey_ducey_deals   = 0
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -64,6 +65,7 @@ class GameState(object):
             'show_chip_totals'   : self.show_chip_totals,
             'reshuffled'         : self.reshuffled,
             'game_count'         : self.game_count,
+            'acey_ducey_deals'   : self.acey_ducey_deals,
  
         }
 
@@ -179,6 +181,7 @@ class GameState(object):
         if self.pot != 0:
             raise ClientError('WARNING: pot must be empty')
 
+        self.acey_ducey_deals = 0
         self.last_bet = 0
         self.game_name = game_name
         # reset each player
@@ -232,21 +235,23 @@ class GameState(object):
         self.pot                 -= self.last_bet
         self.active_player.last_bet  = 0
         self.active_player.last_ante = 0
-
+        self.acey_ducey_deals        += 1
 
     def lost_acey_ducey(self):
         self.active_player.chips -= self.last_bet
         self.pot                 += self.last_bet
         self.active_player.last_bet  = 0
-        self.active_player.last_ante = 0        
-
+        self.active_player.last_ante = 0 
+        self.acey_ducey_deals        += 1
+        
     
     def pay_post(self, num):
         self.active_player.chips -= num * self.last_bet
         self.pot                 += num * self.last_bet
         self.active_player.last_bet  = 0
-        self.active_player.last_ante = 0         
-
+        self.active_player.last_ante = 0 
+        self.acey_ducey_deals        += 1
+        
             
     def next_dealer(self):
         if self.dealer is not None:

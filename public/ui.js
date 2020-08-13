@@ -169,11 +169,12 @@ export function render_ui(
     $(".after").hide();
     $("#text").hide();
 
-    //LOGO: shakes on hover and when clicked shows credits
+    //LOGO: 
     const $logo_link = $('<span />',
     {
       href: '#',
       id: 'logo-link',
+      title: 'Click to bring up CP Tutorial page ',
 
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
@@ -182,7 +183,7 @@ export function render_ui(
     {
       href: '#',
       id: 'dollar-dot',
-
+       title: 'Double-click to see $ totals (at end of night)',
     });
     $dollar_dot.append("•");
     
@@ -318,21 +319,21 @@ export function render_ui(
 
     $lose_a_d_button.click(function ()
     {
-      game.lost_acey_ducey();
       game.clear_hand();
+      game.lost_acey_ducey();
       game.increment_bettor_drawer();
     });
 
     $post_button.click(function ()
     {
-      game.pay_post(1);
       game.clear_hand();
+      game.pay_post(1);
       game.increment_bettor_drawer();
     });
     $dbl_post_button.click(function ()
     {
-      game.pay_post(2);
       game.clear_hand();
+      game.pay_post(2);
       game.increment_bettor_drawer();
     });
 
@@ -514,7 +515,7 @@ export function render_ui(
       }
       else if (choice === "Acey-Ducey")
       {
-        alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (will deal with chips and clear cards)");
+        alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (chips will be paid and cards cleared automatically)");
         $("#discard-btn").removeClass("not-discard-mode");
         $("#discard-btn").addClass("discard-mode");
 
@@ -1102,7 +1103,7 @@ $player_controls.append($ante_button);
     let gn_disp = "#" + game_state.game_count + " " + game_state.game_name;
     if (game_state.game_name === "Acey-Ducey")
     {
-      const num_rounds = Math.ceil(game_state.acey_ducey_deals / game_state.players.length);
+      const num_rounds = Math.ceil((game_state.acey_ducey_deals + 1) / game_state.players.length);
       gn_disp += " round:" + num_rounds + " ";
     }
 
