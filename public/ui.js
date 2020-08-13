@@ -179,14 +179,14 @@ export function render_ui(
     });
     $logo_link.append('<img src="favicon/android-icon-36x36.png" style="margin-bottom: 10px;">');
 
-     const $dollar_dot = $('<span />',
+    const $dollar_dot = $('<span />',
     {
       href: '#',
       id: 'dollar-dot',
-       title: 'Double-click to see $ totals (at end of night)',
+      title: 'Double-click to see $ totals (at end of night)',
     });
     $dollar_dot.append("•");
-    
+
     //top half of dealer controls:
     const $dealer_controls = $('<div />',
     {
@@ -594,7 +594,7 @@ export function render_ui(
 
       ['• Turn DISCARD MODE On/Off', 'discard-mode'],
       ['', ''],
-      
+
       ['• COLLECT CARDS/SHUFFLE (Man-Mouse & Dirty Gertie) leaves pot alone ', 'collect'],
       ['', ''],
 
@@ -941,7 +941,7 @@ export function render_ui(
      * ADD ALL PLAYER CONTROLS HTML TO PAGE:
      *******************************************/
 
-$player_controls.append($ante_button);
+    $player_controls.append($ante_button);
     $player_controls.append($ante_input);
     $player_controls.append($fold_button);
     $player_controls.append($check_button);
@@ -953,7 +953,7 @@ $player_controls.append($ante_button);
     $player_controls.append($bet_button_half_pot);
     $player_controls.append($bet_button_pot);
 
-    
+
 
     /*******************************************
      * BUILD ENTIRE PAGE:
@@ -1312,15 +1312,26 @@ $player_controls.append($ante_button);
       else
         $last_chips = player.last_bet;
       //only show shy amount if not playing man-mouse and you are in the hand
-      if (game_state.game_name !== "Man-Mouse" && player.in_hand && !player.left_seat)
+      if (game_state.game_name !== "Man-Mouse" && !player.left_seat)
       {
         if (game_state.game_name !== "Acey-Ducey")
-          $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
+        {
+          if (player.in_hand)
+            $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
+          else
+            $chips_shy.text('OUT');
+        }
         else if (game_state.active_player === player.id)
-          $chips_shy.text(`BET:${$last_chips}`);
+          if (player.in_hand)
+            $chips_shy.text(`BET:${$last_chips}`);
+          else
+            $chips_shy.text('OUT');
       }
       else
-        $chips_shy.text(' ');
+        if(player.in_hand)    
+          $chips_shy.text(' ');
+      else
+            $chips_shy.text('OUT');
 
       //button to kick if disconnected:
       const $kick_button = $('<button />');
@@ -1334,10 +1345,12 @@ $player_controls.append($ante_button);
       /*****************************************
        * CARDS FOR EACH PLAYER (also determines up and down):
        *****************************************/
+
+      //NOTE: player.in_hand = fold or not (or if sat out)
       const $hand = $('<div />');
       $hand.addClass('hand');
 
-      if (player.in_hand && !player.left_seat)
+      if (!player.left_seat)
       {
         _.forEach(player.hand, (card, idx) =>
         {
@@ -1349,8 +1362,10 @@ $player_controls.append($ante_button);
             id: 'up-with-down',
           });
 
-          //add down card - will be behind part of upcard
+          //down card - will be behind part of upcard
           var $card_img2;
+
+
           //if down card show card and backing....
           //       first the card:
           if (!card.up && player.id === current_player.id)
@@ -1368,10 +1383,9 @@ $player_controls.append($ante_button);
               $card_img2.addClass('sixth_card');
             }
           }
-
           $up_with_down.append($card_img2);
 
-          //show backing or card image:
+          //show card up to player or show card image:
           if (card.up || player.id === current_player.id && game_state.game_name != "Midnight Baseball")
             card_img_name = card.card;
           else
@@ -1388,9 +1402,11 @@ $player_controls.append($ante_button);
             $card_img.addClass('sixth_card');
           }
 
-          //outline cards or show halfup half down
+          //outline cards
           if (!card.up && player.id === current_player.id && game_state.discard_mode)
             $card_img2.addClass('discard-ready'); //show black outline around down cards
+
+          //show halfup half down
           if (!card.up && player.id === current_player.id)
             $card_img.addClass('down-card');
 
@@ -1532,35 +1548,36 @@ $player_controls.append($ante_button);
 
   function show_chip_totals()
   {
-  
-      //      game_state.mark_dirty();
-      //      works = false;
-      let t = '<Br><a onclick="location.reload()" style="color:red; font-size:50px; cursor:pointer;">⇦⇦⇦<u>BACK</u></a><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a><br>';
-      t += "<table style='width:30%' id='summary'>";
-      t += "<tr><th>NAME</th><th>HAS:</th>";
-      //      <th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
 
-      //go through each player to show their data in table:
-      for (var i = 0; i < game_state.players.length; i++)
-      {
-        let p = game_state.players[i];
+    //      game_state.mark_dirty();
+    //      works = false;
+    let t = '<Br><a onclick="location.reload()" style="color:red; font-size:50px; cursor:pointer;">⇦⇦⇦<u>BACK</u></a><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a><br>';
+    t += "<table style='width:30%' id='summary'>";
+    t += "<tr><th>NAME</th><th>HAS:</th>";
+    //      <th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";
 
-        //update player's money amount:
-        t += "<tr><td>" + p.name + "</td>" +
-          "<td>$" + format_$_for_table(formatChips(p.chips)) + "</td>";
-      }
-      t += "</table>";
+    //go through each player to show their data in table:
+    for (var i = 0; i < game_state.players.length; i++)
+    {
+      let p = game_state.players[i];
 
-      $('body').css(
-      {
-        backgroundColor: 'black'
-      });
-      $('body').html('<br><Br>' + t + '</body></html>');
+      //update player's money amount:
+      t += "<tr><td>" + p.name + "</td>" +
+        "<td>$" + format_$_for_table(formatChips(p.chips)) + "</td>";
     }
+    t += "</table>";
 
-  function show_instructions(){
-      window.open('instructions.html', '_blank');
-}
+    $('body').css(
+    {
+      backgroundColor: 'black'
+    });
+    $('body').html('<br><Br>' + t + '</body></html>');
+  }
+
+  function show_instructions()
+  {
+    window.open('instructions.html', '_blank');
+  }
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
   if (current_player == null)
   {

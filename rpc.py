@@ -273,6 +273,11 @@ class RPC(object):
             raise ClientError('\nWARNING:  not your turn')
 
         self.player.in_hand = False
+        
+        # make all cards down:
+        for c in self.player.hand:
+            c.up = False
+            
         self.player.chips_in = 0
 
         self.game_state.next_active_player()
