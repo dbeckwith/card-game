@@ -1311,27 +1311,33 @@ export function render_ui(
         $last_chips = player.last_ante;
       else
         $last_chips = player.last_bet;
-      //only show shy amount if not playing man-mouse and you are in the hand
-      if (game_state.game_name !== "Man-Mouse" && !player.left_seat)
+
+      $('.chips-shy').css(
+      {
+        color: 'white',
+      });
+      //if folded, remind player of that:
+      if (!player.in_hand)
+      {
+        $chips_shy.text('==> FOLDED <==');
+        $chips_shy.css(
+        {
+          color: 'black',
+          backgroundColor: '#90ee90',
+          height:'25px',
+        });
+        //tried background color, font-family, tried on $chips-display, tried ID instead...
+      }
+      //only show shy amount if not playing man-mouse and you didn't sit out:
+      else if (game_state.game_name !== "Man-Mouse" && !player.left_seat)
       {
         if (game_state.game_name !== "Acey-Ducey")
-        {
-          if (player.in_hand)
-            $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
-          else
-            $chips_shy.text('OUT');
-        }
+          $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
         else if (game_state.active_player === player.id)
-          if (player.in_hand)
-            $chips_shy.text(`BET:${$last_chips}`);
-          else
-            $chips_shy.text('OUT');
+          $chips_shy.text(`BET:${$last_chips}`);
       }
       else
-        if(player.in_hand)    
-          $chips_shy.text(' ');
-      else
-            $chips_shy.text('OUT');
+        $chips_shy.text(' ');
 
       //button to kick if disconnected:
       const $kick_button = $('<button />');
