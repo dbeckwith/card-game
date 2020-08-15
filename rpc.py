@@ -230,6 +230,7 @@ class RPC(object):
     def flip(self, card_num):
         '''
         flip down card to up
+        
         :param card_num: card to flip
         '''
         self.player.hand[card_num].up = True

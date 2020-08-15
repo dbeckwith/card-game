@@ -1317,7 +1317,7 @@ export function render_ui(
         color: 'white',
       });
       //if folded, remind player of that:
-      if (!player.in_hand)
+      if (!player.in_hand && game_state.hand_started)
       {
         $chips_shy.text('==> FOLDED <==');
         $chips_shy.css(

@@ -640,7 +640,7 @@ td:nth-child(2){
   grid-row: 1;
   font-size: 15px;
   font-family: 'PT Mono', monospace;
-
+  border-radius: 3px;
 }
 #chips-shy2{
   
