@@ -532,7 +532,6 @@ export function render_ui(
     {
       let choice = $(this).val();
 
-      game.new_game(choice, false);
 
       ////  SHOW AND HIDE BUTTONS: /////
 
@@ -573,10 +572,17 @@ export function render_ui(
         show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
       else if ("7-Card Stud Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
         show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
+      else if (choice === "Other")
+      {
+        choice = getGame();
+      }
       else if (choice !== "(Hover for rules!)")
       {
         show_buttons(new Array($next_label, $one_up_button, $one_down_button, $next_up_button, $next_down_button), true);
       }
+
+      game.new_game(choice, false);
+
     });
 
     //GAME SELECTOR:
@@ -1043,6 +1049,13 @@ export function render_ui(
     });
   }
 
+  function getGame()
+  {
+    var gameName = prompt("Please enter the game name:", "(game name)");
+    if (gameName == null || gameName == "")
+      gameName = "(no name given)";
+    return gameName;
+  }
   /*********************************
    * RENDER ALL COMPONENTS OF GAME
    ********************************/
