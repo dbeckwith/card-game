@@ -449,14 +449,15 @@ export function render_ui(
 
     //GAME SELECTOR setup: shows which game is being played
     const $games = new Array(
+      '(Hover for rules!)',
       '7-Card Stud',
       '5-Card Draw',
       //      'Jacks or Better',
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
-     'Low Spade in Hole Wild',
-       'Low Space in the Hole 1/2pot',
+      'Low Spade in Hole Wild',
+      'Low Space in the Hole 1/2pot',
       'Gay Bar',
       'Raise the Flag',
       'Woolworths',
@@ -475,34 +476,35 @@ export function render_ui(
       'Acey-Ducey',
       'Man-Mouse',
       'Other');
-    
-     const $how_to = new Array(
-      '2 down/1 up then bet, 3 more up, 1 down, bet on each',//'7-Card Stud',
-      'Deal 5, bet, draw, bet',//'5-Card Draw',
+
+    const $how_to = new Array(
+      'Hover over EACH GAME for rules, dummy!',
+      '2 down/1 up then bet, 3 more up, 1 down, bet on each', //'7-Card Stud',
+      'Deal 5, bet, draw, bet', //'5-Card Draw',
       //      'Jacks or Better',
-      '1 down, 4 up, one at a time',//'5-Card Stud',
+      '1 down, 4 up, one at a time', //'5-Card Stud',
       '',
-      '7-card stud, announce at end going for low hand (0) (ace can be low), '+
-       'high hand (1), or both (2)',//'Chicago Hi-Lo',
-      '7-card stud, lowest spade (2 is lowest?) down is wild for the player that has it',//'Low Spade in Hole Wild',
-       '7-card stud, lowest space (2 is lowest?) down gets half the pot',//'Low Space in the Hole 1/2pot'
-      '7-card stud, up Queens are wild, down Queens are wild, only if you reveal them by...?',//'Gay Bar',
-      'Ask Ned',//'Raise the Flag',
+      '7-card stud, announce at end going for low hand (0) (ace can be low), ' +
+      'high hand (1), or both (2), if a low and hi, split pot (both = win both or lose all)', //'Chicago Hi-Lo',
+      '7-card stud, lowest spade (2 is lowest?) down is wild for the player that has it', //'Low Spade in Hole Wild',
+      '7-card stud, lowest spade (2 is lowest?) down gets half the pot', //'Low Space in the Hole 1/2pot'
+      '7-card stud, up Queens are wild, down Queens are wild, only if you reveal them by...?', //'Gay Bar',
+      'Ask Ned', //'Raise the Flag',
       '7-card stud, 5\'s and 10\s are wild (pay 2 and 4 chips)', //Woolworths',
-      '7-card stud, up card following up queen is wild for all occurrences of that card ',//'Follow the Queen',
-      '7-card stud, up card following up queen is wild for all occurrences of that card AND if Queen of Spades comes up, all those still in the game, turn in for new cards and start again',//'Dirty Gertie',
-       '7-card stud, 3\'s and 9\'s are wild, but 3 is buy-or-dye (dealer\'s choice on whether only first 3) pay the pot; 4\'s give an extra card to that player for 2 chips',// Day Baseball', 
+      '7-card stud, up card following up queen is wild for all occurrences of that card ', //'Follow the Queen',
+      '7-card stud, up card following up queen is wild for all occurrences of that card AND if Queen of Spades comes up, all those still in the game, turn in for new cards and start again', //'Dirty Gertie',
+      '7-card stud, 3\'s and 9\'s are wild, but 3 is buy-or-dye (dealer\'s choice on whether only first 3) pay the pot; 4\'s give an extra card to that player for 2 chips', // Day Baseball', 
 
-      '7-card roll-em: 3\'s and 9\'s are wild, but 3 is buy-or-dye pay the pot; 4\'s give an extra card to that player for 2 chips',//Midnight Baseball',
-      '7-card stud, 3 down dealt, choose which to roll, bet, deal/roll/bet repeat.  Last down no roll',//'Roll Your Own',
+      '7-card roll-em: 3\'s and 9\'s are wild, but 3 is buy-or-dye pay the pot; 4\'s give an extra card to that player for 2 chips', //Midnight Baseball',
+      '7-card stud, 3 down dealt, choose which to roll, bet, deal/roll/bet repeat.  Last down no roll', //'Roll Your Own',
 
       '',
-      'Everyone gets 2 down cards, common cards: 3, then 1, then 1.  Player uses best 5',//'Texas Hold-Em',
-      'Everyone gets 4 down cards, common cards: 3, then 1, then 1.  Player must use exactly 2 from hand',//'Omaha',
+      'Everyone gets 2 down cards, common cards: 3, then 1, then 1.  Player uses best 5', //'Texas Hold-Em',
+      'Everyone gets 4 down cards, common cards: 3, then 1, then 1.  Player must use exactly 2 from hand', //'Omaha',
       //      'Criss-Cross',
       '',
-      'card1, card2 dealt, player bet is on card3 is in between (player calls card1 if Ace as high or low)',//'Acey-Ducey',
-      'Hands: 3 of a kind, pair, high card.  3 cards dealt to each player, each player says "in" or "out", if more than one in, all losers pay pot, repeat until only one player in.  Ante each round and move rotate player to delcare first',//'Man-Mouse',
+      'card1, card2 dealt, player bet is on card3 is in between (player calls card1 if Ace as high or low)', //'Acey-Ducey',
+      'Hands: 3 of a kind, pair, high card.  3 cards dealt to each player, each player says "in" or "out", if more than one in, all losers pay pot, repeat until only one player in.  Ante each round and move rotate player to delcare first', //'Man-Mouse',
       'Other');
 
 
@@ -571,7 +573,7 @@ export function render_ui(
         show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
       else if ("7-Card Stud Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
         show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
-      else
+      else if (choice !== "(Hover for rules!)")
       {
         show_buttons(new Array($next_label, $one_up_button, $one_down_button, $next_up_button, $next_down_button), true);
       }
@@ -746,8 +748,11 @@ export function render_ui(
       if (_.max(_.map(game_state.players, 'chips_in')) - current_player.chips_in == 0 ||
         game_state.game_name === "Man-Mouse")
       {
+        game.in_man_mouse();
+
         game.bet(0);
         $bet_input.val('');
+
       }
       else
         alert("You must match the amount you are shy or fold!")
@@ -1353,15 +1358,22 @@ export function render_ui(
       //if folded, remind player of that:
       if (!player.in_hand && game_state.hand_started)
       {
-        $chips_shy.text('==> FOLDED <==');
+        if (game_state.game_name === "Man-Mouse")
+          $chips_shy.text("OUT");
+        else
+          $chips_shy.text('<⚐⚐ FOLDED ⚐⚐>');
         $chips_shy.css(
         {
           color: 'black',
-          backgroundColor: '#90ee90',
-          height:'25px',
+          backgroundColor: 'pink',
+          height: '25px',
+          fontFamily: 'Open Sans Condensed',
+          textAlign: 'center',
+
         });
-        //tried background color, font-family, tried on $chips-display, tried ID instead...
       }
+
+
       //only show shy amount if not playing man-mouse and you didn't sit out:
       else if (game_state.game_name !== "Man-Mouse" && !player.left_seat)
       {
@@ -1370,9 +1382,35 @@ export function render_ui(
         else if (game_state.active_player === player.id)
           $chips_shy.text(`BET:${$last_chips}`);
       }
-      else
+      else if (game_state.game_name !== "Man-Mouse")
         $chips_shy.text(' ');
+      else if (player.in_man_mouse)
+      {
+        $chips_shy.text("IN");
 
+        $chips_shy.css(
+        {
+          color: 'black',
+          backgroundColor: '#90ee90',
+          height: '25px',
+          fontFamily: 'Open Sans Condensed',
+          textAlign: 'center',
+
+        });
+      }
+      //      else
+      //      {
+      //        $chips_shy.text("OUT");
+      //
+      //        $chips_shy.css(
+      //        {
+      //          color: 'black',
+      //          backgroundColor: '#90ee90',
+      //          height: '25px',
+      //          fontFamily: 'Open Sans Condensed',
+      //          textAlign: 'center',
+      //        });
+      //      }
       //button to kick if disconnected:
       const $kick_button = $('<button />');
       $kick_button.addClass('kick-button');
@@ -1586,12 +1624,27 @@ export function render_ui(
     return spaces + s;
   }
 
+  function formatDate()
+  {
+    var d = new Date(),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [month, day, year].join('-');
+  }
+
   function show_chip_totals()
   {
 
     //      game_state.mark_dirty();
     //      works = false;
-    let t = '<Br><a onclick="location.reload()" style="color:red; font-size:50px; cursor:pointer;">⇦⇦⇦<u>BACK</u></a><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a><br>';
+    let t = 'Game Played On: ' + formatDate() + '<br><br><a onclick="location.reload()" style="color:red; font-size:50px; cursor:pointer;">⇦⇦⇦<u>BACK</u></a><br> <span style="font-size:20px; color: gray">(don\'t use browser back button)</span></a><br>';
     t += "<table style='width:30%' id='summary'>";
     t += "<tr><th>NAME</th><th>HAS:</th>";
     //      <th>BUY-IN:</th><th colspan='2' style='text-align:center'>Result:</th></tr>";

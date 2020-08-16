@@ -169,10 +169,13 @@ class GameState(object):
             if self.game_name == "Man-Mouse":
                 if not player.left_seat:
                     player.in_hand = True  # put everyone that was out back in
-                
+                    player.in_man_mouse = False
         self.common_cards = []
         self.deck = cards.new_deck()  # shuffle a new deck
 
+    def stay_in_man_mouse(self):
+        self.active_player.in_man_mouse = True
+        
     def new_game(self, game_name, from_button):
         '''
         creates new game: 0 pot, set players, new deck, clear common cards,

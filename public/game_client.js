@@ -206,5 +206,8 @@ export class CardGame {
   reset_last_bet_and_ante(){
     this._send('reset_last_bet_and_ante');
   }
+  in_man_mouse(){
+    this._send('in_man_mouse');
+  }
 }
 

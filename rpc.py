@@ -102,12 +102,15 @@ class RPC(object):
 
     def reset_last_bet_and_ante(self):
         self.game_state.reset_last_bet_and_ante()
+    
     def new_game(self, game_name, from_button):
         self.game_state.new_game(game_name, from_button)
         self.game_state.checkpoint('new_game')
         self.game_state.checkpoint('money_or_card')
+        self.new_back()
         
-
+    def in_man_mouse(self):
+        self.game_state.stay_in_man_mouse()
     def reset_game(self):
         self.game_state.reset_game()
 
