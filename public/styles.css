@@ -36,6 +36,7 @@ button#login-button {
   font-size: 25px;
   border-top-right-radius: 10px;
   border-bottom-left-radius: 10px;
+  background-color:aqua;
 }
 
 #game-board {

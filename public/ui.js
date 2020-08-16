@@ -37,7 +37,7 @@ export function render_ui(
     {
       type: "text",
       id: "name-input",
-      placeholder: "==> your name here <==",
+      placeholder: "ENTER YOUR NAME",
     });
     //    $("#name-input").css(
     //    {
@@ -54,7 +54,7 @@ export function render_ui(
     {
       id: "login-button",
     });
-    $login_button.text('LOGIN');
+    $login_button.text('JOIN GAME');
     $login_button.on('click', function ()
     {
       const name = $name_input.val();
@@ -455,21 +455,54 @@ export function render_ui(
       '5-Card Stud',
       '',
       'Chicago Hi-Lo',
-      'Low Spade in Hole',
+     'Low Spade in Hole Wild',
+       'Low Space in the Hole 1/2pot',
       'Gay Bar',
       'Raise the Flag',
       'Woolworths',
       'Follow the Queen',
       'Dirty Gertie',
+      'Day Baseball',
 
       'Midnight Baseball',
+      'Roll Your Own',
 
       '',
       'Texas Hold-Em',
+      'Omaha',
       //      'Criss-Cross',
       '',
       'Acey-Ducey',
       'Man-Mouse',
+      'Other');
+    
+     const $how_to = new Array(
+      '2 down/1 up then bet, 3 more up, 1 down, bet on each',//'7-Card Stud',
+      'Deal 5, bet, draw, bet',//'5-Card Draw',
+      //      'Jacks or Better',
+      '1 down, 4 up, one at a time',//'5-Card Stud',
+      '',
+      '7-card stud, announce at end going for low hand (0) (ace can be low), '+
+       'high hand (1), or both (2)',//'Chicago Hi-Lo',
+      '7-card stud, lowest spade (2 is lowest?) down is wild for the player that has it',//'Low Spade in Hole Wild',
+       '7-card stud, lowest space (2 is lowest?) down gets half the pot',//'Low Space in the Hole 1/2pot'
+      '7-card stud, up Queens are wild, down Queens are wild, only if you reveal them by...?',//'Gay Bar',
+      'Ask Ned',//'Raise the Flag',
+      '7-card stud, 5\'s and 10\s are wild (pay 2 and 4 chips)', //Woolworths',
+      '7-card stud, up card following up queen is wild for all occurrences of that card ',//'Follow the Queen',
+      '7-card stud, up card following up queen is wild for all occurrences of that card AND if Queen of Spades comes up, all those still in the game, turn in for new cards and start again',//'Dirty Gertie',
+       '7-card stud, 3\'s and 9\'s are wild, but 3 is buy-or-dye (dealer\'s choice on whether only first 3) pay the pot; 4\'s give an extra card to that player for 2 chips',// Day Baseball', 
+
+      '7-card roll-em: 3\'s and 9\'s are wild, but 3 is buy-or-dye pay the pot; 4\'s give an extra card to that player for 2 chips',//Midnight Baseball',
+      '7-card stud, 3 down dealt, choose which to roll, bet, deal/roll/bet repeat.  Last down no roll',//'Roll Your Own',
+
+      '',
+      'Everyone gets 2 down cards, common cards: 3, then 1, then 1.  Player uses best 5',//'Texas Hold-Em',
+      'Everyone gets 4 down cards, common cards: 3, then 1, then 1.  Player must use exactly 2 from hand',//'Omaha',
+      //      'Criss-Cross',
+      '',
+      'card1, card2 dealt, player bet is on card3 is in between (player calls card1 if Ace as high or low)',//'Acey-Ducey',
+      'Hands: 3 of a kind, pair, high card.  3 cards dealt to each player, each player says "in" or "out", if more than one in, all losers pay pot, repeat until only one player in.  Ante each round and move rotate player to delcare first',//'Man-Mouse',
       'Other');
 
 
@@ -554,6 +587,7 @@ export function render_ui(
         value: $games[i],
         text: $games[i],
         optSelected: game_state.game_name == $games[i],
+        title: $how_to[i],
       });
       $set_game_select.append($a_game);
     }
@@ -1276,7 +1310,7 @@ export function render_ui(
 
       //add ante, dealer indicators:
       if (player.in_hand && player.anted && !player.left_seat)
-        $player_name.append('•');
+        $player_name.append('<span style="color:red"> ✓ </span>');
       $player_name.append(player.name);
       if (game_state.dealer === player.id)
         $player_name.append(" ♠")

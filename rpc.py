@@ -202,11 +202,11 @@ class RPC(object):
             # acedy-ducey - stop if first ace:
             # woolworths stop if 4, 5, or 10
             is_first_card = num_cards_in_hand == 1
-            is_ace = card[0] == "1"
-            is_510 = card[0] in '5T'
-            is_34  = card[0] in '34'
+            is_ace    = card[0] == "1"
+            is_510_up = card[0] in '5T' and self.game_state.active_player.hand[-1].up
+            is_34     = card[0] in '34' 
             if is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey" or\
-               self.game_state.game_name == "Woolworths" and is_510 or\
+               self.game_state.game_name == "Woolworths" and is_510_up or\
                self.game_state.game_name == "Midnight Baseball" and is_34:
                 self.game_state.wait_for_card = True
             else:
