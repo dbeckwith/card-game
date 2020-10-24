@@ -1682,7 +1682,7 @@ export function render_ui(
 
   function show_instructions()
   {
-    window.open('instructions.html', '_blank');
+    window.open('instr/index.html', '_blank');
   }
   //DETERIMES WHETHER TO SHOW LOGIN OR GAME BOARD:
   if (current_player == null)
