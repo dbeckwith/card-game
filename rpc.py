@@ -1,7 +1,10 @@
 __author__ = 'D. Beckwith & A.Beckwith'
 
 from player import Player, PlayerCard
-import random, cards, math
+import random
+import cards
+import math
+
 
 class RPC(object):
     def __init__(self, ws, game_state):
@@ -32,12 +35,12 @@ class RPC(object):
 
     def next_dealer(self):
         self.game_state.next_dealer()
-        
+
     def login(self, name):
         '''
         called by Join button in opening screen
         makes new player object, adds player to game
-        
+
         :param name: name of player
         '''
         if self.player is not None:
@@ -52,8 +55,7 @@ class RPC(object):
         # mark player as connected
         player.connected = True
         self._player = player.id
-    
-        
+
     def logout(self):
         '''called by Login button - takes player out of game'''
         if self.player is None:
@@ -77,7 +79,8 @@ class RPC(object):
         if player is None:
             raise ClientError('player not found')
         if player.connected:
-            raise ClientError('cannot kick player while they are still connected')
+            raise ClientError(
+                'cannot kick player while they are still connected')
 
         # if this was the active player, pick the next one
         if self.game_state.active_player is player:
@@ -102,15 +105,18 @@ class RPC(object):
 
     def reset_last_bet_and_ante(self):
         self.game_state.reset_last_bet_and_ante()
-    
+
     def new_game(self, game_name, from_button):
         self.game_state.new_game(game_name, from_button)
         self.game_state.checkpoint('new_game')
         self.game_state.checkpoint('money_or_card')
         self.new_back()
-        
+
     def in_man_mouse(self):
+        if self.game_state.active_player is not self.player:
+            raise ClientError('\nWARNING:  not your turn')        
         self.game_state.stay_in_man_mouse()
+
     def reset_game(self):
         self.game_state.reset_game()
 
@@ -125,24 +131,23 @@ class RPC(object):
 
     def set_player_num(self, current_player, num):
         self.game_state.get_player(current_player).set_player_num(num)
-        
+
     def toggle_allow_show_chip_totals(self):
         self.game_state.show_chip_totals = not self.game_state.show_chip_totals
 
     def leave_seat(self):
         self.player.left_seat = True
-        
+
     def return_to_seat(self):
         self.player.left_seat = False
-    
+
     def deal_all(self, down, up):
-        
         '''
         Deal cards to every active player
-        
+
         :param down: number of down cards to deal
         :param up: number of up cards to deal
-        
+
         :return: None
         '''
         # dealing cards starts the hand
@@ -151,7 +156,6 @@ class RPC(object):
 
         # only consider players in the hand
         players = list(self.game_state.players_in_hand())
-
 
         # check that deck has enough cards to give to each player
         if len(self.game_state.deck) < (down + up) * len(players):
@@ -168,13 +172,12 @@ class RPC(object):
                 card = self.game_state.draw_card()
 
                 player.give_card(PlayerCard(card, True))
-        
+
         self.game_state.checkpoint('money_or_card')
 
     def collect_shuffle(self):
         self.game_state.collect_shuffle()
         self.game_state.checkpoint('money_or_card')
-        
 
     def one_card(self, up):
         '''
@@ -190,7 +193,7 @@ class RPC(object):
             card = self.game_state.draw_card()
 
             self.game_state.active_player.give_card(PlayerCard(card, up))
-            
+
             if self.game_state.game_name == "Acey-Ducey":
                 # reshuffle when 1 card left (0  incl. in case mistake in dealing was made)
                 if len(self.game_state.deck) == 0 or len(self.game_state.deck) == 1:
@@ -204,13 +207,16 @@ class RPC(object):
 
             # acedy-ducey - stop if first ace:
             # woolworths stop if 4, 5, or 10
+            
+            # booleans:
             is_first_card = num_cards_in_hand == 1
-            is_ace    = card[0] == "1"
-            is_510_up = card[0] in '5T' and self.game_state.active_player.hand[-1].up
-            is_34     = card[0] in '34' 
-            if is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey" or\
-               self.game_state.game_name == "Woolworths" and is_510_up or\
-               self.game_state.game_name == "Midnight Baseball" and is_34:
+            is_ace        = card[0] == "1"
+            is_510_up     = card[0] in '5T' and self.game_state.active_player.hand[-1].up
+            is_34         = card[0] in '34'
+            
+            if (is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey") or\
+               (self.game_state.game_name == "Woolworths" and is_510_up) or\
+               (self.game_state.game_name == "Midnight Baseball" and is_34):
                 self.game_state.wait_for_card = True
             else:
                 self.game_state.wait_for_card = False
@@ -226,19 +232,17 @@ class RPC(object):
             
             self.game_state.checkpoint('money_or_card')
 
-
     def card_confirmed(self):
         self.game_state.not_waiting_for_card()
 
     def flip(self, card_num):
         '''
         flip down card to up
-        
+
         :param card_num: card to flip
         '''
         self.player.hand[card_num].up = True
         self.game_state.checkpoint('money_or_card')
-        
 
     def discard(self, card_num):
         '''
@@ -247,7 +251,6 @@ class RPC(object):
         '''
         del self.player.hand[card_num]
         self.game_state.checkpoint('money_or_card')
-        
 
     def deal_common(self):
         '''deal one common up card'''
@@ -257,7 +260,6 @@ class RPC(object):
         card = self.game_state.draw_card()
         self.game_state.common_cards.append(card)
         self.game_state.checkpoint('money_or_card')
-        
 
     def toggle_discard_mode(self):
         self.game_state.discard_mode = not self.game_state.discard_mode
@@ -265,8 +267,7 @@ class RPC(object):
     def fold_current_player(self):
         self.game_state.fold_current_player()
         self.game_state.checkpoint('money_or_card')
-        
-        
+
     def fold(self):
         '''fold current player'''
         if self.player is None:
@@ -277,29 +278,25 @@ class RPC(object):
             raise ClientError('\nWARNING:  not your turn')
 
         self.player.in_hand = False
-        
+
         # make all cards down:
         for c in self.player.hand:
             c.up = False
-            
+
         self.player.chips_in = 0
 
         self.game_state.next_active_player()
         self.game_state.checkpoint('money_or_card')
-        
 
     def bet_half_pot(self):
         self.bet(math.ceil(self.game_state.pot / 2))
         self.game_state.checkpoint('money_or_card')
-        
 
     def bet_pot(self):
         self.bet(self.game_state.pot)
         self.game_state.checkpoint('money_or_card')
-        
 
     def bet(self, amount):
-        
         '''player bet - subtract from chips, add to pot, move to next player'''
         if self.player is None:
             raise ClientError('not logged-in')
@@ -315,16 +312,17 @@ class RPC(object):
 
         bet_minimum = max(player.chips_in for player in self.game_state.players) \
             - self.player.chips_in
-        
+
         if amount < bet_minimum and self.game_state.game_name != "Acey-Ducey":
-            raise ClientError(f'\nWARNING:  you must bet at least {bet_minimum} chips')
-        
+            raise ClientError(
+                f'\nWARNING:  you must bet at least {bet_minimum} chips')
+
         if self.game_state.game_name != "Acey-Ducey":
-            self.player.chips         -= amount
-            self.game_state.pot       += amount
-        
-        self.game_state.last_bet   = amount
-        self.player.chips_in      += amount
+            self.player.chips -= amount
+            self.game_state.pot += amount
+
+        self.game_state.last_bet = amount
+        self.player.chips_in += amount
         self.player.chips_in_hand += amount
 
         self.player.last_bet = amount
@@ -333,9 +331,8 @@ class RPC(object):
 
         if self.game_state.game_name != "Acey-Ducey":
             self.game_state.next_active_player()
-        
+
         self.game_state.checkpoint('money_or_card')
-            
 
     def call(self):
         if self.player is None:
@@ -345,16 +342,17 @@ class RPC(object):
         if self.game_state.active_player is not self.player:
             raise ClientError('\nWARNING:  not your turn')
 
-        self.bet(max(player.chips_in for player in self.game_state.players) \
-            - self.player.chips_in)
+        self.bet(max(player.chips_in for player in self.game_state.players)
+                 - self.player.chips_in)
         self.game_state.checkpoint('money_or_card')
-        
 
     def ante(self, amt):
         '''takes amt chips from player and puts in pot'''
         amt = int(amt)
         if self.player.chips < amt:
             raise ClientError('\nWARNING:  not enough chips')
+        if self.game_state.game_name == "Select Game":
+            raise ClientError('\nWARNING: attempted ante - a game must be selected first')
         self.player.chips -= amt
         self.game_state.pot += amt
         self.player.chips_in_hand += amt
@@ -362,7 +360,7 @@ class RPC(object):
         self.player.last_ante = amt
         self.player.ante_is_last_bet = True
         self.game_state.checkpoint('money_or_card')
-        
+
     def all_anted(self):
         return self.game_state.all_anted()
 
@@ -370,17 +368,14 @@ class RPC(object):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()
         self.game_state.checkpoint('money_or_card')
-        
+
     def lost_acey_ducey(self):
         self.game_state.lost_acey_ducey()
         self.game_state.checkpoint('money_or_card')
-        
-
 
     def pay_post(self, num):
         self.game_state.pay_post(num)
         self.game_state.checkpoint('money_or_card')
-        
 
     def set_active_player(self, id):
         '''called when click on name to set as active player'''
@@ -419,22 +414,42 @@ class RPC(object):
                 if extra_chips == 0:
                     break         # no more extra chips
                 extra_chips -= 1  # take one from the pile
-                player.chips += 1 # give it to the player
+                player.chips += 1  # give it to the player
             self.game_state.pot = 0
 
-        else: # man-mouse
+        else:  # man-mouse
             # pay winner
             winners[0].chips += self.game_state.pot
-
+            
+            msg = "PAYING OUT!\n" + winners[0].name +\
+                " will get " + str(winners[0].chips) + " chips\n"
+            
             # save pot amount, then clear pot:
             to_pay = self.game_state.pot
             self.game_state.pot = 0
-
+            
+            losers = []
             # any player that stayed in pays the pot
             for p in self.game_state.players:
                 if p.in_hand and p is not winners[0]:
-                    p.chips            -= to_pay
+                    p.chips -= to_pay
                     self.game_state.pot += to_pay
+                    losers.append(p.name)
+            if len(losers) != 0:
+                if len(losers) == 1:
+                    msg += losers[0] + " will have " + str(winners[0].chips) +\
+                    " chips transferred from their stack to the pot"
+                else:
+                    loser_list = ""
+                    for i in range(len(losers) - 1):
+                        loser_list += losers[i] + ", "
+                     
+                    loser_list += losers[len(losers) - 1]
+                    msg += loser_list + "\n will all have " + str(winners[0].chips) +\
+                        " chips transferred from their stack to the pot"
+                self.game_state.message = msg # this change will be notice and
+            # ...initiate the alert
+
         # empty the pot
 
         for player in self.game_state.players:
@@ -443,11 +458,9 @@ class RPC(object):
         self.game_state.last_bet = 0
         self.game_state.checkpoint('money_or_card')
 
-
     def increment_bettor_drawer(self):
         '''sets active player for betting'''
         self.game_state.next_active_player()
-
 
     def new_back(self):
         '''goes to next card backing'''
@@ -472,6 +485,7 @@ class RPC(object):
 
     def revert(self):
         self.game_state.restore('new_game')
+
 
 class ClientError(Exception):
     def __init__(self, message):

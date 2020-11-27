@@ -11,13 +11,16 @@ export class CardGame {
       this.on_connect?.();
     };
 
+    this.prev_game_state = null;
+
     this.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
       switch (message.type) {
         case 'game_state': {
           const { game_state, current_player } = message;
 //          console.log('Game state update:', { game_state, current_player });
-          this.on_update?.({ game_state, current_player });
+          this.on_update?.({ prev_game_state:this.prev_game_state, game_state, current_player });
+          this.prev_game_state = game_state;
           break;
         }
         case 'error': {

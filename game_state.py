@@ -42,6 +42,7 @@ class GameState(object):
         self.game_count         = 0
         self.connections        = []
         self.acey_ducey_deals   = 0
+        self.message            = ""
         self.player_id_connections = defaultdict(list)
         self.client_update_event = asyncio.Event()
         self.backup_event = asyncio.Event()
@@ -66,6 +67,8 @@ class GameState(object):
             'reshuffled'         : self.reshuffled,
             'game_count'         : self.game_count,
             'acey_ducey_deals'   : self.acey_ducey_deals,
+            'message'            : self.message,
+            
  
         }
 
@@ -174,6 +177,7 @@ class GameState(object):
         self.deck = cards.new_deck()  # shuffle a new deck
 
     def stay_in_man_mouse(self):
+      
         self.active_player.in_man_mouse = True
         
     def new_game(self, game_name, from_button):
@@ -239,6 +243,7 @@ class GameState(object):
         self.active_player.last_bet  = 0
         self.active_player.last_ante = 0
         self.acey_ducey_deals        += 1
+        self.next_active_player()
 
     def lost_acey_ducey(self):
         self.active_player.chips -= self.last_bet
@@ -246,6 +251,7 @@ class GameState(object):
         self.active_player.last_bet  = 0
         self.active_player.last_ante = 0 
         self.acey_ducey_deals        += 1
+        self.next_active_player()
         
     
     def pay_post(self, num):
@@ -283,7 +289,8 @@ class GameState(object):
 
     def not_waiting_for_card(self):
         self.wait_for_card = False
-
+        
+        
     def draw_card(self):
         '''takes next card from deck'''
         if self.deck:

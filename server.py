@@ -88,6 +88,7 @@ async def connect_client(request):
                     if missing_args:
                         raise ClientError(f'missing arguments to {msg_type}: {", ".join(missing_args)}')
 
+                    game_state.message = ''
                     # call the method with the message as kwargs
                     cmd(**msg)
 
