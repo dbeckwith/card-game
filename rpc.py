@@ -212,11 +212,12 @@ class RPC(object):
             is_first_card = num_cards_in_hand == 1
             is_ace        = card[0] == "1"
             is_510_up     = card[0] in '5T' and self.game_state.active_player.hand[-1].up
-            is_34         = card[0] in '34'
+            is_34         = card[0] in '34' and self.game_state.active_player.hand[-1].up
             
             if (is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey") or\
-               (self.game_state.game_name == "Woolworths" and is_510_up) or\
-               (self.game_state.game_name == "Midnight Baseball" and is_34):
+               (self.game_state.game_name == "Woolworths"        and is_510_up) or\
+               (self.game_state.game_name == "Midnight Baseball" and is_34) or\
+               (self.game_state.game_name == "Day Baseball"      and is_34):
                 self.game_state.wait_for_card = True
             else:
                 self.game_state.wait_for_card = False
@@ -437,7 +438,7 @@ class RPC(object):
                     losers.append(p.name)
             if len(losers) != 0:
                 if len(losers) == 1:
-                    msg += losers[0] + " will have " + str(winners[0].chips) +\
+                    msg += losers[0] + " will have " + str(to_pay) +\
                     " chips transferred from their stack to the pot"
                 else:
                     loser_list = ""
@@ -445,7 +446,7 @@ class RPC(object):
                         loser_list += losers[i] + ", "
                      
                     loser_list += losers[len(losers) - 1]
-                    msg += loser_list + "\n will all have " + str(winners[0].chips) +\
+                    msg += loser_list + "\n will all have " + str(to_pay) +\
                         " chips transferred from their stack to the pot"
                 self.game_state.message = msg # this change will be notice and
             # ...initiate the alert

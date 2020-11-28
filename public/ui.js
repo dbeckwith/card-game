@@ -616,8 +616,8 @@ export function render_ui({
 
       $dealer_controls_top.append($set_game_select);
 
-      $dealer_controls_top.append($winners_select);
       $dealer_controls_top.append($payout_button);
+      $dealer_controls_top.append($winners_select);
       $dealer_controls_top.append($new_game_button);
       $dealer_controls_top.append($new_back_button);
       $dealer_controls_top.append($dealer_select);
@@ -1140,7 +1140,7 @@ export function render_ui({
 
       if (game_state.wait_for_card) {
          $("#card-confirmed-button").addClass("confirm");
-         swal("Confirm", "You'll need to hit the Confirm Card button to continue");
+         swal("Dealer: Confirm", "The dealer will need to hit the Confirm Card button to continue");
       } else
          $("#card-confirmed-button").removeClass("confirm");
 
