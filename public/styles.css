@@ -23,6 +23,31 @@ body {
     text-align: center;
 }
 
+/* alerts */
+.swal-overlay {
+    background-color: rgba(28, 146, 235, 0.45);
+}
+
+.swal-title {
+    font-size: 26px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.21);
+    margin-bottom: 28px;
+    color: white;
+}
+
+.swal-modal {
+
+    background-color: rgba(28, 146, 235, 0.95);
+    border: 3px solid "yellow";
+    color: white;
+}
+
+.swal-text {
+    color: "#92bFd3";
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 input#name-input {
     width: 270px;
     height: 35px;

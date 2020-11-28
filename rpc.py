@@ -241,7 +241,6 @@ class RPC(object):
         :param card_num: card to flip
         '''
         self.player.hand[card_num].up = True
-        print(self.game_state.game_name , self.player.hand[card_num].card)
         
         is_34 = self.player.hand[card_num].card[0] in '34'
         

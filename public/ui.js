@@ -484,14 +484,14 @@ export function render_ui({
             show_buttons(new Array($next_label, $next_down_button, $one_down_button), true);
          else if (choice === "Midnight Baseball" || choice == "Day Baseball") {
             if (choice === "Midnight Baseball") {
-               swal("MIDNIGHT BASEBALL!", "Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
+               swal("MIDNIGHT BASEBALL!", "Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone" +
                   "  and players can flip their own cards");
                show_buttons(new Array($one_down_button), true);
             }
             show_buttons(new Array($card_confirmed_button), true);
 
          } else if (choice === "Acey-Ducey") {
-            alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (chips will be paid and cards cleared automatically)");
+            swal("Acey-Ducey", "DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (chips will be paid and cards cleared automatically)");
             $("#discard-btn").removeClass("not-discard-mode");
             $("#discard-btn").addClass("discard-mode");
 
@@ -678,7 +678,7 @@ export function render_ui({
             $bet_input.val('');
 
          } else
-            alert("You must match the amount you are shy or fold!")
+            swal("Hey!", "You must match the amount you are shy or fold!")
       });
       $call_button.click(function () {
          game.call();
