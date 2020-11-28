@@ -402,7 +402,7 @@ export function render_ui({
          '',
          'Chicago Hi-Lo',
          'Low Spade in Hole Wild',
-         'Low Space in the Hole 1/2pot',
+         'Low Spade in the Hole 1/2pot',
          'Gay Bar',
          'Raise the Flag',
          'Woolworths',
@@ -1166,11 +1166,6 @@ export function render_ui({
          else
             $player_seat.addClass('player-disconnected');
 
-         //determine if this player is the dealer:
-         if (game_state.dealer === player.id)
-            $player_seat.addClass('dealer');
-         if (game_state.active_player === player.id)
-            $player_seat.addClass('active-player');
 
          //add name:
          const $player_name = $('<div />');
@@ -1179,6 +1174,16 @@ export function render_ui({
             game.set_active_player(player.id);
          });
          $player_name.addClass('player-name');
+
+         //determine if this player is the dealer:
+         if (game_state.dealer === player.id) {
+            $player_seat.addClass('dealer');
+            $player_name.addClass('dlr'); //to color only left purple
+         }
+         if (game_state.active_player === player.id)
+            $player_seat.addClass('active-player');
+
+
 
          //add ante, dealer indicators:
          if (player.in_hand && player.anted && !player.left_seat)

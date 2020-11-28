@@ -608,9 +608,10 @@ td:nth-child(2){
   background-color:lightblue;
 }
 */
-.player-seat.dealer {
+.player-name.dlr {
     background-color: rebeccapurple;
 }
+
 
 .player-seat.active-player {
     color: #BEFFFF;

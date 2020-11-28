@@ -14,10 +14,10 @@ $(() => {
    game.on_connect = () => {
 
       //testing:
-      // const storage = window.sessionStorage; //a session is a single tab (or duplicate)
+      const storage = window.sessionStorage; //a session is a single tab (or duplicate)
 
       //real game:
-      const storage = window.localStorage; //a session is for the browser (so log back in same name)
+      // const storage = window.localStorage; //a session is for the browser (so log back in same name)
 
       let player_id = storage.getItem('player_id');
 
