@@ -92,7 +92,7 @@ class GameState(object):
 
     def all_anted(self):
         for p in self.players:
-            if not p.anted and p.in_hand:
+            if not p.anted and p.in_hand and not player.left_seat:
                 return False
         return True
 
@@ -153,6 +153,7 @@ class GameState(object):
         for player in self.players:
             if player.id == player_id:
                 return player
+            
     def reset_last_bet_and_ante(self):
         for player in self.players:
             player.last_bet = 0
@@ -160,7 +161,7 @@ class GameState(object):
             
     def players_in_hand(self):
         for player in self.players:
-            if player.in_hand:
+            if player.in_hand and not player.left_seat:
                 yield player
 
     def collect_shuffle(self):
@@ -233,7 +234,8 @@ class GameState(object):
 
         # reset each player
         for player in self.players:
-            player.new_game()
+            if not player.left_seat:
+                player.new_game()
         if self.game_name == "Man-Mouse":
             self.next_active_player()
 
@@ -276,7 +278,7 @@ class GameState(object):
                 if self.active_player is original:
                     # we've looped back around
                     break
-                if self.active_player.in_hand:
+                if self.active_player.in_hand  and not self.active_player.left_seat:
                     # found a player in the hand
                     break
 
