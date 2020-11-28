@@ -261,7 +261,7 @@ class GameState(object):
         self.pot                 += num * self.last_bet
         self.active_player.last_bet  = 0
         self.active_player.last_ante = 0 
-        self.acey_ducey_deals        += 1
+        self.acey_ducey_deals       += 1
         
             
     def next_dealer(self):

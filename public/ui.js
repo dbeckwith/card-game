@@ -482,10 +482,14 @@ export function render_ui({
          //now, show only those needed
          if (choice === "5-Card Draw")
             show_buttons(new Array($next_label, $next_down_button, $one_down_button), true);
-         else if (choice === "Midnight Baseball") {
-            alert("Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
-               "  and players can flip their own cards")
-            show_buttons(new Array($one_down_button), true);
+         else if (choice === "Midnight Baseball" || choice == "Day Baseball") {
+            if (choice === "Midnight Baseball") {
+               swal("MIDNIGHT BASEBALL!", "Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone\n" +
+                  "  and players can flip their own cards");
+               show_buttons(new Array($one_down_button), true);
+            }
+            show_buttons(new Array($card_confirmed_button), true);
+
          } else if (choice === "Acey-Ducey") {
             alert("DEALER:\n\n1. Deal 2 cards then get player's bet\n\n2. Deal 3rd card\n\n3. Click Win, Lose, Post, or DblPost (chips will be paid and cards cleared automatically)");
             $("#discard-btn").removeClass("not-discard-mode");
@@ -505,7 +509,7 @@ export function render_ui({
             show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button), true);
          else if (choice === "5-Card Stud")
             show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
-         else if ("7-Card Stud Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
+         else if ("7-Card Stud Day Baseball Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
             show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
          else if (choice === "Other") {
             choice = getGame();

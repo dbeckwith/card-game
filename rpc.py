@@ -213,10 +213,8 @@ class RPC(object):
             is_ace        = card[0] == "1"
             is_510_up     = card[0] in '5T' and self.game_state.active_player.hand[-1].up
             is_34         = card[0] in '34' and self.game_state.active_player.hand[-1].up
-            
             if (is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey") or\
                (self.game_state.game_name == "Woolworths"        and is_510_up) or\
-               (self.game_state.game_name == "Midnight Baseball" and is_34) or\
                (self.game_state.game_name == "Day Baseball"      and is_34):
                 self.game_state.wait_for_card = True
             else:
@@ -243,6 +241,15 @@ class RPC(object):
         :param card_num: card to flip
         '''
         self.player.hand[card_num].up = True
+        print(self.game_state.game_name , self.player.hand[card_num].card)
+        
+        is_34 = self.player.hand[card_num].card[0] in '34'
+        
+        if self.game_state.game_name == "Midnight Baseball" and is_34:
+            self.game_state.wait_for_card = True
+        else:
+            self.game_state.wait_for_card = False  
+            
         self.game_state.checkpoint('money_or_card')
 
     def discard(self, card_num):
