@@ -2,6 +2,35 @@
 
 let showing_login_screen = false;
 let allow_access_to_totals = false;
+var $how_to = new Array(
+   'Hover over EACH GAME for rules',
+   '2 down/1 up then bet, 3 more up, 1 down, bet on each', //'7-Card Stud',
+   'Deal 5, bet, draw, bet', //'5-Card Draw',
+   //      'Jacks or Better',
+   '1 down, 4 up, one at a time', //'5-Card Stud',
+   '',
+   '7-card stud, announce at end going for low hand (0) (ace can be low), ' +
+   'high hand (1), or both (2), if a low and hi, split pot (both = win both or lose all)', //'Chicago Hi-Lo',
+   '7-card stud, lowest spade down (2 is lowest?) is wild for the player that has it', //'Low Spade in Hole Wild',
+   '7-card stud, lowest spade down (2 is lowest?) gets half the pot', //'Low Space in the Hole 1/2pot'
+   '7-card stud, up Queens are wild, down Queens are wild, only if you reveal them by...?', //'Gay Bar',
+   'Ask Ned', //'Raise the Flag',
+   '7-card stud, 5\'s and 10\s are wild (pay 2 and 4 chips - buy or die)', //Woolworths',
+   '7-card stud, up card following up queen is wild for all occurrences of that card ', //'Follow the Queen',
+   '7-card stud, up card following up queen is wild for all occurrences of that card AND if Queen of Spades comes up, all those still in the game, turn in for new cards and start again', //'Dirty Gertie',
+   '7-card stud, 3\'s and 9\'s are wild, but 3 is buy-or-dye (dealer\'s choice on whether only first 3) pay the pot; 4\'s give an extra card to that player for 2 chips', // Day Baseball', 
+   '7-card stud, common wild card after 2nd up card and 4th up card - no wild cards if the two wilds have the same value',
+   '7-card roll-em: 3\'s and 9\'s are wild, but 3 is buy-or-dye pay the pot; 4\'s give an extra card to that player for 2 chips', //Midnight Baseball',
+   '7-card stud, 3 down dealt, choose which to roll, bet, deal/roll/bet repeat.  Last down no roll', //'Roll Your Own',
+
+   '',
+   'Everyone gets 2 down cards, common cards: 3, then 1, then 1.  Player uses best 5', //'Texas Hold-Em',
+   'Everyone gets 4 down cards, common cards: 3, then 1, then 1.  Player must use exactly 2 from hand', //'Omaha',
+   //      'Criss-Cross',
+   '',
+   'card1, card2 dealt, player bet is on card3 is in between (player calls card1 if Ace as high or low)', //'Acey-Ducey',
+   'Hands: 3 of a kind, pair, high card.  3 cards dealt to each player, each player says "in" or "out", if more than one in, all losers pay pot, repeat until only one player in.  Ante each round and move rotate player to delcare first', //'Man-Mouse',
+   'Other');
 /**
  * show chips as $d.cc
  */
@@ -409,6 +438,7 @@ export function render_ui({
          'Follow the Queen',
          'Dirty Gertie',
          'Day Baseball',
+         'Hope Springs Eternal',
 
          'Midnight Baseball',
          'Roll Your Own',
@@ -422,35 +452,7 @@ export function render_ui({
          'Man-Mouse',
          'Other');
 
-      const $how_to = new Array(
-         'Hover over EACH GAME for rules, dummy!',
-         '2 down/1 up then bet, 3 more up, 1 down, bet on each', //'7-Card Stud',
-         'Deal 5, bet, draw, bet', //'5-Card Draw',
-         //      'Jacks or Better',
-         '1 down, 4 up, one at a time', //'5-Card Stud',
-         '',
-         '7-card stud, announce at end going for low hand (0) (ace can be low), ' +
-         'high hand (1), or both (2), if a low and hi, split pot (both = win both or lose all)', //'Chicago Hi-Lo',
-         '7-card stud, lowest spade (2 is lowest?) down is wild for the player that has it', //'Low Spade in Hole Wild',
-         '7-card stud, lowest spade (2 is lowest?) down gets half the pot', //'Low Space in the Hole 1/2pot'
-         '7-card stud, up Queens are wild, down Queens are wild, only if you reveal them by...?', //'Gay Bar',
-         'Ask Ned', //'Raise the Flag',
-         '7-card stud, 5\'s and 10\s are wild (pay 2 and 4 chips)', //Woolworths',
-         '7-card stud, up card following up queen is wild for all occurrences of that card ', //'Follow the Queen',
-         '7-card stud, up card following up queen is wild for all occurrences of that card AND if Queen of Spades comes up, all those still in the game, turn in for new cards and start again', //'Dirty Gertie',
-         '7-card stud, 3\'s and 9\'s are wild, but 3 is buy-or-dye (dealer\'s choice on whether only first 3) pay the pot; 4\'s give an extra card to that player for 2 chips', // Day Baseball', 
-
-         '7-card roll-em: 3\'s and 9\'s are wild, but 3 is buy-or-dye pay the pot; 4\'s give an extra card to that player for 2 chips', //Midnight Baseball',
-         '7-card stud, 3 down dealt, choose which to roll, bet, deal/roll/bet repeat.  Last down no roll', //'Roll Your Own',
-
-         '',
-         'Everyone gets 2 down cards, common cards: 3, then 1, then 1.  Player uses best 5', //'Texas Hold-Em',
-         'Everyone gets 4 down cards, common cards: 3, then 1, then 1.  Player must use exactly 2 from hand', //'Omaha',
-         //      'Criss-Cross',
-         '',
-         'card1, card2 dealt, player bet is on card3 is in between (player calls card1 if Ace as high or low)', //'Acey-Ducey',
-         'Hands: 3 of a kind, pair, high card.  3 cards dealt to each player, each player says "in" or "out", if more than one in, all losers pay pot, repeat until only one player in.  Ante each round and move rotate player to delcare first', //'Man-Mouse',
-         'Other');
+     
 
 
       //set game selector to show name of game on screen:
@@ -472,7 +474,6 @@ export function render_ui({
 
       $set_game_select.change(function () {
          let choice = $(this).val();
-
 
          ////  SHOW AND HIDE BUTTONS: /////
 
@@ -509,15 +510,16 @@ export function render_ui({
             show_buttons(new Array($one_down_button, $next_label, $next_up_button, $next_down_button), true);
          else if (choice === "5-Card Stud")
             show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
-         else if ("7-Card Stud Day Baseball Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
+         else if ("7-Card Stud Day Baseball Hope Sprints Eternal Chicago Hi-Lo Low Spade in the Hole Gay Bar Raise the Flag".includes(choice))
             show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
          else if (choice === "Other") {
+            show_buttons(new Array($one_up_button, $next_label, $next_down_button, $next_up_button, $one_down_button), true);
             choice = getGame();
          } else if (choice !== "(Hover for rules!)") {
             show_buttons(new Array($next_label, $one_up_button, $one_down_button, $next_up_button, $next_down_button), true);
          }
-
          game.new_game(choice, false);
+         // game.set_instructions("testing");
 
       });
 
@@ -780,6 +782,7 @@ export function render_ui({
       //GAME NAME DISPLAY:
       const $game_name_display = $('<span />', {
          id: 'game-name-display',
+         title: "instructions coming soon!"
       });
 
       const $common_info = $('<span />', {
@@ -822,6 +825,7 @@ export function render_ui({
             const amount = +$bet_input.val();
             game.bet(amount);
             $bet_input.val('');
+            console.log("BET: " + amount);
          }
       });
 
@@ -841,6 +845,8 @@ export function render_ui({
          $bet_button_num.click(function () {
             const amount = +i;
             game.bet(i);
+            console.log("Recent BET: " + i);
+
          });
          $bet_buttons.append($bet_button_num);
       }
@@ -958,6 +964,7 @@ export function render_ui({
 
       //SHOW CONTROLS IN CURRENT DEALER's VIEW:
       if (game_state.dealer === current_player.id) {
+         // alert("DEALER: You can hover over each game title in Select Game to see rules");
          $('#dealer-controls').show();
          $('#dealer-controls-top').show();
       } else {
@@ -1022,6 +1029,8 @@ export function render_ui({
       const $set_game_select = $('#set-game-select');
       $set_game_select.val(game_state.game_name);
 
+
+
       //GAME NAME DISPLAY (also acey-ducey rounds and total games played):
       const $game_name_display = $('#game-name-display');
       let gn_disp = "#" + game_state.game_count + " " + game_state.game_name;
@@ -1031,6 +1040,7 @@ export function render_ui({
       }
 
       $game_name_display.text(gn_disp);
+      $game_name_display.prop("title", game_state.instructions);
 
       const $discard_button = $('#discard-btn');
 
@@ -1147,7 +1157,10 @@ export function render_ui({
          swal("Dealer: Confirm", "The dealer will need to hit the Confirm Card button to continue");
       } else
          $("#card-confirmed-button").removeClass("confirm");
-
+      if (game_state.wait_for_bet){
+         swal("Dealer: Admonish Player", "Don't deal the 3rd card until the player bets");
+         game.reset_wait_for_bet();
+      }
       //game board has all players:
       const $game_board = $('#game-board');
       $game_board.empty();
@@ -1247,7 +1260,7 @@ export function render_ui({
          //only show shy amount if not playing man-mouse and you didn't sit out:
          else if (game_state.game_name !== "Man-Mouse" && !player.left_seat) {
             if (game_state.game_name !== "Acey-Ducey")
-               $chips_shy.text(`shy:${$chips_in_disp}/last:${$last_chips}`);
+               $chips_shy.text(`SHY:${$chips_in_disp} (last:${$last_chips})`);
             else if (game_state.active_player === player.id)
                $chips_shy.text(`BET:${$last_chips}`);
          } else if (game_state.game_name !== "Man-Mouse")

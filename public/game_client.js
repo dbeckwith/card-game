@@ -22,7 +22,7 @@ export class CardGame {
                   current_player
                } = message;
                //          console.log('Game state update:', { game_state, current_player });
-               this.on_update ?.({
+               this.on_update?.({
                   prev_game_state: this.prev_game_state,
                   game_state,
                   current_player
@@ -53,7 +53,7 @@ export class CardGame {
             code,
             reason
          });
-         this.on_disconnect ?.(reason);
+         this.on_disconnect?.(reason);
          setTimeout(() => {
             this._reconnect();
          }, 1000);
@@ -134,7 +134,9 @@ export class CardGame {
    call() {
       this._send('call');
    }
-
+   reset_wait_for_bet(){
+      this._send('reset_wait_for_bet');
+   }
    pay_acey_ducey() {
       this._send('pay_acey_ducey');
    }
