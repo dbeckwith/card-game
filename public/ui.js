@@ -483,7 +483,7 @@ export function render_ui({
          //now, show only those needed
          if (choice === "5-Card Draw")
             show_buttons(new Array($next_label, $next_down_button, $one_down_button), true);
-         else if (choice === "Midnight Baseball" || choice == "Day Baseball") {
+         else if (choice === "Midnight Baseball") {
             if (choice === "Midnight Baseball") {
                swal("MIDNIGHT BASEBALL!", "Cards are now in 'no-peek mode'.  You can deal 7 cards to everyone" +
                   "  and players can flip their own cards");
@@ -1154,7 +1154,7 @@ export function render_ui({
 
       if (game_state.wait_for_card) {
          $("#card-confirmed-button").addClass("confirm");
-         swal("Dealer: Confirm", "The dealer will need to hit the Confirm Card button to continue");
+         swal("Dealer: Confirm", "Waiting for bet or call Ace high or low or buy or die - see confirm button ");
       } else
          $("#card-confirmed-button").removeClass("confirm");
       if (game_state.wait_for_bet){

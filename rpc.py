@@ -114,7 +114,7 @@ class RPC(object):
 
     def in_man_mouse(self):
         if self.game_state.active_player is not self.player:
-            raise ClientError('\nWARNING:  not your turn')        
+            raise ClientError('\nWARNING:  not your turn')
         self.game_state.stay_in_man_mouse()
 
     def reset_game(self):
@@ -185,28 +185,28 @@ class RPC(object):
         :param up: True if up card, False if down card
         '''
         # don't deal card if acey ducey first card is ace and btn not yet pressed
-        
+
         self.game_state.wait_for_card = False
 
         if not self.game_state.wait_for_card and self.player.id == self.game_state.dealer.id:
             self.game_state.hand_started = True
             num_cards_in_hand = len(self.game_state.active_player.hand)
 
-
-            # don't deal next card unless player bets:
-            if self.game_state.game_name == "Acey-Ducey"   and\
+            # don't deal 3rd card unless player bets:
+            if self.game_state.game_name == "Acey-Ducey" and\
                self.game_state.active_player.chips_in == 0 and\
                num_cards_in_hand == 2:
                 self.game_state.wait_for_bet = True
             else:
                 self.game_state.wait_for_bet = False
+
             if not self.game_state.wait_for_bet:
-            
+
                 self.reset_antes_and_chips_in(True)
                 card = self.game_state.draw_card()
-    
+
                 self.game_state.active_player.give_card(PlayerCard(card, up))
-    
+
                 if self.game_state.game_name == "Acey-Ducey":
                     # reshuffle when 1 card left (0  incl. in case mistake in dealing was made)
                     if len(self.game_state.deck) == 0 or len(self.game_state.deck) == 1:
@@ -215,34 +215,34 @@ class RPC(object):
                         self.game_state.reshuffled = True
                     else:
                         self.game_state.reshuffled = False
-    
+
                 num_cards_in_hand = len(self.game_state.active_player.hand)
-    
+
                 # acedy-ducey - stop if first ace:
                 # woolworths stop if 4, 5, or 10
-                
+
                 # booleans:
                 is_first_card = num_cards_in_hand == 1
-                is_ace        = card[0] == "1"
-                is_510_up     = card[0] in '5T' and self.game_state.active_player.hand[-1].up
-                is_34         = card[0] in '34' and self.game_state.active_player.hand[-1].up
+                is_ace = card[0] == "1"
+                is_510_up = card[0] in '5T' and self.game_state.active_player.hand[-1].up
+                is_34 = card[0] in '34' and self.game_state.active_player.hand[-1].up
                 if (is_first_card and is_ace and self.game_state.game_name == "Acey-Ducey") or\
-                   (self.game_state.game_name == "Woolworths"        and is_510_up) or\
-                   (self.game_state.game_name == "Day Baseball"      and is_34):
+                   (self.game_state.game_name == "Woolworths" and is_510_up) or\
+                   (self.game_state.game_name == "Day Baseball" and is_34):
                     self.game_state.wait_for_card = True
                 else:
                     self.game_state.wait_for_card = False
-                
-    
+
                 # go to next player unless it's discard mode or if you just completed a 5-card hand in 5-card draw:
                 fifth_card = self.game_state.game_name == "5-Card Draw" and num_cards_in_hand == 5
-    
+
                 not_discard = not self.game_state.discard_mode
-                not_midnight_four = self.game_state.game_name != "Midnight Baseball"
-    
-                if (fifth_card or (not_discard and not_midnight_four)) and self.game_state.game_name != "Acey-Ducey":
+                not_midnight = self.game_state.game_name != "Midnight Baseball"
+                not_acey = self.game_state.game_name != "Acey-Ducey"
+
+                if (not_discard and not_midnight and not_acey) or fifth_card:
                     self.game_state.next_active_player()
-                
+
                 self.game_state.checkpoint('money_or_card')
 
     def card_confirmed(self):
@@ -255,14 +255,14 @@ class RPC(object):
         :param card_num: card to flip
         '''
         self.player.hand[card_num].up = True
-        
+
         is_34 = self.player.hand[card_num].card[0] in '34'
-        
+
         if self.game_state.game_name == "Midnight Baseball" and is_34:
             self.game_state.wait_for_card = True
         else:
-            self.game_state.wait_for_card = False  
-            
+            self.game_state.wait_for_card = False
+
         self.game_state.checkpoint('money_or_card')
 
     def discard(self, card_num):
@@ -282,10 +282,10 @@ class RPC(object):
         self.game_state.common_cards.append(card)
         self.game_state.checkpoint('money_or_card')
 
-    #def set_instructions(self, instr):
+    # def set_instructions(self, instr):
         #'''sets instructions so they can be shown when hover over game name'''
-        #self.game_state.set_instructions(instr)
-        
+        # self.game_state.set_instructions(instr)
+
     def toggle_discard_mode(self):
         self.game_state.discard_mode = not self.game_state.discard_mode
 
@@ -377,7 +377,8 @@ class RPC(object):
         if self.player.chips < amt:
             raise ClientError('\nWARNING:  not enough chips')
         if self.game_state.game_name == "Select Game":
-            raise ClientError('\nWARNING: attempted ante - a game must be selected first')
+            raise ClientError(
+                '\nWARNING: attempted ante - a game must be selected first')
         self.player.chips -= amt
         self.game_state.pot += amt
         self.player.chips_in_hand += amt
@@ -388,11 +389,11 @@ class RPC(object):
 
     def all_anted(self):
         return self.game_state.all_anted()
-    
+
     def reset_wait_for_bet(self):
         '''reset after showing warning'''
-        self.game_state.wait_for_bet  = False
-        
+        self.game_state.wait_for_bet = False
+
     def pay_acey_ducey(self):
         ''' return player's bet and give them how much they won'''
         self.game_state.pay_acey_ducey()
@@ -449,14 +450,14 @@ class RPC(object):
         else:  # man-mouse
             # pay winner
             winners[0].chips += self.game_state.pot
-            
+
             msg = "PAYING OUT!\n" + winners[0].name +\
-                " will get " + str(winners[0].chips) + " chips\n"
-            
+                " will get " + str(self.game_state.pot) + " chips\n"
+
             # save pot amount, then clear pot:
             to_pay = self.game_state.pot
             self.game_state.pot = 0
-            
+
             losers = []
             # any player that stayed in pays the pot
             for p in self.game_state.players:
@@ -467,16 +468,16 @@ class RPC(object):
             if len(losers) != 0:
                 if len(losers) == 1:
                     msg += losers[0] + " will have " + str(to_pay) +\
-                    " chips transferred from their stack to the pot"
+                        " chips transferred from their stack to the pot"
                 else:
                     loser_list = ""
                     for i in range(len(losers) - 1):
                         loser_list += losers[i] + ", "
-                     
+
                     loser_list += losers[len(losers) - 1]
                     msg += loser_list + "\n will all have " + str(to_pay) +\
                         " chips transferred from their stack to the pot"
-                self.game_state.message = msg # this change will be notice and
+                self.game_state.message = msg  # this change will be notice and
             # ...initiate the alert
 
         # empty the pot
