@@ -1,0 +1,148 @@
+================================
+NOTE: have each dealer hover over each game
+• console has recent bet
+• ctrl-` = I can click to set next dealer
+• ctrl-shift-` = I can folder current player
+• click CP = show help page
+• double-click white dot = show $ for everyone
+
+
+TODO:
+FIX: DON'T allow dealing next card when pot is shy
+FIX: logout doesn't show logged out?
+MAKE LINK TO "GAMES SUMMARY" OR POPUP WITH RULES
+• ????confirm comes up twice with 5 or 10 (line 91 in  server.py sets = '', rpc.py 220 sets wait_for-card to true)
+
+Man-mouse - should show last bet? 
+
+When sit out - doesn't skip over that player upon advance in acey-ducey
+BlackJack, criss-cross, jacks or better
+================================
+TODO each game: 
+1. in main.js make  sure: //testing  NOT // real 
+2. Pull: cd dekstop/card-game , git pull
+3. RUN: card-game/main.py
+• iPad: open new tab with chrome://inspect to see console.log()
+=============================
+game_client.js: comment back in line 19 to get game state object
+===================================
+SERVER:
+• running main.py serves on 31455
+• if run on desktop, servers on 108.7.186.33:31455 (port forwarding set up on Verizon to for this IP)
+• cards.abeckwith.net redirects to 108.7.186.33:31455
+• testing: if run on laptop, use localhost:31455, 
+===
+desktop as hotspot:
+System Pref, Sharing
+check Internet sharing on left
+Share your connection from: Wi-Fi
+To computers using: Wi-Fi
+
+ISSUES LEFT:
+• tried moving code, didn't work
+
+Previous requests/ideas:
+• Implement BlackJack
+• Menu with removed buttons
+
+Other:
+• make sure you log out
+• Might need a non-CC Zoom account: $15/month
+
+venmo: L@brea64!ebuy   @Anthony-Beckwith-3
+
+
+TO RUN PYTHON SIMPLE SERVER:
+cd /Users/abeckwith/Google\ Drive/card-game
+python3 -m http.server
+
+
+
+OTHER:
+cards.abeckwith.net
+
+
+CODE EXPLANATION:
+main.py: 
+creates a GameState object and runs run_server from server.py
+
+game_state.py:
+GameState object tracks all variables for game and players: 
+players list, dealer, pot, etc.
+provides game control methods like add_player, new_game, get_player, next_dealer, draw_card, etc.
+also: every time client needs update, uses websockets to send JSON (serialized form of all data so can be handled by server)
+
+server.py:
+makes an RPC object
+one of these async tasks, with  rpc, running for every player
+- they all have a ref. to the same game_state
+
+rpc.py:
+each players had their own RPC object
+actions a player can take to modify game state - dealer affects all player affects one
+game. - to call a function written in rpc
+
+has the game_state object, player, and player id 
+remote procedure call (RPC) is code that calls methods "in a different address space" -  another computer on a shared network
+
+methods: newgame, reset game, deal_all, deal_one, flip, discard, deal_common, fold
+
+player.py:
+Player object has name, hand, chips, etc.
+"to_json"
+methods: new_game - called when new_game is called in rpc - to reset this player's chips and hand
+give_card - appends card to hand
+
+main.js:
+sets port to 31455
+line 150 sets name of folder with code (public)
+makes a CardGame object called game, from game_client.js
+game.on_update - game_state, current_player -> render_UI (gs,cp)?
+
+game_client.js:
+has all the method names: every time it gets a websocket message is a game state update, will call onupdate, which calls renderui
+
+ui.js:
+creates the entire UI
+
+player in rpc is the person calling the function (could be dealer if pressed)
+game. - to call a function I've written in rpc
+(often those functions are altering game_state)
+
+
+CHANGE HOSTING:
+1. Browser:  http://192.168.1.1/  (Verizon)
+2. Proceed, Login wifi password
+3. Left menu: Port Forwarding
+4. delete current forwarding to 31455
+5. Create new port forwarding - select the computer
+6. Application to Forward - Custom Ports - TCP / 31455 - Add +
+
+Explanation:
+Every router will host 
+192.168.x.x
+private IP address 	 - whatismyip.com gives 108.7.186.33
+I want the host/server to have a static IP address
+(When your computer or device sends a request, like a search on Google, it tags the request with your IP address. That way Google knows where to send the response.)	
+- can't be reached through public internet 
+- used for your LAN -
+- because only used in your LAN, same address can be used elsewhere 
+
+192.168.1.1 
+- home routers use this as the default gateway
+- used in browser, goes to router configuration page
+	port forwarding
+	custom ports
+tcp = 31455 - anything coming into house from outside will route to this
+socket cconnection to a port, router forwards to the computer selected
+http://108.7.186.33:31455/
+
+System Preferences >> Network >> Status on right tells IP adress
+
+System Preferences >> Network >> Advanced >> TCP/IP
+
+Your Mac is assigned an IP address when it connects to a network. Other devices that are connected to the same network can use this unique identifier to transfer information to and from your Mac.
+
+
+There are two different types of IP addresses. Static IP addresses are permanent or semi-permanent addresses that can be accessed from virtually anywhere. These types of addresses are usually reserved for computers that need to be frequently accessed by other people. Most web servers, VPN servers, groupware servers, and network routing equipment like AirPort base stations have static IP addresses assigned.
+Dynamic IP addresses are temporary addresses that are unique only to your internal network, which is commonly referred to as an intranet. These addresses commonly start with 192.168 and 10.0.1. Since these addresses are dynamically and randomly assigned by the router every time a device connects to a network, you can't expect your Mac to have the same dynamic IP address every time you connect.
